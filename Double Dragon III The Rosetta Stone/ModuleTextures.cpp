@@ -70,9 +70,9 @@ SDL_Texture* const ModuleTextures::Load(const char* path)
 		}
 		else
 		{
+			//LOG("Loaded succesfull surface with path: %s. IMG_Load: %s", path);
 			textures.push_back(texture);
 		}
-
 		SDL_FreeSurface(surface);
 	}
 

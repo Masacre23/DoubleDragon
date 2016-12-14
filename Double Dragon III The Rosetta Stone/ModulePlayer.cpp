@@ -6,7 +6,6 @@
 #include "ModuleTextures.h"
 #include "SDL/include/SDL.h"
 
-// Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 ModulePlayer::ModulePlayer(bool start_enabled) : Module(start_enabled)
 {
 	position.x = 100;
@@ -15,9 +14,7 @@ ModulePlayer::ModulePlayer(bool start_enabled) : Module(start_enabled)
 }
 
 ModulePlayer::~ModulePlayer()
-{
-	// Homework : check for memory leaks
-}
+{}
 
 // Load assets
 bool ModulePlayer::Start()

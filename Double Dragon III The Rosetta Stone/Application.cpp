@@ -6,6 +6,8 @@
 #include "ModuleAudio.h"
 #include "ModuleFadeToBlack.h"
 #include "ModulePlayer.h"
+#include "ModuleSceneMenu.h"
+#include "ModuleSceneMission1.h"
 
 using namespace std;
 
@@ -20,8 +22,11 @@ Application::Application()
 	modules.push_back(audio = new ModuleAudio());
 
 	// Game Modules
+	modules.push_back(scene_menu = new ModuleSceneMenu(false));
+	modules.push_back(scene_mission1 = new ModuleSceneMission1(false));
 	modules.push_back(player = new ModulePlayer(false));
 	modules.push_back(fade = new ModuleFadeToBlack());
+	
 }
 
 Application::~Application()
@@ -44,13 +49,19 @@ bool Application::Init()
 	}
 
 	// Start the first scene --
-
+	fade->FadeToBlack(scene_menu, nullptr, 3.0f);
+	//fade->FadeToBlack(scene_mission1, nullptr, 3.0f);
 	return ret;
 }
 
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		fade->FadeToBlack(scene_mission1, nullptr, 3.0f);
+	}
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if ((*it)->IsEnabled() == true)

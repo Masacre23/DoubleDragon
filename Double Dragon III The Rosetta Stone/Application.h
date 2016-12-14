@@ -12,8 +12,8 @@ class ModuleInput;
 class ModuleAudio;
 class ModuleFadeToBlack;
 class ModulePlayer;
-class ModuleSceneKen;
-class ModuleSceneHonda;
+class ModuleSceneMenu;
+class ModuleSceneMission1;
 
 class Application
 {
@@ -34,8 +34,8 @@ public:
 	ModuleAudio* audio;
 	ModuleFadeToBlack* fade;
 	ModulePlayer* player;
-	ModuleSceneKen* scene_ken;
-	ModuleSceneHonda* scene_honda;
+	ModuleSceneMenu* scene_menu;
+	ModuleSceneMission1* scene_mission1;
 
 private:
 
