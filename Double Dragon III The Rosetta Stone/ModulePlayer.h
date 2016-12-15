@@ -18,6 +18,9 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	bool isAttacking(int& currentAttack);
+	SDL_Rect GetAttack(int attack);
+
 public:
 
 	SDL_Texture* graphics = nullptr;
@@ -28,6 +31,8 @@ public:
 	Animation left_down;
 	Animation up_right;
 	Animation up_left;
+	Animation punch;
+	Animation kick;
 	bool direction; //rigth->true left->false
 
 	int speed;
