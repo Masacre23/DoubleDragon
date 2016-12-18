@@ -58,7 +58,7 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		fade->FadeToBlack(scene_mission1, nullptr, 3.0f);
 	}

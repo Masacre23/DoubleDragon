@@ -11,58 +11,66 @@ ModulePlayer::ModulePlayer(bool start_enabled) : Module(start_enabled)
 	position.x = 100;
 	position.y = 216;
 	speed = 1;
-	direction = true; //right is true
 
-	// idle right
-	idle_right = { 8, 0, 26, 64 };
-	//idle_right = { 120, 81, 38, 63 };
-
-	// idle left
-	idle_left = { 942, 0, 26, 64 };
+	int n = 20+2+2;
 
 	// Right & Down
-	right_down.frames.push_back({ 8, 0, 26, 64 });
+	/*right_down.frames.push_back({ 8, 0, 26, 64 });
 	right_down.frames.push_back({ 48, 0, 26, 64 });
 	right_down.frames.push_back({ 80, 0, 26, 64 });
 	right_down.frames.push_back({ 113, 0, 26, 64 });
+	right_down.speed = 0.1f;*/
+	right_down.frames.push_back({ 33-n, 0, 70, 64 });
+	right_down.frames.push_back({ 108-n, 0, 70, 64 });
+	right_down.frames.push_back({ 173-n, 0, 70, 64 });
+	right_down.frames.push_back({ 242-n, 0, 70, 64 });
 	right_down.speed = 0.1f;
-
-	// Left & Down
-	left_down.frames.push_back({ 942, 0, 26, 64 });
-	left_down.frames.push_back({ 903, 0, 26, 64 });
-	left_down.frames.push_back({ 871, 0, 26, 64 });
-	left_down.frames.push_back({ 838, 0, 26, 64 });
-	left_down.speed = 0.1f;
 	
-	// Up right
-	up_right.frames.push_back({ 152, 0, 26, 64 });
-	up_right.frames.push_back({ 184, 0, 26, 64 });
-	up_right.frames.push_back({ 216, 0, 26, 64 });
-	up_right.frames.push_back({ 248, 0, 26, 64 });
-	up_right.speed = 0.1f;
+	// Up
+	/*up.frames.push_back({ 152, 0, 26, 64 });
+	up.frames.push_back({ 184, 0, 26, 64 });
+	up.frames.push_back({ 216, 0, 26, 64 });
+	up.frames.push_back({ 248, 0, 26, 64 });
+	up.speed = 0.1f;*/
+	up.frames.push_back({ 305-n, 0, 70, 64 });
+	up.frames.push_back({ 362-n, 0, 70, 64 });
+	up.frames.push_back({ 414-n, 0, 70, 64 });
+	up.frames.push_back({ 462-n, 0, 70, 64 });
+	up.speed = 0.1f;
 
-	// Up left
-	up_left.frames.push_back({ 803, 0, 26, 64 });
-	up_left.frames.push_back({ 771, 0, 26, 64 });
-	up_left.frames.push_back({ 739, 0, 26, 64 });
-	up_left.frames.push_back({ 707, 0, 26, 64 });
-	up_left.speed = 0.1f;
+	// Jump
+	jump = { 422 - n, 79, 64, 64 };
 
 	// Punch
-	punch.frames.push_back({ 8, 0, 26, 64 });
-	punch.frames.push_back({ 8, 79, 26, 64 });
+	/*punch.frames.push_back({ 8-12, 0, 26+12, 64 });
+	punch.frames.push_back({ 8-12, 79, 26+12, 64 });
 	punch.frames.push_back({ 40, 79, 39, 64 });
-	punch.frames.push_back({ 8, 79, 26, 64 });
-	punch.frames.push_back({ 8, 0, 26, 64 });
+	punch.frames.push_back({ 8-12, 79, 26+12, 64 });
+	punch.frames.push_back({ 8-12, 0, 26+12, 64 });
+	punch.speed = 0.1f;*/
+	punch.frames.push_back({ 33-n, 0, 70, 64 });
+	punch.frames.push_back({ 33-n, 79, 70, 64 });
+	punch.frames.push_back({ 101-n, 79, 70, 64 });
+	punch.frames.push_back({ 33-n, 79, 70, 64 });
+	punch.frames.push_back({ 33-n, 0, 70, 64 });
 	punch.speed = 0.1f;
 
 	// Kick
-	kick.frames.push_back({ 8, 0, 26, 64 });
+	/*kick.frames.push_back({ 8, 0, 26, 64 });
 	kick.frames.push_back({ 88, 81, 24, 64 });
 	kick.frames.push_back({ 120, 81, 38, 64 });
 	kick.frames.push_back({ 88, 81, 24, 64 });
 	kick.frames.push_back({ 8, 0, 26, 64 });
+	kick.speed = 0.1f;*/
+	kick.frames.push_back({ 33 - n, 0, 70, 64 });
+	kick.frames.push_back({ 176-n, 81, 70, 64 });
+	kick.frames.push_back({ 241-n, 81, 70, 64 });
+	kick.frames.push_back({ 176-n, 81, 70, 64 });
+	kick.frames.push_back({ 33 - n, 0, 70, 64 });
 	kick.speed = 0.1f;
+
+	//Kick jump
+	kick_jump = { 487 - n, 79, 70, 64 };
 }
 
 ModulePlayer::~ModulePlayer()
@@ -73,7 +81,7 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy.png"); // arcade version
+	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png"); // arcade version
 
 	return true;
 }
@@ -91,56 +99,58 @@ bool ModulePlayer::CleanUp()
 // Update
 update_status ModulePlayer::Update()
 {
-	//SDL_Rect billy = idle.GetCurrentFrame();
-	SDL_Rect billy;
+	SDL_Rect billy = right_down.frames[0];
 	static int currentAttack = 0;
+	static bool flip = false; // When the character goes left is true
+	//static bool isJumping = false;
+
 	if (!isAttacking(currentAttack))
 	{
-		if (direction)
-			billy = idle_right;
-		else
-			billy = idle_left;
 
 		// Horizontal
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		if (!isJumping) 
 		{
-			position.x += speed;
-			billy = right_down.GetCurrentFrame();
-			direction = true;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			position.x -= speed;
-			billy = left_down.GetCurrentFrame();
-			direction = false;
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+			{
+				position.x += speed;
+				billy = right_down.GetCurrentFrame();
+				flip = false;
+			}
+			else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+			{
+				position.x -= speed;
+				billy = right_down.GetCurrentFrame();
+				flip = true;
+			}
 		}
 
-		// Vertical
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		// Vertical and jump
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || isJumping)
+		{
+			Jump(position.x, position.y, isJumping);
+			billy = jump;
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
 			position.y -= speed;
-			if (direction)
-				billy = up_right.GetCurrentFrame();
-			else
-				billy = up_left.GetCurrentFrame();
+			billy = up.GetCurrentFrame();
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		{
 			position.y += speed;
-			if (direction)
-				billy = right_down.GetCurrentFrame();
-			else
-				billy = left_down.GetCurrentFrame();
+			billy = right_down.GetCurrentFrame();
 		}
 	}
 	else
 	{
-		billy = GetAttack(currentAttack);
+		billy = getAttack(currentAttack);
 	}
-	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f);
+
+	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
 	return UPDATE_CONTINUE;
 }
 
+//------------------------------------------------------------------
 bool ModulePlayer::isAttacking(int& currentAttack)
 {
 	if (currentAttack != NULL)
@@ -159,12 +169,11 @@ bool ModulePlayer::isAttacking(int& currentAttack)
 	}
 	else
 	{
-		if (App->input->GetKey(SDL_SCANCODE_COMMA) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
 		{
 			currentAttack = SDL_SCANCODE_COMMA;
 		}
-
-		if (App->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_REPEAT)
+		else if (App->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_DOWN)
 		{
 			currentAttack = SDL_SCANCODE_PERIOD;
 		}
@@ -173,17 +182,70 @@ bool ModulePlayer::isAttacking(int& currentAttack)
 		
 }
 
-SDL_Rect ModulePlayer::GetAttack(int attack)
+//-------------------------------------------------------------------
+SDL_Rect& ModulePlayer::getAttack(const int& attack)
 {
-	//Punch
-	if (attack == SDL_SCANCODE_COMMA)
+	switch (attack)
 	{
+	case SDL_SCANCODE_COMMA: //Punch
+		if (isJumping)
+		{
+			Jump(position.x, position.y, isJumping);
+			return jump;
+		}
 		return punch.GetCurrentFrame();
-	}
+		break;
 
-	//Kick
-	if (attack == SDL_SCANCODE_PERIOD)
-	{
+	case SDL_SCANCODE_PERIOD: //Kick
+		if (isJumping)
+		{
+			Jump(position.x, position.y, isJumping);
+			return kick_jump;
+		}
 		return kick.GetCurrentFrame();
+		break;
+	}
+}
+
+//--------------------------------------------------------------------
+void ModulePlayer::Jump(int& x, int& y, bool& isJumping)
+{
+	static int y_ini = -1;
+	float aceleration = 0.3f;
+	static float speed = 5;
+	static bool jumpDirection[] = {false, false}; //right, left
+
+	if (y_ini == -1)// Init
+	{
+		y_ini = y;
+		--y;
+		isJumping = true;
+		speed = 5;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			jumpDirection[0] = true;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			jumpDirection[1] = true;
+		}
+	}
+	else if (y_ini <= y) 
+	{
+		y = y_ini;
+		y_ini = -1;
+		isJumping = false;
+		jumpDirection[0] = false;
+		jumpDirection[1] = false;
+	}
+	else
+	{
+		speed -= aceleration;
+		y -= speed;
+
+		if (jumpDirection[0])
+			x += 2;
+		else if(jumpDirection[1])
+			x -= 2;
 	}
 }

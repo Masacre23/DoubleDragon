@@ -19,23 +19,22 @@ public:
 	bool CleanUp();
 
 	bool isAttacking(int& currentAttack);
-	SDL_Rect GetAttack(int attack);
+	SDL_Rect& getAttack(const int& attack);
+	void Jump(int& x, int& y, bool& isJumping);
 
 public:
 
 	SDL_Texture* graphics = nullptr;
-	SDL_Rect idle_left;
-	SDL_Rect idle_right;
 	iPoint position;
 	Animation right_down;
-	Animation left_down;
-	Animation up_right;
-	Animation up_left;
+	Animation up;
 	Animation punch;
 	Animation kick;
-	bool direction; //rigth->true left->false
+	SDL_Rect kick_jump;
+	SDL_Rect jump;
 
 	int speed;
+	bool isJumping = false;
 };
 
 #endif // __MODULEPLAYER_H__

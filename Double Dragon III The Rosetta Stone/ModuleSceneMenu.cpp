@@ -11,17 +11,11 @@
 
 ModuleSceneMenu::ModuleSceneMenu(bool start_enabled) : Module(start_enabled)
 {
-	// ground
-	/*ground.x = 0;
-	ground.y = 0;
-	ground.w = 896;
-	ground.h = 72;*/
-
-	// Background / sky
+	// Background
 	background.x = 0;
 	background.y = 0;
 	background.w = 320;
-	background.h = 240;
+	background.h = 224;
 }
 
 ModuleSceneMenu::~ModuleSceneMenu()
@@ -33,10 +27,9 @@ bool ModuleSceneMenu::Start()
 	bool res = true;
 	LOG("Loading menu scene");
 
-	graphics = App->textures->Load("Double_Dragon3_arcade_title.png");
-	//graphics = App->textures->Load("ddragon3.png");
-	//App->audio->PlayMusic();
-	//App->audio->PlayMusic("C:\\SDL Game 2 - Master - Handout\\Game\\ken.ogg");
+	graphics = App->textures->Load("DD3_Title.gif");
+	//App->audio->PlayMusic("01-rosetta-stone.ogg");
+
 	return res;
 }
 
