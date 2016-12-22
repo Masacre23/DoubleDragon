@@ -15,6 +15,9 @@ class ModulePlayer;
 class ModuleSceneMenu;
 class ModuleSceneMission1;
 
+//class ModuleEntity;
+class EntityManager;
+
 class Application
 {
 public:
@@ -33,11 +36,14 @@ public:
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModuleFadeToBlack* fade;
-	ModulePlayer* player;
+	//ModulePlayer* player;
+	//ModuleEntity* entity;
+
 	ModuleSceneMenu* scene_menu;
 	ModuleSceneMission1* scene_mission1;
 
-private:
+	EntityManager* entityManager;
+//private:
 
 	std::list<Module*> modules;
 

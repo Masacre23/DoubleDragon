@@ -5,72 +5,222 @@
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "SDL/include/SDL.h"
+#include "src\pugixml.hpp"
 
-ModulePlayer::ModulePlayer(bool start_enabled) : Module(start_enabled)
+ModulePlayer::ModulePlayer(bool start_enabled) : ModuleEntity(start_enabled)
 {
 	position.x = 100;
 	position.y = 216;
 	speed = 1;
 
-	int n = 20+2+2;
+	//int n = 20+2+2;
+
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data.xml");
+	pugi::xml_node config = doc.document_element();
+	pugi::xml_node entities = config.child("entities");
+	pugi::xml_node player1 = entities.child("player1");
+	if (player1)
+		LOG("pene");
 
 	// Right & Down
-	/*right_down.frames.push_back({ 8, 0, 26, 64 });
-	right_down.frames.push_back({ 48, 0, 26, 64 });
-	right_down.frames.push_back({ 80, 0, 26, 64 });
-	right_down.frames.push_back({ 113, 0, 26, 64 });
-	right_down.speed = 0.1f;*/
-	right_down.frames.push_back({ 33-n, 0, 70, 64 });
-	right_down.frames.push_back({ 108-n, 0, 70, 64 });
-	right_down.frames.push_back({ 173-n, 0, 70, 64 });
-	right_down.frames.push_back({ 242-n, 0, 70, 64 });
-	right_down.speed = 0.1f;
+	pugi::xml_node right_downXML = player1.child("right_down");
+	right_down.frames.push_back(
+	{ 
+		right_downXML.child("frame1").attribute("x").as_int(), 
+		right_downXML.child("frame1").attribute("y").as_int(),
+		right_downXML.child("frame1").attribute("w").as_int(),
+		right_downXML.child("frame1").attribute("h").as_int()
+	});
+	right_down.frames.push_back(
+	{
+		right_downXML.child("frame2").attribute("x").as_int(),
+		right_downXML.child("frame2").attribute("y").as_int(),
+		right_downXML.child("frame2").attribute("w").as_int(),
+		right_downXML.child("frame2").attribute("h").as_int()
+	});
+	right_down.frames.push_back(
+	{
+		right_downXML.child("frame3").attribute("x").as_int(),
+		right_downXML.child("frame3").attribute("y").as_int(),
+		right_downXML.child("frame3").attribute("w").as_int(),
+		right_downXML.child("frame3").attribute("h").as_int()
+	});
+	right_down.frames.push_back(
+	{
+		right_downXML.child("frame4").attribute("x").as_int(),
+		right_downXML.child("frame4").attribute("y").as_int(),
+		right_downXML.child("frame4").attribute("w").as_int(),
+		right_downXML.child("frame4").attribute("h").as_int()
+	});
+	
+	right_down.speed = right_downXML.attribute("speed").as_float();
 	
 	// Up
-	/*up.frames.push_back({ 152, 0, 26, 64 });
-	up.frames.push_back({ 184, 0, 26, 64 });
-	up.frames.push_back({ 216, 0, 26, 64 });
-	up.frames.push_back({ 248, 0, 26, 64 });
-	up.speed = 0.1f;*/
-	up.frames.push_back({ 305-n, 0, 70, 64 });
-	up.frames.push_back({ 362-n, 0, 70, 64 });
-	up.frames.push_back({ 414-n, 0, 70, 64 });
-	up.frames.push_back({ 462-n, 0, 70, 64 });
-	up.speed = 0.1f;
+	pugi::xml_node upXML = player1.child("up");
+	up.frames.push_back(
+	{
+		upXML.child("frame1").attribute("x").as_int(),
+		upXML.child("frame1").attribute("y").as_int(),
+		upXML.child("frame1").attribute("w").as_int(),
+		upXML.child("frame1").attribute("h").as_int()
+	});
+	up.frames.push_back(
+	{
+		upXML.child("frame2").attribute("x").as_int(),
+		upXML.child("frame2").attribute("y").as_int(),
+		upXML.child("frame2").attribute("w").as_int(),
+		upXML.child("frame2").attribute("h").as_int()
+	});
+	up.frames.push_back(
+	{
+		upXML.child("frame3").attribute("x").as_int(),
+		upXML.child("frame3").attribute("y").as_int(),
+		upXML.child("frame3").attribute("w").as_int(),
+		upXML.child("frame3").attribute("h").as_int()
+	});
+	up.frames.push_back(
+	{
+		upXML.child("frame4").attribute("x").as_int(),
+		upXML.child("frame4").attribute("y").as_int(),
+		upXML.child("frame4").attribute("w").as_int(),
+		upXML.child("frame4").attribute("h").as_int()
+	});
+
+	up.speed = upXML.attribute("speed").as_float();
 
 	// Jump
-	jump = { 422 - n, 79, 64, 64 };
+	pugi::xml_node jumpXML = player1.child("jump");
+	jump = 
+	{ 
+		jumpXML.attribute("x").as_int(), 
+		jumpXML.attribute("y").as_int(),
+		jumpXML.attribute("w").as_int(),
+		jumpXML.attribute("h").as_int()
+	};
 
 	// Punch
-	/*punch.frames.push_back({ 8-12, 0, 26+12, 64 });
-	punch.frames.push_back({ 8-12, 79, 26+12, 64 });
-	punch.frames.push_back({ 40, 79, 39, 64 });
-	punch.frames.push_back({ 8-12, 79, 26+12, 64 });
-	punch.frames.push_back({ 8-12, 0, 26+12, 64 });
-	punch.speed = 0.1f;*/
-	punch.frames.push_back({ 33-n, 0, 70, 64 });
-	punch.frames.push_back({ 33-n, 79, 70, 64 });
-	punch.frames.push_back({ 101-n, 79, 70, 64 });
-	punch.frames.push_back({ 33-n, 79, 70, 64 });
-	punch.frames.push_back({ 33-n, 0, 70, 64 });
-	punch.speed = 0.1f;
+	pugi::xml_node punchXML = player1.child("punch");
+	punch.frames.push_back(
+	{
+		punchXML.child("frame1").attribute("x").as_int(),
+		punchXML.child("frame1").attribute("y").as_int(),
+		punchXML.child("frame1").attribute("w").as_int(),
+		punchXML.child("frame1").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame2").attribute("x").as_int(),
+		punchXML.child("frame2").attribute("y").as_int(),
+		punchXML.child("frame2").attribute("w").as_int(),
+		punchXML.child("frame2").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame3").attribute("x").as_int(),
+		punchXML.child("frame3").attribute("y").as_int(),
+		punchXML.child("frame3").attribute("w").as_int(),
+		punchXML.child("frame3").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame4").attribute("x").as_int(),
+		punchXML.child("frame4").attribute("y").as_int(),
+		punchXML.child("frame4").attribute("w").as_int(),
+		punchXML.child("frame4").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame5").attribute("x").as_int(),
+		punchXML.child("frame5").attribute("y").as_int(),
+		punchXML.child("frame5").attribute("w").as_int(),
+		punchXML.child("frame5").attribute("h").as_int()
+	});
+
+	punch.speed = punchXML.attribute("speed").as_float();
 
 	// Kick
-	/*kick.frames.push_back({ 8, 0, 26, 64 });
-	kick.frames.push_back({ 88, 81, 24, 64 });
-	kick.frames.push_back({ 120, 81, 38, 64 });
-	kick.frames.push_back({ 88, 81, 24, 64 });
-	kick.frames.push_back({ 8, 0, 26, 64 });
-	kick.speed = 0.1f;*/
-	kick.frames.push_back({ 33 - n, 0, 70, 64 });
-	kick.frames.push_back({ 176-n, 81, 70, 64 });
-	kick.frames.push_back({ 241-n, 81, 70, 64 });
-	kick.frames.push_back({ 176-n, 81, 70, 64 });
-	kick.frames.push_back({ 33 - n, 0, 70, 64 });
-	kick.speed = 0.1f;
+	pugi::xml_node kickXML = player1.child("kick");
+	kick.frames.push_back(
+	{
+		kickXML.child("frame1").attribute("x").as_int(),
+		kickXML.child("frame1").attribute("y").as_int(),
+		kickXML.child("frame1").attribute("w").as_int(),
+		kickXML.child("frame1").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame2").attribute("x").as_int(),
+		kickXML.child("frame2").attribute("y").as_int(),
+		kickXML.child("frame2").attribute("w").as_int(),
+		kickXML.child("frame2").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame3").attribute("x").as_int(),
+		kickXML.child("frame3").attribute("y").as_int(),
+		kickXML.child("frame3").attribute("w").as_int(),
+		kickXML.child("frame3").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame4").attribute("x").as_int(),
+		kickXML.child("frame4").attribute("y").as_int(),
+		kickXML.child("frame4").attribute("w").as_int(),
+		kickXML.child("frame4").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame5").attribute("x").as_int(),
+		kickXML.child("frame5").attribute("y").as_int(),
+		kickXML.child("frame5").attribute("w").as_int(),
+		kickXML.child("frame5").attribute("h").as_int()
+	});
 
-	//Kick jump
-	kick_jump = { 487 - n, 79, 70, 64 };
+	kick.speed = kickXML.attribute("speed").as_float();
+
+	// Kick jump
+	pugi::xml_node kick_jumpXML = player1.child("kick_jump");
+	kick_jump =
+	{
+		kick_jumpXML.attribute("x").as_int(),
+		kick_jumpXML.attribute("y").as_int(),
+		kick_jumpXML.attribute("w").as_int(),
+		kick_jumpXML.attribute("h").as_int()
+	};
+
+	// Rotate kick jump
+	pugi::xml_node rotate_kick_jumpXML = player1.child("rotate_kick_jump");
+	rotate_kick_jump.frames.push_back(
+	{
+		rotate_kick_jumpXML.child("frame1").attribute("x").as_int(),
+		rotate_kick_jumpXML.child("frame1").attribute("y").as_int(),
+		rotate_kick_jumpXML.child("frame1").attribute("w").as_int(),
+		rotate_kick_jumpXML.child("frame1").attribute("h").as_int()
+	});
+	rotate_kick_jump.frames.push_back(
+	{
+		rotate_kick_jumpXML.child("frame2").attribute("x").as_int(),
+		rotate_kick_jumpXML.child("frame2").attribute("y").as_int(),
+		rotate_kick_jumpXML.child("frame2").attribute("w").as_int(),
+		rotate_kick_jumpXML.child("frame2").attribute("h").as_int()
+	});
+	rotate_kick_jump.frames.push_back(
+	{
+		rotate_kick_jumpXML.child("frame3").attribute("x").as_int(),
+		rotate_kick_jumpXML.child("frame3").attribute("y").as_int(),
+		rotate_kick_jumpXML.child("frame3").attribute("w").as_int(),
+		rotate_kick_jumpXML.child("frame3").attribute("h").as_int()
+	});
+	rotate_kick_jump.frames.push_back(
+	{
+		rotate_kick_jumpXML.child("frame4").attribute("x").as_int(),
+		rotate_kick_jumpXML.child("frame4").attribute("y").as_int(),
+		rotate_kick_jumpXML.child("frame4").attribute("w").as_int(),
+		rotate_kick_jumpXML.child("frame4").attribute("h").as_int()
+	});
+
+	rotate_kick_jump.speed = rotate_kick_jumpXML.attribute("speed").as_float();
 }
 
 ModulePlayer::~ModulePlayer()
@@ -82,6 +232,8 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png"); // arcade version
+
+	playerState = IDLE;
 
 	return true;
 }
@@ -102,7 +254,7 @@ update_status ModulePlayer::Update()
 	SDL_Rect billy = right_down.frames[0];
 	static int currentAttack = 0;
 	static bool flip = false; // When the character goes left is true
-	//static bool isJumping = false;
+	//static int time = 0;
 
 	if (!isAttacking(currentAttack))
 	{
@@ -110,24 +262,46 @@ update_status ModulePlayer::Update()
 		// Horizontal
 		if (!isJumping) 
 		{
+			int newSpeed;
+			static bool b = false;
+			static int time = 0;
+			static int maxTime = 10;
+			++time;
+
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+			{
+				if (b && time < maxTime)
+				{
+					playerState = RUNNING;
+					b = false;
+				}
+				else
+				{
+					b = true;
+					time = 0;
+					playerState = WALKING;
+				}
+			}
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 			{
-				position.x += speed;
-				billy = right_down.GetCurrentFrame();
 				flip = false;
+				newSpeed = getSpeed();
+				position.x += newSpeed;
+				billy = right_down.GetCurrentFrame();
 			}
 			else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 			{
-				position.x -= speed;
-				billy = right_down.GetCurrentFrame();
 				flip = true;
+				newSpeed = getSpeed();
+				position.x -= newSpeed;
+				billy = right_down.GetCurrentFrame();
 			}
 		}
 
 		// Vertical and jump
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || isJumping)
 		{
-			Jump(position.x, position.y, isJumping);
+			Jump(position.x, position.y, isJumping, currentAttack);
 			billy = jump;
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
@@ -148,6 +322,18 @@ update_status ModulePlayer::Update()
 
 	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
 	return UPDATE_CONTINUE;
+}
+
+/**************************************************************/
+int ModulePlayer::getSpeed()
+{
+
+	if (playerState == RUNNING)
+	{
+		return 2 * speed;
+	}
+	
+	return speed;
 }
 
 //------------------------------------------------------------------
@@ -183,14 +369,14 @@ bool ModulePlayer::isAttacking(int& currentAttack)
 }
 
 //-------------------------------------------------------------------
-SDL_Rect& ModulePlayer::getAttack(const int& attack)
+SDL_Rect& ModulePlayer::getAttack(int& currentAttack)
 {
-	switch (attack)
+	switch (currentAttack)
 	{
 	case SDL_SCANCODE_COMMA: //Punch
 		if (isJumping)
 		{
-			Jump(position.x, position.y, isJumping);
+			Jump(position.x, position.y, isJumping, currentAttack);
 			return jump;
 		}
 		return punch.GetCurrentFrame();
@@ -199,8 +385,9 @@ SDL_Rect& ModulePlayer::getAttack(const int& attack)
 	case SDL_SCANCODE_PERIOD: //Kick
 		if (isJumping)
 		{
-			Jump(position.x, position.y, isJumping);
+			Jump(position.x, position.y, isJumping, currentAttack);
 			return kick_jump;
+			//return rotate_kick_jump.GetCurrentFrame();
 		}
 		return kick.GetCurrentFrame();
 		break;
@@ -208,7 +395,7 @@ SDL_Rect& ModulePlayer::getAttack(const int& attack)
 }
 
 //--------------------------------------------------------------------
-void ModulePlayer::Jump(int& x, int& y, bool& isJumping)
+void ModulePlayer::Jump(int& x, int& y, bool& isJumping, int& currentAttack)
 {
 	static int y_ini = -1;
 	float aceleration = 0.3f;
@@ -237,6 +424,7 @@ void ModulePlayer::Jump(int& x, int& y, bool& isJumping)
 		isJumping = false;
 		jumpDirection[0] = false;
 		jumpDirection[1] = false;
+		currentAttack = 0;
 	}
 	else
 	{

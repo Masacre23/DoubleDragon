@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "SDL/include/SDL.h"
+#include "src\pugixml.hpp"
 
 ModuleWindow::ModuleWindow()
 {
@@ -15,6 +16,15 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
+	/******PUGI******/
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data.xml");
+	pugi::xml_node config = doc.document_element();
+	pugi::xml_node app = config.child("app");
+	pugi::xml_node title = app.child("title");
+	if (title)
+		LOG(title.text().as_string());
+	/******PUGI******/
 	LOG("Init SDL window & surface");
 	bool ret = true;
 
@@ -35,7 +45,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(title.text().as_string(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if (window == nullptr)
 		{

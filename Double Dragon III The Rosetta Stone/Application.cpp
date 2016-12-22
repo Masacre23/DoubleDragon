@@ -9,6 +9,9 @@
 #include "ModuleSceneMenu.h"
 #include "ModuleSceneMission1.h"
 
+#include "ModuleEntity.h"
+#include "EntityManager.h"
+
 using namespace std;
 
 Application::Application()
@@ -24,8 +27,11 @@ Application::Application()
 	// Game Modules
 	modules.push_back(scene_menu = new ModuleSceneMenu(false));
 	modules.push_back(scene_mission1 = new ModuleSceneMission1(false));
-	modules.push_back(player = new ModulePlayer(false));
+	//modules.push_back(player = new ModulePlayer(false));
+	//modules.push_back(entity = new ModuleEntity(false));
 	modules.push_back(fade = new ModuleFadeToBlack());
+
+	entityManager = new EntityManager();
 	
 }
 

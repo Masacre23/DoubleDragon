@@ -1,26 +1,38 @@
 #ifndef __MODULEPLAYER_H__
 #define __MODULEPLAYER_H__
 
-#include "Module.h"
+//#include "Module.h"
+#include "ModuleEntity.h"
 #include "Animation.h"
 #include "Globals.h"
 #include "Point.h"
 
 struct SDL_Texture;
 
-class ModulePlayer   : public Module
+enum state
+{
+	IDLE = 1,
+	WALKING,
+	RUNNING,
+	JUMPING,
+	ATTACKING
+};
+
+class ModulePlayer   : public ModuleEntity
 {
 public:
 	ModulePlayer(bool start_enabled = true);
+	//ModulePlayer();
 	~ModulePlayer();
 
 	bool Start();
 	update_status Update();
 	bool CleanUp();
 
+	int getSpeed();
 	bool isAttacking(int& currentAttack);
-	SDL_Rect& getAttack(const int& attack);
-	void Jump(int& x, int& y, bool& isJumping);
+	SDL_Rect& getAttack(int& currentAttack);
+	void Jump(int& x, int& y, bool& isJumping, int& currentAttack);
 
 public:
 
@@ -32,7 +44,9 @@ public:
 	Animation kick;
 	SDL_Rect kick_jump;
 	SDL_Rect jump;
+	Animation rotate_kick_jump;
 
+	state playerState;
 	int speed;
 	bool isJumping = false;
 };

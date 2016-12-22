@@ -40,7 +40,7 @@ enum update_status
 #define SCREEN_SIZE 2
 #define FULLSCREEN false
 #define VSYNC true
-#define TITLE "Double Dragon III"
+//#define TITLE "Double Dragon III"
 #define CAMERA_SPEED 1
 
 #endif //__GLOBALS_H__

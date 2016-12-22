@@ -1,0 +1,52 @@
+<!-- Config file for the game -->
+<config >
+	<window>
+		<title>Double Dragon III : The Rosetta Stone</title>
+		<resolution width="320" height="224" scale="2"></resolution>
+		<fullscreen value="false"/>
+	</window>
+
+	<renderer>
+		<vsync value="true"/>
+	</renderer>
+	
+	<entities>
+		<player1>
+			<right_down speed="0.1f">
+				<frame1 x="9" y="0" w="70" h="64"/>
+				<frame2 x="84" y="0" w="70" h="64"/>
+				<frame3 x="149" y="0" w="70" h="64"/>
+				<frame4 x="218" y="0" w="70" h="64"/>
+			</right_down>
+			<up speed="0.1f">
+				<frame1 x="281" y="0" w="70" h="64"/>
+				<frame2 x="338" y="0" w="70" h="64"/>
+				<frame3 x="390" y="0" w="70" h="64"/>
+				<frame4 x="438" y="0" w="70" h="64"/>
+			</up>
+			<jump x="398" y="79" h = "70" w="64"/>
+			<punch speed="0.1f">
+				<frame1 x="9" y="0" w="70" h="64"/>
+				<frame2 x="9" y="79" w="70" h="64"/>
+				<frame3 x="77" y="79" w="70" h="64"/>
+				<frame4 x="9" y="79" w="70" h="64"/>
+				<frame5 x="9" y="0" w="70" h="64"/>
+			</punch>
+			<kick speed="0.1f">
+				<frame1 x="9" y="0" w="70" h="64"/>
+				<frame2 x="152" y="81" w="70" h="64"/>
+				<frame3 x="217" y="81" w="70" h="64"/>
+				<frame4 x="152" y="81" w="70" h="64"/>
+				<frame5 x="9" y="81" w="70" h="64"/>
+			</kick>
+			<kick_jump x="463" y="79" h = "70" w="64"/>
+			<rotate_kick_jump speed="0.1f">
+				<frame1 x="217" y="79" w="70" h="64"/>
+				<frame2 x="281" y="79" w="70" h="64"/>
+				<frame3 x="343" y="79" w="70" h="64"/>
+				<frame4 x="217" y="79" w="70" h="64"/>
+			</rotate_kick_jump>
+		</player1>
+	</entities>
+
+</config>
