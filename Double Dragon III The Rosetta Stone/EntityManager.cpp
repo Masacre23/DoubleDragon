@@ -14,7 +14,7 @@ void EntityManager::CreateEntity(Types type)
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
-	case player: ret = new ModulePlayer(); break;
+	case player: ret = (ModuleEntity*)new ModulePlayer(); break;
 	}
 
 	if (ret != nullptr)

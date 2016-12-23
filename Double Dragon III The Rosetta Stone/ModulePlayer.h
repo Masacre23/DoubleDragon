@@ -1,11 +1,10 @@
 #ifndef __MODULEPLAYER_H__
 #define __MODULEPLAYER_H__
 
-//#include "Module.h"
-#include "ModuleEntity.h"
 #include "Animation.h"
 #include "Globals.h"
 #include "Point.h"
+#include "EntityCreature.h"
 
 struct SDL_Texture;
 
@@ -18,7 +17,7 @@ enum state
 	ATTACKING
 };
 
-class ModulePlayer   : public ModuleEntity
+class ModulePlayer   : public EntityCreature
 {
 public:
 	ModulePlayer(bool start_enabled = true);
@@ -30,9 +29,10 @@ public:
 	bool CleanUp();
 
 	int getSpeed();
-	bool isAttacking(int& currentAttack);
-	SDL_Rect& getAttack(int& currentAttack);
-	void Jump(int& x, int& y, bool& isJumping, int& currentAttack);
+	bool isAttacking();
+	SDL_Rect& getAttack();
+	bool isJumping();
+	void Jump(int& x, int& y);
 
 public:
 
@@ -48,7 +48,8 @@ public:
 
 	state playerState;
 	int speed;
-	bool isJumping = false;
+	int currentAttack = 0;
+	//bool isJumping = false;
 };
 
 #endif // __MODULEPLAYER_H__

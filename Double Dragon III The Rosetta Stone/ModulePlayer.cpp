@@ -7,7 +7,7 @@
 #include "SDL/include/SDL.h"
 #include "src\pugixml.hpp"
 
-ModulePlayer::ModulePlayer(bool start_enabled) : ModuleEntity(start_enabled)
+ModulePlayer::ModulePlayer(bool start_enabled) : EntityCreature(start_enabled)
 {
 	position.x = 100;
 	position.y = 216;
@@ -20,8 +20,6 @@ ModulePlayer::ModulePlayer(bool start_enabled) : ModuleEntity(start_enabled)
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node player1 = entities.child("player1");
-	if (player1)
-		LOG("pene");
 
 	// Right & Down
 	pugi::xml_node right_downXML = player1.child("right_down");
@@ -231,7 +229,7 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png"); // arcade version
+	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png");
 
 	playerState = IDLE;
 
@@ -252,59 +250,54 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 	SDL_Rect billy = right_down.frames[0];
-	static int currentAttack = 0;
+	//static int currentAttack = 0;
 	static bool flip = false; // When the character goes left is true
 	//static int time = 0;
-
-	if (!isAttacking(currentAttack))
+	switch (playerState)
 	{
-
-		// Horizontal
-		if (!isJumping) 
+	//case IDLE:
+		
+		//break;
+	case ATTACKING:
+		if (!isAttacking())
+			break;
+		billy = getAttack();
+		break;
+	case JUMPING:
+		isJumping();
+		if (isAttacking())
 		{
-			int newSpeed;
-			static bool b = false;
-			static int time = 0;
-			static int maxTime = 10;
-			++time;
+			billy = getAttack();
+			break;
+		}
+		billy = jump;
+		break;
+	default:
+		if (isAttacking())
+		{
+			playerState = ATTACKING;
+			break;
+		}
+		if (isJumping())
+			break;
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-			{
-				if (b && time < maxTime)
-				{
-					playerState = RUNNING;
-					b = false;
-				}
-				else
-				{
-					b = true;
-					time = 0;
-					playerState = WALKING;
-				}
-			}
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-			{
-				flip = false;
-				newSpeed = getSpeed();
-				position.x += newSpeed;
-				billy = right_down.GetCurrentFrame();
-			}
-			else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-			{
-				flip = true;
-				newSpeed = getSpeed();
-				position.x -= newSpeed;
-				billy = right_down.GetCurrentFrame();
-			}
+		int newSpeed = getSpeed();
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			flip = false;
+			//newSpeed = getSpeed();
+			position.x += newSpeed;
+			billy = right_down.GetCurrentFrame();
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			flip = true;
+			//newSpeed = getSpeed();
+			position.x -= newSpeed;
+			billy = right_down.GetCurrentFrame();
 		}
 
-		// Vertical and jump
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || isJumping)
-		{
-			Jump(position.x, position.y, isJumping, currentAttack);
-			billy = jump;
-		}
-		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
 			position.y -= speed;
 			billy = up.GetCurrentFrame();
@@ -314,10 +307,7 @@ update_status ModulePlayer::Update()
 			position.y += speed;
 			billy = right_down.GetCurrentFrame();
 		}
-	}
-	else
-	{
-		billy = getAttack(currentAttack);
+		break;
 	}
 
 	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
@@ -327,28 +317,48 @@ update_status ModulePlayer::Update()
 /**************************************************************/
 int ModulePlayer::getSpeed()
 {
-
-	if (playerState == RUNNING)
+	static bool running = false;
+	static int time = 0;
+	static int maxTime = 60;
+	if (running)
 	{
+		time = 0;
 		return 2 * speed;
 	}
-	
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	{
+		if (!time)
+		{
+			++time;
+			return speed;
+		}
+
+		if (time < maxTime)
+		{
+			running = true;
+		}else
+			time = 0;
+	}
+	if(time != 0)
+		++time;
 	return speed;
 }
 
 //------------------------------------------------------------------
-bool ModulePlayer::isAttacking(int& currentAttack)
+bool ModulePlayer::isAttacking()
 {
 	if (currentAttack != NULL)
 	{
 		if (punch.AnimationFinished())
 		{
 			currentAttack = 0;
+			playerState = IDLE;
 			return false;
 		}
 		if (kick.AnimationFinished())
 		{
 			currentAttack = 0;
+			playerState = IDLE;
 			return false;
 		}
 		return true;
@@ -369,45 +379,50 @@ bool ModulePlayer::isAttacking(int& currentAttack)
 }
 
 //-------------------------------------------------------------------
-SDL_Rect& ModulePlayer::getAttack(int& currentAttack)
+SDL_Rect& ModulePlayer::getAttack()
 {
 	switch (currentAttack)
 	{
 	case SDL_SCANCODE_COMMA: //Punch
-		if (isJumping)
-		{
-			Jump(position.x, position.y, isJumping, currentAttack);
+		if (playerState == JUMPING)
 			return jump;
-		}
 		return punch.GetCurrentFrame();
 		break;
 
 	case SDL_SCANCODE_PERIOD: //Kick
-		if (isJumping)
-		{
-			Jump(position.x, position.y, isJumping, currentAttack);
+		if (playerState == JUMPING)
 			return kick_jump;
-			//return rotate_kick_jump.GetCurrentFrame();
-		}
 		return kick.GetCurrentFrame();
 		break;
 	}
 }
 
 //--------------------------------------------------------------------
-void ModulePlayer::Jump(int& x, int& y, bool& isJumping, int& currentAttack)
+bool ModulePlayer::isJumping()
+{
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || playerState == JUMPING)
+	{
+		playerState = JUMPING;
+		Jump(position.x, position.y);
+		//billy = jump;
+		return true;
+	}
+	return false;
+}
+//--------------------------------------------------------------------
+void ModulePlayer::Jump(int& x, int& y)
 {
 	static int y_ini = -1;
 	float aceleration = 0.3f;
-	static float speed = 5;
+	static float jumpspeed = 5;
 	static bool jumpDirection[] = {false, false}; //right, left
 
 	if (y_ini == -1)// Init
 	{
 		y_ini = y;
 		--y;
-		isJumping = true;
-		speed = 5;
+		//isJumping = true;
+		jumpspeed = 5;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			jumpDirection[0] = true;
@@ -421,15 +436,16 @@ void ModulePlayer::Jump(int& x, int& y, bool& isJumping, int& currentAttack)
 	{
 		y = y_ini;
 		y_ini = -1;
-		isJumping = false;
+		//isJumping = false;
+		playerState = IDLE;
 		jumpDirection[0] = false;
 		jumpDirection[1] = false;
 		currentAttack = 0;
 	}
 	else
 	{
-		speed -= aceleration;
-		y -= speed;
+		jumpspeed -= aceleration;
+		y -= jumpspeed;
 
 		if (jumpDirection[0])
 			x += 2;
