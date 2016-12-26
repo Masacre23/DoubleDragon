@@ -1,10 +1,11 @@
-#ifndef __MODULEPLAYER_H__
-#define __MODULEPLAYER_H__
+#ifndef __CREATUREPLAYER_H__
+#define __CREATUREPLAYER_H__
 
 #include "Animation.h"
 #include "Globals.h"
 #include "Point.h"
 #include "EntityCreature.h"
+#include "ModuleCollision.h"
 
 struct SDL_Texture;
 
@@ -17,12 +18,11 @@ enum state
 	ATTACKING
 };
 
-class ModulePlayer   : public EntityCreature
+class CreaturePlayer   : public EntityCreature
 {
 public:
-	ModulePlayer(bool start_enabled = true);
-	//ModulePlayer();
-	~ModulePlayer();
+	CreaturePlayer(bool start_enabled = true);
+	~CreaturePlayer();
 
 	bool Start();
 	update_status Update();
@@ -36,9 +36,8 @@ public:
 
 public:
 
-	SDL_Texture* graphics = nullptr;
-	iPoint position;
-	Animation right_down;
+	
+	
 	Animation up;
 	Animation punch;
 	Animation kick;
@@ -47,8 +46,9 @@ public:
 	Animation rotate_kick_jump;
 
 	state playerState;
-	int speed;
 	int currentAttack = 0;
+	//bool colliding = false;
+	Collider* playerCollider;
 	//bool isJumping = false;
 };
 

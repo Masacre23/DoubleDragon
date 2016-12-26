@@ -16,7 +16,7 @@
 };*/
 enum Types
 {
-	npc,
+	enemy,
 	player,
 	unknown
 };

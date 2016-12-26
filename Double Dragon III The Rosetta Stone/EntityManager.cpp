@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "ModuleEntity.h"
-#include "ModulePlayer.h"
+#include "CreaturePlayer.h"
+#include "CreatureEnemy.h"
 
 EntityManager::EntityManager()
 {}
@@ -14,7 +15,8 @@ void EntityManager::CreateEntity(Types type)
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
-	case player: ret = (ModuleEntity*)new ModulePlayer(); break;
+	case player: ret = (ModuleEntity*)new CreaturePlayer(); break;
+	case enemy: ret = (ModuleEntity*)new CreatureEnemy(); break;
 	}
 
 	if (ret != nullptr)

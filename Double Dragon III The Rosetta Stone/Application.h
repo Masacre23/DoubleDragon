@@ -11,9 +11,11 @@ class ModuleTextures;
 class ModuleInput;
 class ModuleAudio;
 class ModuleFadeToBlack;
-class ModulePlayer;
+class CreaturePlayer;
 class ModuleSceneMenu;
 class ModuleSceneMission1;
+class ModuleCollision;
+
 
 //class ModuleEntity;
 class EntityManager;
@@ -38,6 +40,7 @@ public:
 	ModuleFadeToBlack* fade;
 	//ModulePlayer* player;
 	//ModuleEntity* entity;
+	ModuleCollision* collision;
 
 	ModuleSceneMenu* scene_menu;
 	ModuleSceneMission1* scene_mission1;

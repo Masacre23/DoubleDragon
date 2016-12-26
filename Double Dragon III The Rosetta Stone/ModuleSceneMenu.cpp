@@ -3,7 +3,7 @@
 #include "ModuleSceneMenu.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
-#include "ModulePlayer.h"
+#include "CreaturePlayer.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
 #include "ModuleFadeToBlack.h"

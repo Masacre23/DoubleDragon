@@ -1,18 +1,17 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModulePlayer.h"
+#include "CreaturePlayer.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "SDL/include/SDL.h"
 #include "src\pugixml.hpp"
 
-ModulePlayer::ModulePlayer(bool start_enabled) : EntityCreature(start_enabled)
+CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, start_enabled)
 {
 	position.x = 100;
 	position.y = 216;
 	speed = 1;
-
 	//int n = 20+2+2;
 
 	pugi::xml_document doc;
@@ -21,9 +20,11 @@ ModulePlayer::ModulePlayer(bool start_enabled) : EntityCreature(start_enabled)
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node player1 = entities.child("player1");
 
+	//playerCollider = App->collision->AddCollider({ position.x, position.y - 64, 70, 64 }, PLAYER);
+
 	// Right & Down
-	pugi::xml_node right_downXML = player1.child("right_down");
-	right_down.frames.push_back(
+	//pugi::xml_node right_downXML = player1.child("right_down");
+	/*right_down.frames.push_back(
 	{ 
 		right_downXML.child("frame1").attribute("x").as_int(), 
 		right_downXML.child("frame1").attribute("y").as_int(),
@@ -52,8 +53,8 @@ ModulePlayer::ModulePlayer(bool start_enabled) : EntityCreature(start_enabled)
 		right_downXML.child("frame4").attribute("h").as_int()
 	});
 	
-	right_down.speed = right_downXML.attribute("speed").as_float();
-	
+	right_down.speed = right_downXML.attribute("speed").as_float();*/
+
 	// Up
 	pugi::xml_node upXML = player1.child("up");
 	up.frames.push_back(
@@ -221,11 +222,11 @@ ModulePlayer::ModulePlayer(bool start_enabled) : EntityCreature(start_enabled)
 	rotate_kick_jump.speed = rotate_kick_jumpXML.attribute("speed").as_float();
 }
 
-ModulePlayer::~ModulePlayer()
+CreaturePlayer::~CreaturePlayer()
 {}
 
 // Load assets
-bool ModulePlayer::Start()
+bool CreaturePlayer::Start()
 {
 	LOG("Loading player");
 
@@ -237,7 +238,7 @@ bool ModulePlayer::Start()
 }
 
 // Unload assets
-bool ModulePlayer::CleanUp()
+bool CreaturePlayer::CleanUp()
 {
 	LOG("Unloading player");
 
@@ -247,12 +248,11 @@ bool ModulePlayer::CleanUp()
 }
 
 // Update
-update_status ModulePlayer::Update()
+update_status CreaturePlayer::Update()
 {
 	SDL_Rect billy = right_down.frames[0];
-	//static int currentAttack = 0;
 	static bool flip = false; // When the character goes left is true
-	//static int time = 0;
+
 	switch (playerState)
 	{
 	//case IDLE:
@@ -299,7 +299,8 @@ update_status ModulePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-			position.y -= speed;
+			if (!creatureCollider->colliding)
+				position.y -= speed;
 			billy = up.GetCurrentFrame();
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
@@ -310,12 +311,14 @@ update_status ModulePlayer::Update()
 		break;
 	}
 
+	creatureCollider->SetPos(position.x, position.y - 64);
+
 	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
 	return UPDATE_CONTINUE;
 }
 
 /**************************************************************/
-int ModulePlayer::getSpeed()
+int CreaturePlayer::getSpeed()
 {
 	static bool running = false;
 	static int time = 0;
@@ -345,7 +348,7 @@ int ModulePlayer::getSpeed()
 }
 
 //------------------------------------------------------------------
-bool ModulePlayer::isAttacking()
+bool CreaturePlayer::isAttacking()
 {
 	if (currentAttack != NULL)
 	{
@@ -379,7 +382,7 @@ bool ModulePlayer::isAttacking()
 }
 
 //-------------------------------------------------------------------
-SDL_Rect& ModulePlayer::getAttack()
+SDL_Rect& CreaturePlayer::getAttack()
 {
 	switch (currentAttack)
 	{
@@ -398,7 +401,7 @@ SDL_Rect& ModulePlayer::getAttack()
 }
 
 //--------------------------------------------------------------------
-bool ModulePlayer::isJumping()
+bool CreaturePlayer::isJumping()
 {
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || playerState == JUMPING)
 	{
@@ -410,7 +413,7 @@ bool ModulePlayer::isJumping()
 	return false;
 }
 //--------------------------------------------------------------------
-void ModulePlayer::Jump(int& x, int& y)
+void CreaturePlayer::Jump(int& x, int& y)
 {
 	static int y_ini = -1;
 	float aceleration = 0.3f;
