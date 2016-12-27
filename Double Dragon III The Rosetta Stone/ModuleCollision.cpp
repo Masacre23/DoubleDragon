@@ -38,14 +38,24 @@ update_status ModuleCollision::Update()
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 	{
 		(*it)->colliding = false;
+		(*it)->collisionMatrix[0][0] = false;
+		(*it)->collisionMatrix[0][1] = false;
+		(*it)->collisionMatrix[0][2] = false;
+		(*it)->collisionMatrix[1][0] = false;
+		(*it)->collisionMatrix[1][1] = false;
+		(*it)->collisionMatrix[1][2] = false;
+		(*it)->collisionMatrix[2][0] = false;
+		(*it)->collisionMatrix[2][1] = false;
+		(*it)->collisionMatrix[2][2] = false;
 		for (list<Collider*>::iterator it2 = colliders.begin(); it2 != colliders.end(); ++it2)
 		{
 			if ((*it)->CheckCollision((*it2)->rect))
 			{
 				//LOG("YOLOOOOOOOOOOOOOOOOOOOOOO");
 				(*it)->colliding = true;
+				(*it)->collisionMatrix[(*it)->type][(*it2)->type] = true;
 				(*it2)->colliding = true;
-				break;
+				(*it2)->collisionMatrix[(*it2)->type][(*it)->type] = true;
 			}
 		}
 	}
@@ -101,11 +111,10 @@ Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, const collider_type
 }
 
 // -----------------------------------------------------
-
 bool Collider::CheckCollision(const SDL_Rect& r) const
 {
-	if (rect.x < r.x && rect.x + rect.w > r.x)
-		if (rect.y < r.y && rect.y + rect.h > r.y)
+	if ((rect.x <= r.x && rect.x + rect.w >= r.x) || (r.x <= rect.x && r.x + r.w >= rect.x))
+		if((rect.y <= r.y && rect.y + rect.h >= r.y) || (r.y <= rect.y && r.y + r.h >= rect.y))
 			return true;
 
 	return false;

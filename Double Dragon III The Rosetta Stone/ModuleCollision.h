@@ -20,6 +20,11 @@ struct Collider
 	bool to_delete = false;
 
 	collider_type type;
+	bool collisionMatrix[3][3] = {
+		{false, false, false}, //Player
+		{false, false, false}, //Enemy
+		{false, false, false} //Wall
+	};
 
 	Collider(SDL_Rect rectangle) : // expand this call if you need to
 		rect(rectangle)

@@ -9,7 +9,7 @@
 
 CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, start_enabled)
 {
-	position.x = 100;
+	position.x = 120;
 	position.y = 216;
 	speed = 1;
 	//int n = 20+2+2;
@@ -299,7 +299,7 @@ update_status CreaturePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-			if (!creatureCollider->colliding)
+			if (!creatureCollider->collisionMatrix[0][2])//Player-Wall
 				position.y -= speed;
 			billy = up.GetCurrentFrame();
 		}
@@ -455,4 +455,16 @@ void CreaturePlayer::Jump(int& x, int& y)
 		else if(jumpDirection[1])
 			x -= 2;
 	}
+}
+
+
+/*****************************************/
+int CreaturePlayer::getCollision() //Return the type of collision (enemy attack, a wall,...)
+{
+	int ret;
+
+	//for
+	//creatureCollider
+
+	return ret;
 }

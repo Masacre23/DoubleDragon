@@ -33,11 +33,9 @@ public:
 	SDL_Rect& getAttack();
 	bool isJumping();
 	void Jump(int& x, int& y);
+	int getCollision();
 
 public:
-
-	
-	
 	Animation up;
 	Animation punch;
 	Animation kick;
@@ -47,9 +45,9 @@ public:
 
 	state playerState;
 	int currentAttack = 0;
-	//bool colliding = false;
 	Collider* playerCollider;
-	//bool isJumping = false;
+	bool wallCollision = false;
+	bool enemyCollision = false;
 };
 
 #endif // __MODULEPLAYER_H__
