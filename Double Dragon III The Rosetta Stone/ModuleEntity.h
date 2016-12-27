@@ -4,6 +4,7 @@
 #include <list>
 #include "Globals.h"
 #include "Module.h"
+#include "Point.h"
 
 /*enum Types
 {
@@ -28,7 +29,11 @@ public:
 	ModuleEntity(bool start_enabled = true);
 	~ModuleEntity();
 
+	void UpdateProfundity();
+
 public:
+	iPoint position;
+	int profundity = 0;
 	//Types type;
 };
 

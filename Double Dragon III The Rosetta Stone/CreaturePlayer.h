@@ -9,15 +9,6 @@
 
 struct SDL_Texture;
 
-enum state
-{
-	IDLE = 1,
-	WALKING,
-	RUNNING,
-	JUMPING,
-	ATTACKING
-};
-
 class CreaturePlayer   : public EntityCreature
 {
 public:
@@ -36,11 +27,7 @@ public:
 	int getCollision();
 
 public:
-	Animation up;
-	Animation punch;
-	Animation kick;
-	SDL_Rect kick_jump;
-	SDL_Rect jump;
+	
 	Animation rotate_kick_jump;
 
 	state playerState;

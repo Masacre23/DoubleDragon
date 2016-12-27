@@ -3,7 +3,6 @@
 
 #include "Animation.h"
 #include "Globals.h"
-#include "Point.h"
 #include"ModuleEntity.h"
 #include "ModuleCollision.h"
 
@@ -18,6 +17,16 @@ enum creature_type
 	BOSS
 };
 
+enum state
+{
+	IDLE = 1,
+	WALKING,
+	RUNNING,
+	JUMPING,
+	ATTACKING,
+	DAMAGED
+};
+
 class EntityCreature : public ModuleEntity
 {
 public:
@@ -26,10 +35,14 @@ public:
 
 public:
 	SDL_Texture* graphics = nullptr;
-	iPoint position;
 
 	Collider* creatureCollider;
 	Animation right_down;
+	Animation up;
+	Animation punch;
+	Animation kick;
+	SDL_Rect kick_jump;
+	SDL_Rect jump;
 
 	int speed;
 };

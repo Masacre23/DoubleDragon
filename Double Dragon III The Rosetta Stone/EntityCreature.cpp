@@ -75,6 +75,138 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 
 	right_down.speed = right_downXML.attribute("speed").as_float();
 
+	// Up
+	pugi::xml_node upXML = creature.child("up");
+	up.frames.push_back(
+	{
+		upXML.child("frame1").attribute("x").as_int(),
+		upXML.child("frame1").attribute("y").as_int(),
+		upXML.child("frame1").attribute("w").as_int(),
+		upXML.child("frame1").attribute("h").as_int()
+	});
+	up.frames.push_back(
+	{
+		upXML.child("frame2").attribute("x").as_int(),
+		upXML.child("frame2").attribute("y").as_int(),
+		upXML.child("frame2").attribute("w").as_int(),
+		upXML.child("frame2").attribute("h").as_int()
+	});
+	up.frames.push_back(
+	{
+		upXML.child("frame3").attribute("x").as_int(),
+		upXML.child("frame3").attribute("y").as_int(),
+		upXML.child("frame3").attribute("w").as_int(),
+		upXML.child("frame3").attribute("h").as_int()
+	});
+	up.frames.push_back(
+	{
+		upXML.child("frame4").attribute("x").as_int(),
+		upXML.child("frame4").attribute("y").as_int(),
+		upXML.child("frame4").attribute("w").as_int(),
+		upXML.child("frame4").attribute("h").as_int()
+	});
+
+	up.speed = upXML.attribute("speed").as_float();
+
+	// Jump
+	pugi::xml_node jumpXML = creature.child("jump");
+	jump =
+	{
+		jumpXML.attribute("x").as_int(),
+		jumpXML.attribute("y").as_int(),
+		jumpXML.attribute("w").as_int(),
+		jumpXML.attribute("h").as_int()
+	};
+
+	// Punch
+	pugi::xml_node punchXML = creature.child("punch");
+	punch.frames.push_back(
+	{
+		punchXML.child("frame1").attribute("x").as_int(),
+		punchXML.child("frame1").attribute("y").as_int(),
+		punchXML.child("frame1").attribute("w").as_int(),
+		punchXML.child("frame1").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame2").attribute("x").as_int(),
+		punchXML.child("frame2").attribute("y").as_int(),
+		punchXML.child("frame2").attribute("w").as_int(),
+		punchXML.child("frame2").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame3").attribute("x").as_int(),
+		punchXML.child("frame3").attribute("y").as_int(),
+		punchXML.child("frame3").attribute("w").as_int(),
+		punchXML.child("frame3").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame4").attribute("x").as_int(),
+		punchXML.child("frame4").attribute("y").as_int(),
+		punchXML.child("frame4").attribute("w").as_int(),
+		punchXML.child("frame4").attribute("h").as_int()
+	});
+	punch.frames.push_back(
+	{
+		punchXML.child("frame5").attribute("x").as_int(),
+		punchXML.child("frame5").attribute("y").as_int(),
+		punchXML.child("frame5").attribute("w").as_int(),
+		punchXML.child("frame5").attribute("h").as_int()
+	});
+
+	punch.speed = punchXML.attribute("speed").as_float();
+
+	// Kick
+	pugi::xml_node kickXML = creature.child("kick");
+	kick.frames.push_back(
+	{
+		kickXML.child("frame1").attribute("x").as_int(),
+		kickXML.child("frame1").attribute("y").as_int(),
+		kickXML.child("frame1").attribute("w").as_int(),
+		kickXML.child("frame1").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame2").attribute("x").as_int(),
+		kickXML.child("frame2").attribute("y").as_int(),
+		kickXML.child("frame2").attribute("w").as_int(),
+		kickXML.child("frame2").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame3").attribute("x").as_int(),
+		kickXML.child("frame3").attribute("y").as_int(),
+		kickXML.child("frame3").attribute("w").as_int(),
+		kickXML.child("frame3").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame4").attribute("x").as_int(),
+		kickXML.child("frame4").attribute("y").as_int(),
+		kickXML.child("frame4").attribute("w").as_int(),
+		kickXML.child("frame4").attribute("h").as_int()
+	});
+	kick.frames.push_back(
+	{
+		kickXML.child("frame5").attribute("x").as_int(),
+		kickXML.child("frame5").attribute("y").as_int(),
+		kickXML.child("frame5").attribute("w").as_int(),
+		kickXML.child("frame5").attribute("h").as_int()
+	});
+
+	kick.speed = kickXML.attribute("speed").as_float();
+
+	// Kick jump
+	pugi::xml_node kick_jumpXML = creature.child("kick_jump");
+	kick_jump =
+	{
+		kick_jumpXML.attribute("x").as_int(),
+		kick_jumpXML.attribute("y").as_int(),
+		kick_jumpXML.attribute("w").as_int(),
+		kick_jumpXML.attribute("h").as_int()
+	};
 }
 
 EntityCreature::~EntityCreature()

@@ -75,6 +75,8 @@ update_status ModuleSceneMission1::Update()
 	//Update entities
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		(*it)->Update();
+	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
+		(*it)->Update();
 
 	return UPDATE_CONTINUE;
 }

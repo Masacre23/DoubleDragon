@@ -42,13 +42,14 @@ bool CreatureEnemy::CleanUp()
 // Update
 update_status CreatureEnemy::Update()
 {
-	LOG("Updating enemy");
+	UpdateProfundity();
 	position.x = 100;
 	position.y = 216;
 	SDL_Rect enemy = right_down.frames[0];
 	bool flip = false;
 	
-	if (creatureCollider->collisionMatrix[1][0])
+	enemy = right_down.GetCurrentFrame();
+	/*if (creatureCollider->collisionMatrix[1][0])
 	{
 		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		{
@@ -59,7 +60,7 @@ update_status CreatureEnemy::Update()
 			}
 		}
 		
-	}
+	}*/
 	creatureCollider->SetPos(position.x, position.y - 64);
 	App->renderer->Blit(graphics, position.x + speed, position.y - enemy.h, &(enemy), 1.0f, flip);
 	return UPDATE_CONTINUE;
