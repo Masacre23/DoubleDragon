@@ -26,12 +26,13 @@ Application::Application()
 	modules.push_back(audio = new ModuleAudio());
 
 	// Game Modules
+	entityManager = new EntityManager();
 	modules.push_back(scene_menu = new ModuleSceneMenu(false));
 	modules.push_back(scene_mission1 = new ModuleSceneMission1(false));
 	modules.push_back(fade = new ModuleFadeToBlack());
 
 	modules.push_back(collision = new ModuleCollision());
-	entityManager = new EntityManager();
+	
 	
 }
 

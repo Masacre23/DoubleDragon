@@ -21,7 +21,7 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node creature;
-
+	
 	switch (type)
 	{
 	case PLAYER:

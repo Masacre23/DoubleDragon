@@ -39,7 +39,7 @@
 				<frame4 x="152" y="81" w="70" h="64"/>
 				<frame5 x="9" y="81" w="70" h="64"/>
 			</kick>
-			<kick_jump x="463" y="79" h = "70" w="64"/>
+			<kick_jump x="487" y="79" h = "70" w="64"/>
 			<rotate_kick_jump speed="0.1f">
 				<frame1 x="217" y="79" w="70" h="64"/>
 				<frame2 x="281" y="79" w="70" h="64"/>
@@ -75,7 +75,7 @@
 				<frame4 x="152" y="81" w="70" h="64"/>
 				<frame5 x="9" y="81" w="70" h="64"/>
 			</kick>
-			<kick_jump x="463" y="79" h = "70" w="64"/>
+			<kick_jump x="487" y="79" h = "70" w="64"/>
 		</enemy1>
 	</entities>
 

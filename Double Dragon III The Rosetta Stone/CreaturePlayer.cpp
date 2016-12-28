@@ -11,7 +11,7 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 {
 	position.x = 120;
 	position.y = 216;
-	speed = 1;
+	//speed = 1;
 	//int n = 20+2+2;
 
 	pugi::xml_document doc;
@@ -53,6 +53,17 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 	});
 
 	rotate_kick_jump.speed = rotate_kick_jumpXML.attribute("speed").as_float();
+
+	// Butting
+	pugi::xml_node buttingXML = player1.child("butting");
+	butting =
+	{
+		buttingXML.attribute("x").as_int(),
+		buttingXML.attribute("y").as_int(),
+		buttingXML.attribute("w").as_int(),
+		buttingXML.attribute("h").as_int()
+	};
+
 }
 
 CreaturePlayer::~CreaturePlayer()
@@ -65,7 +76,7 @@ bool CreaturePlayer::Start()
 
 	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png");
 
-	playerState = IDLE;
+	creature_state = IDLE;
 
 	return true;
 }
@@ -87,7 +98,7 @@ update_status CreaturePlayer::Update()
 	SDL_Rect billy = right_down.frames[0];
 	static bool flip = false; // When the character goes left is true
 
-	switch (playerState)
+	switch (creature_state)
 	{
 	//case IDLE:
 		
@@ -109,7 +120,7 @@ update_status CreaturePlayer::Update()
 	default:
 		if (isAttacking())
 		{
-			playerState = ATTACKING;
+			creature_state = ATTACKING;
 			break;
 		}
 		if (isJumping())
@@ -154,30 +165,37 @@ update_status CreaturePlayer::Update()
 /**************************************************************/
 int CreaturePlayer::getSpeed()
 {
-	static bool running = false;
+	//static bool running = false;
+	static bool walking = false;
 	static int time = 0;
-	static int maxTime = 60;
+	static int maxTime = 24; 
+
 	if (running)
 	{
-		time = 0;
-		return 2 * speed;
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
-	{
-		if (!time)
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP || App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 		{
-			++time;
+			running = false;
 			return speed;
 		}
-
-		if (time < maxTime)
+		return speed * 2;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	{
+		if (walking && time < maxTime)
 		{
 			running = true;
-		}else
+			walking = false;
 			time = 0;
+			return speed * 2;
+		}
+		else
+		{
+			walking = true;
+			time = 0;
+		}
 	}
-	if(time != 0)
-		++time;
+	++time;
+	
 	return speed;
 }
 
@@ -189,15 +207,16 @@ bool CreaturePlayer::isAttacking()
 		if (punch.AnimationFinished())
 		{
 			currentAttack = 0;
-			playerState = IDLE;
+			creature_state = IDLE;
 			return false;
 		}
 		if (kick.AnimationFinished())
 		{
 			currentAttack = 0;
-			playerState = IDLE;
+			creature_state = IDLE;
 			return false;
 		}
+
 		return true;
 	}
 	else
@@ -205,6 +224,8 @@ bool CreaturePlayer::isAttacking()
 		if (App->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
 		{
 			currentAttack = SDL_SCANCODE_COMMA;
+			if (running)
+				isButting = true;
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_DOWN)
 		{
@@ -221,13 +242,18 @@ SDL_Rect& CreaturePlayer::getAttack()
 	switch (currentAttack)
 	{
 	case SDL_SCANCODE_COMMA: //Punch
-		if (playerState == JUMPING)
+		if (creature_state == JUMPING)
 			return jump;
+		if (isButting)
+		{
+			Butting();
+			return butting;
+		}
 		return punch.GetCurrentFrame();
 		break;
 
 	case SDL_SCANCODE_PERIOD: //Kick
-		if (playerState == JUMPING)
+		if (creature_state == JUMPING)
 			return kick_jump;
 		return kick.GetCurrentFrame();
 		break;
@@ -237,9 +263,9 @@ SDL_Rect& CreaturePlayer::getAttack()
 //--------------------------------------------------------------------
 bool CreaturePlayer::isJumping()
 {
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || playerState == JUMPING)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || creature_state == JUMPING)
 	{
-		playerState = JUMPING;
+		creature_state = JUMPING;
 		Jump(position.x, position.y);
 		//billy = jump;
 		return true;
@@ -251,7 +277,7 @@ void CreaturePlayer::Jump(int& x, int& y)
 {
 	static int y_ini = -1;
 	float aceleration = 0.3f;
-	static float jumpspeed = 5;
+	static float jump_speed = 5;
 	static bool jumpDirection[] = {false, false}; //right, left
 
 	if (y_ini == -1)// Init
@@ -259,7 +285,7 @@ void CreaturePlayer::Jump(int& x, int& y)
 		y_ini = y;
 		--y;
 		//isJumping = true;
-		jumpspeed = 5;
+		jump_speed = 5;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			jumpDirection[0] = true;
@@ -273,16 +299,16 @@ void CreaturePlayer::Jump(int& x, int& y)
 	{
 		y = y_ini;
 		y_ini = -1;
-		//isJumping = false;
-		playerState = IDLE;
+		creature_state = IDLE;
 		jumpDirection[0] = false;
 		jumpDirection[1] = false;
 		currentAttack = 0;
+		//isButting = false;
 	}
 	else
 	{
-		jumpspeed -= aceleration;
-		y -= jumpspeed;
+		jump_speed -= aceleration;
+		y -= jump_speed;
 
 		if (jumpDirection[0])
 			x += 2;
@@ -290,7 +316,54 @@ void CreaturePlayer::Jump(int& x, int& y)
 			x -= 2;
 	}
 }
+/*****************************************/
+void CreaturePlayer::Butting() //Return true when the atack is finished
+{
+	//static bool isButting = false;
+	static int y_ini = -1;
+	float aceleration = 0.5f;
+	static float jump_speed = 5;
+	static bool jumpDirection[] = { false, false }; //right, left
+	running = false;
+	if (y_ini == -1)
+	{
+		y_ini = position.y;
+		--position.y;
+		jump_speed = 5;
+		//running = false;
+		isButting = true;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			jumpDirection[0] = true;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			jumpDirection[1] = true;
+		}
 
+	}else if (y_ini <= position.y)
+	{
+		creature_state = IDLE;
+		//isButting = false;
+		//running = false;
+		jumpDirection[0] = false;
+		jumpDirection[1] = false;
+		currentAttack = 0;
+		position.y = y_ini;
+		y_ini = -1;
+	}
+	else
+	{
+		jump_speed -= aceleration;
+		position.y -= jump_speed;
+
+		if (jumpDirection[0])
+			position.x += 3;
+		else if (jumpDirection[1])
+			position.x -= 3;
+	}
+
+}
 
 /*****************************************/
 int CreaturePlayer::getCollision() //Return the type of collision (enemy attack, a wall,...)
