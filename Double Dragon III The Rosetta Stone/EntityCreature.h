@@ -45,7 +45,7 @@ public:
 	SDL_Rect jump;
 
 	state creature_state;
-	int speed;
+	float speed;
 };
 
 #endif

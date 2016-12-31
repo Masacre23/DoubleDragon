@@ -12,16 +12,19 @@ struct SDL_Texture;
 class CreatureEnemy : public EntityCreature
 {
 public:
-	CreatureEnemy(bool start_enabled = true);
+	CreatureEnemy(float x, float y, bool start_enabled = true);
 	~CreatureEnemy();
 
 	bool Start();
 	update_status Update();
 	bool CleanUp();
 
+	void Move(SDL_Rect& enemy);
+	SDL_Rect Attack();
+
 public:
 	SDL_Texture* graphics = nullptr;
-	iPoint position;
+	CreaturePlayer* target;
 };
 
 #endif

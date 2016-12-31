@@ -23,15 +23,15 @@ public:
 	bool isAttacking();
 	SDL_Rect& getAttack();
 	bool isJumping();
-	void Jump(int& x, int& y);
-	void Butting();
+	void Jump();
+	void HeadButt();
 	int getCollision();
 	//bool Butting();
 
 public:
 	
 	Animation rotate_kick_jump;
-	SDL_Rect butting;
+	SDL_Rect head_butt;
 
 	//state playerState;
 	int currentAttack = 0;

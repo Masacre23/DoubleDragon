@@ -32,9 +32,9 @@ public:
 	void UpdateProfundity();
 
 public:
-	iPoint position;
-	int profundity = 0;
-	//Types type;
+	fPoint position;
+	float profundity = 0;
+	Types type;
 };
 
 #endif

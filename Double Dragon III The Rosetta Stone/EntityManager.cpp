@@ -10,18 +10,21 @@ EntityManager::EntityManager()
 EntityManager::~EntityManager()
 {}
 
-void EntityManager::CreateEntity(Types type)
+void EntityManager::CreateEntity(Types type, float x, float y)
 {
 	//static_assert(ModuleEntity::Types::un)
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
 	case player: ret = (ModuleEntity*)new CreaturePlayer(); break;
-	case enemy: ret = (ModuleEntity*)new CreatureEnemy(); break;
+	case enemy: ret = (ModuleEntity*)new CreatureEnemy(x, y); break;
 	}
 
 	if (ret != nullptr)
+	{
+		ret->type = type;
 		entities.push_back(ret);
+	}
 
 	//return ret;
 }

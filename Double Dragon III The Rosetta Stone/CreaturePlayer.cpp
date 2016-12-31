@@ -11,7 +11,7 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 {
 	position.x = 120;
 	position.y = 216;
-	//speed = 1;
+	speed = 1;
 	//int n = 20+2+2;
 
 	pugi::xml_document doc;
@@ -55,8 +55,8 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 	rotate_kick_jump.speed = rotate_kick_jumpXML.attribute("speed").as_float();
 
 	// Butting
-	pugi::xml_node buttingXML = player1.child("butting");
-	butting =
+	pugi::xml_node buttingXML = player1.child("head_butt");
+	head_butt =
 	{
 		buttingXML.attribute("x").as_int(),
 		buttingXML.attribute("y").as_int(),
@@ -95,8 +95,11 @@ bool CreaturePlayer::CleanUp()
 update_status CreaturePlayer::Update()
 {
 	UpdateProfundity();
+
+	//profundity = 2;
 	SDL_Rect billy = right_down.frames[0];
 	static bool flip = false; // When the character goes left is true
+	int newSpeed = getSpeed();
 
 	switch (creature_state)
 	{
@@ -126,18 +129,15 @@ update_status CreaturePlayer::Update()
 		if (isJumping())
 			break;
 
-		int newSpeed = getSpeed();
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			flip = false;
-			//newSpeed = getSpeed();
 			position.x += newSpeed;
 			billy = right_down.GetCurrentFrame();
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
 			flip = true;
-			//newSpeed = getSpeed();
 			position.x -= newSpeed;
 			billy = right_down.GetCurrentFrame();
 		}
@@ -246,8 +246,8 @@ SDL_Rect& CreaturePlayer::getAttack()
 			return jump;
 		if (isButting)
 		{
-			Butting();
-			return butting;
+			HeadButt();
+			return head_butt;
 		}
 		return punch.GetCurrentFrame();
 		break;
@@ -266,14 +266,13 @@ bool CreaturePlayer::isJumping()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || creature_state == JUMPING)
 	{
 		creature_state = JUMPING;
-		Jump(position.x, position.y);
-		//billy = jump;
+		Jump();
 		return true;
 	}
 	return false;
 }
 //--------------------------------------------------------------------
-void CreaturePlayer::Jump(int& x, int& y)
+void CreaturePlayer::Jump()
 {
 	static int y_ini = -1;
 	float aceleration = 0.3f;
@@ -282,9 +281,8 @@ void CreaturePlayer::Jump(int& x, int& y)
 
 	if (y_ini == -1)// Init
 	{
-		y_ini = y;
-		--y;
-		//isJumping = true;
+		y_ini = position.y;
+		position.y -= 1;
 		jump_speed = 5;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
@@ -295,29 +293,28 @@ void CreaturePlayer::Jump(int& x, int& y)
 			jumpDirection[1] = true;
 		}
 	}
-	else if (y_ini <= y) 
+	else if (y_ini <= position.y) 
 	{
-		y = y_ini;
+		position.y = y_ini;
 		y_ini = -1;
 		creature_state = IDLE;
 		jumpDirection[0] = false;
 		jumpDirection[1] = false;
 		currentAttack = 0;
-		//isButting = false;
 	}
 	else
 	{
 		jump_speed -= aceleration;
-		y -= jump_speed;
+		position.y -= jump_speed;
 
 		if (jumpDirection[0])
-			x += 2;
+			position.x += 2;
 		else if(jumpDirection[1])
-			x -= 2;
+			position.x -= 2;
 	}
 }
 /*****************************************/
-void CreaturePlayer::Butting() //Return true when the atack is finished
+void CreaturePlayer::HeadButt()
 {
 	//static bool isButting = false;
 	static int y_ini = -1;
@@ -330,7 +327,7 @@ void CreaturePlayer::Butting() //Return true when the atack is finished
 		y_ini = position.y;
 		--position.y;
 		jump_speed = 5;
-		//running = false;
+		running = false;
 		isButting = true;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
@@ -344,8 +341,8 @@ void CreaturePlayer::Butting() //Return true when the atack is finished
 	}else if (y_ini <= position.y)
 	{
 		creature_state = IDLE;
-		//isButting = false;
-		//running = false;
+		isButting = false;
+		running = false;
 		jumpDirection[0] = false;
 		jumpDirection[1] = false;
 		currentAttack = 0;
