@@ -39,4 +39,13 @@ public:
 		}
 		return false;
 	}
+
+	bool AnimationHalf() //Returns true when the animation goes in half
+	{
+		if ((int)current_frame == frames.size() / 2)
+		{
+			return true;
+		}
+		return false;
+	}
 };

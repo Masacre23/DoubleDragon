@@ -43,6 +43,7 @@ public:
 	Animation kick;
 	SDL_Rect kick_jump;
 	SDL_Rect jump;
+	SDL_Rect damaged;
 
 	state creature_state;
 	float speed;

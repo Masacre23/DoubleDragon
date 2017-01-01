@@ -9,7 +9,7 @@
 
 enum collider_type
 {
-	PLAYER,
+	PLAYER = 0,
 	ENEMY,
 	WALL
 };

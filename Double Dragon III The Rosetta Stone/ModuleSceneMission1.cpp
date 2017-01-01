@@ -27,7 +27,7 @@ ModuleSceneMission1::~ModuleSceneMission1()
 bool ModuleSceneMission1::Start()
 {
 	App->entityManager->CreateEntity(Types::player);
-	App->entityManager->CreateEntity(Types::enemy, 200.0f, 200.0f);
+	App->entityManager->CreateEntity(Types::enemy, 0.0f, 200.0f);
 	//App->entityManager->CreateEntity(Types::enemy, 100.0f, 100.0f);
 
 	bool res = true;

@@ -6,6 +6,8 @@
 #include "ModuleTextures.h"
 #include "SDL/include/SDL.h"
 #include "src\pugixml.hpp"
+#include "CreatureEnemy.h"
+#include "EntityManager.h"
 
 CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, start_enabled)
 {
@@ -96,10 +98,26 @@ update_status CreaturePlayer::Update()
 {
 	UpdateProfundity();
 
-	//profundity = 2;
 	SDL_Rect billy = right_down.frames[0];
 	static bool flip = false; // When the character goes left is true
 	int newSpeed = getSpeed();
+	//state previous_state;
+	static int counter = 0;
+
+	/*if (creatureCollider->collisionMatrix[0][1]) //Player - Enemy
+	{
+		//screature_state = previous_state;
+		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
+		{
+			CreatureEnemy* e = (CreatureEnemy*)(*it);
+			/*if (e->enemy = e->punch.frames[2])
+			{
+				creature_state = DAMAGED;
+			}
+			creature_state = DAMAGED;
+		}
+	}*/
+
 
 	switch (creature_state)
 	{
@@ -119,6 +137,18 @@ update_status CreaturePlayer::Update()
 			break;
 		}
 		billy = jump;
+		break;
+	case DAMAGED:
+		++counter;
+		if (counter < 24)
+		{
+			billy = damaged;
+		}
+		else
+		{
+			creature_state = IDLE;
+			counter = 0;
+		}
 		break;
 	default:
 		if (isAttacking())

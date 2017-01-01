@@ -207,6 +207,16 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 		kick_jumpXML.attribute("w").as_int(),
 		kick_jumpXML.attribute("h").as_int()
 	};
+
+	// Damaged
+	pugi::xml_node damagedXML = creature.child("damaged");
+	damaged =
+	{
+		damagedXML.attribute("x").as_int(),
+		damagedXML.attribute("y").as_int(),
+		damagedXML.attribute("w").as_int(),
+		damagedXML.attribute("h").as_int()
+	};
 }
 
 EntityCreature::~EntityCreature()

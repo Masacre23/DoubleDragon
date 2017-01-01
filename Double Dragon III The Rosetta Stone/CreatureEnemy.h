@@ -25,6 +25,7 @@ public:
 public:
 	SDL_Texture* graphics = nullptr;
 	CreaturePlayer* target;
+	SDL_Rect enemy;
 };
 
 #endif

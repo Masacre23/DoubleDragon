@@ -51,7 +51,7 @@ bool CreatureEnemy::CleanUp()
 update_status CreatureEnemy::Update()
 {
 	UpdateProfundity();
-	SDL_Rect enemy = right_down.frames[3];
+	enemy = right_down.frames[3];
 	bool flip = false;
 	static int counter = 0;
 	
@@ -109,5 +109,15 @@ void CreatureEnemy::Move(SDL_Rect& enemy)
 /****************************************************/
 SDL_Rect CreatureEnemy::Attack()
 {
+	creature_state = ATTACKING;
+	if (punch.AnimationFinished())
+	{
+		creature_state = WALKING;
+		return right_down.frames[3];
+	}
+	if (punch.AnimationHalf() && position.DistanceTo(target->position) < 20)
+	{
+		target->creature_state = DAMAGED;
+	}
 	return punch.GetCurrentFrame();
 }
