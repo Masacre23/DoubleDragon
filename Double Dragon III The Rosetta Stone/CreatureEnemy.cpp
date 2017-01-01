@@ -51,29 +51,39 @@ bool CreatureEnemy::CleanUp()
 update_status CreatureEnemy::Update()
 {
 	UpdateProfundity();
-	enemy = right_down.frames[3];
-	bool flip = false;
+	//enemy = right_down.frames[3];
+	static bool flip = false;
 	static int counter = 0;
 	
-	counter++;
-	if (target->position.x < position.x)
-		flip = true;
-
-	Move(enemy);
-
-	/*if (creatureCollider->collisionMatrix[1][0])
+	//counter++;
+	if (creature_state != ATTACKING)
 	{
-		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
+		if (target->position.x < position.x)
+			flip = true;
+		else
+			flip = false;
+	}
+
+	switch (creature_state)
+	{
+	case DAMAGED:
+		++counter;
+		if (counter < 24)
 		{
-			CreaturePlayer* p = (CreaturePlayer*)(*it);
-			if (p->playerState == ATTACKING)
-			{
-				enemy = right_down.frames[1];
-			}
+			enemy = damaged;
 		}
-		
-	}*/
-	creatureCollider->SetPos(position.x, position.y - 64);
+		else
+		{
+			creature_state = IDLE;
+			counter = 0;
+		}
+		break;
+	default:
+		Move(enemy);
+		break;
+	}
+
+	creatureCollider->SetPos(position.x + 25, position.y - 64);
 	App->renderer->Blit(graphics, position.x + speed, position.y - enemy.h, &(enemy), 1.0f, flip);
 	return UPDATE_CONTINUE;
 }
@@ -102,8 +112,8 @@ void CreatureEnemy::Move(SDL_Rect& enemy)
 
 		enemy = right_down.GetCurrentFrame();
 	}
-	else
-		enemy = Attack();
+	//else
+		//enemy = Attack();
 }
 
 /****************************************************/
@@ -120,4 +130,10 @@ SDL_Rect CreatureEnemy::Attack()
 		target->creature_state = DAMAGED;
 	}
 	return punch.GetCurrentFrame();
+}
+
+/*****************************************************/
+void CreatureEnemy::ReceiveDamage(int damage)
+{
+	creature_state = DAMAGED;
 }

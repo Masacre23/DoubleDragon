@@ -186,7 +186,7 @@ update_status CreaturePlayer::Update()
 		break;
 	}
 
-	creatureCollider->SetPos(position.x, position.y - 64);
+	creatureCollider->SetPos(position.x + 25, position.y - 64);
 
 	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
 	return UPDATE_CONTINUE;
@@ -277,14 +277,22 @@ SDL_Rect& CreaturePlayer::getAttack()
 		if (isButting)
 		{
 			HeadButt();
+			doDamage();
 			return head_butt;
 		}
+		if (punch.AnimationHalf())
+			doDamage();
 		return punch.GetCurrentFrame();
 		break;
 
 	case SDL_SCANCODE_PERIOD: //Kick
 		if (creature_state == JUMPING)
+		{
+			doDamage();
 			return kick_jump;
+		}
+		if (kick.AnimationHalf())
+			doDamage();
 		return kick.GetCurrentFrame();
 		break;
 	}
@@ -393,12 +401,18 @@ void CreaturePlayer::HeadButt()
 }
 
 /*****************************************/
-int CreaturePlayer::getCollision() //Return the type of collision (enemy attack, a wall,...)
+void CreaturePlayer::doDamage()
 {
-	int ret;
-
-	//for
-	//creatureCollider
-
-	return ret;
+	LOG("YOLOOOOOOOOOOO");
+	if (creatureCollider->colliding)
+	{
+		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
+		{
+			if ((*it)->type == enemy)
+			{
+				CreatureEnemy* e = (CreatureEnemy*)(*it);
+				e->ReceiveDamage(1);
+			}
+		}
+	}
 }

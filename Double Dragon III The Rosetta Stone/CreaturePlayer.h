@@ -25,21 +25,20 @@ public:
 	bool isJumping();
 	void Jump();
 	void HeadButt();
-	int getCollision();
-	//bool Butting();
+	void doDamage();
+	//int getCollision();
 
 public:
 	
 	Animation rotate_kick_jump;
 	SDL_Rect head_butt;
 
-	//state playerState;
 	int currentAttack = 0;
 	bool running = false;
 	bool isButting = false;
-	Collider* playerCollider;
-	bool wallCollision = false;
-	bool enemyCollision = false;
+	//Collider* playerCollider;
+	//bool wallCollision = false;
+	//bool enemyCollision = false;
 };
 
 #endif // __MODULEPLAYER_H__

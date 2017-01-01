@@ -21,6 +21,7 @@ public:
 
 	void Move(SDL_Rect& enemy);
 	SDL_Rect Attack();
+	void ReceiveDamage(int damage);
 
 public:
 	SDL_Texture* graphics = nullptr;

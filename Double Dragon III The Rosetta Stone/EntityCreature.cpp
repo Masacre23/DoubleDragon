@@ -26,11 +26,11 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 	{
 	case PLAYER:
 		creature = entities.child("player1");
-		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 70, 64 }, (collider_type)PLAYER);
+		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 25, 64 }, (collider_type)PLAYER);
 		break;
 	case ENEMY1:
 		creature = entities.child("enemy1");
-		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 70, 64 }, (collider_type)ENEMY);
+		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 25, 64 }, (collider_type)ENEMY);
 		break;
 	case ENEMY2:
 		creature = entities.child("enemy2");
