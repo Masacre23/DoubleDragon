@@ -101,8 +101,9 @@ update_status CreaturePlayer::Update()
 	SDL_Rect billy = right_down.frames[0];
 	static bool flip = false; // When the character goes left is true
 	int newSpeed = getSpeed();
-	//state previous_state;
 	static int counter = 0;
+
+	
 
 	/*if (creatureCollider->collisionMatrix[0][1]) //Player - Enemy
 	{
@@ -168,7 +169,8 @@ update_status CreaturePlayer::Update()
 		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
 			flip = true;
-			position.x -= newSpeed;
+			if(position.x > -App->renderer->camera.x/SCREEN_SIZE - 25) //25 is number of pixels
+				position.x -= newSpeed;
 			billy = right_down.GetCurrentFrame();
 		}
 
@@ -185,6 +187,8 @@ update_status CreaturePlayer::Update()
 		}
 		break;
 	}
+	
+	UpdateCamera();
 
 	creatureCollider->SetPos(position.x + 25, position.y - 64);
 
@@ -403,8 +407,7 @@ void CreaturePlayer::HeadButt()
 /*****************************************/
 void CreaturePlayer::doDamage()
 {
-	LOG("YOLOOOOOOOOOOO");
-	if (creatureCollider->colliding)
+	if (creatureCollider->collisionMatrix[0][1])
 	{
 		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		{
@@ -414,5 +417,24 @@ void CreaturePlayer::doDamage()
 				e->ReceiveDamage(1);
 			}
 		}
+	}
+}
+
+/**************************************/
+void CreaturePlayer::UpdateCamera()
+{
+	/*std::string tmp = "PLAYER: " + std::to_string(position.x);
+	char tab1[1024];
+	strcpy(tab1, tmp.c_str());
+	LOG(tab1);
+
+	tmp = "CAMERA: " + std::to_string(App->renderer->camera.x);
+	char tab2[1024];
+	strcpy(tab2, tmp.c_str());
+	LOG(tab2);*/
+
+	if (position.x*2 + App->renderer->camera.x > 3*SCREEN_WIDTH/2)
+	{
+		App->renderer->camera.x -= speed * 2;
 	}
 }

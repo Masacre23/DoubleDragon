@@ -26,6 +26,7 @@ public:
 	void Jump();
 	void HeadButt();
 	void doDamage();
+	void UpdateCamera();
 	//int getCollision();
 
 public:

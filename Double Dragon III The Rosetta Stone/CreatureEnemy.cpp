@@ -76,6 +76,7 @@ update_status CreatureEnemy::Update()
 		{
 			creature_state = IDLE;
 			counter = 0;
+			Move(enemy);
 		}
 		break;
 	default:
@@ -112,8 +113,8 @@ void CreatureEnemy::Move(SDL_Rect& enemy)
 
 		enemy = right_down.GetCurrentFrame();
 	}
-	//else
-		//enemy = Attack();
+	else
+		enemy = Attack();
 }
 
 /****************************************************/

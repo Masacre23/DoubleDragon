@@ -20,10 +20,10 @@ bool ModuleWindow::Init()
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data.xml");
 	pugi::xml_node config = doc.document_element();
-	pugi::xml_node app = config.child("app");
-	pugi::xml_node title = app.child("title");
-	if (title)
-		LOG(title.text().as_string());
+	pugi::xml_node windowXML = config.child("window");
+	pugi::xml_node title = windowXML.child("title");
+	//if (title)
+	//	LOG(title.text().as_string());
 	/******PUGI******/
 	LOG("Init SDL window & surface");
 	bool ret = true;

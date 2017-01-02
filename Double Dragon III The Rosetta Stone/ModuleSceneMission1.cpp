@@ -71,7 +71,7 @@ bool ModuleSceneMission1::CleanUp()
 update_status ModuleSceneMission1::Update()
 {
 	// Draw everything --------------------------------------
-	App->renderer->Blit(graphics, 0, 0, &background, 1.8f); 
+	App->renderer->Blit(graphics, 0, 0, &background, 1.0f); 
 
 	//Update entities
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
