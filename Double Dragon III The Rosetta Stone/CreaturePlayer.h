@@ -37,6 +37,7 @@ public:
 	int currentAttack = 0;
 	bool running = false;
 	bool isButting = false;
+	//int life = 250;
 	//Collider* playerCollider;
 	//bool wallCollision = false;
 	//bool enemyCollision = false;

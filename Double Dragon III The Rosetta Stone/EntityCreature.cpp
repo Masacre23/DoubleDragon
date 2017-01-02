@@ -217,7 +217,39 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 		damagedXML.attribute("w").as_int(),
 		damagedXML.attribute("h").as_int()
 	};
+
+	// Fall
+	pugi::xml_node fallXML = creature.child("fall");
+	fall.frames.push_back(
+	{
+		fallXML.child("frame1").attribute("x").as_int(),
+		fallXML.child("frame1").attribute("y").as_int(),
+		fallXML.child("frame1").attribute("w").as_int(),
+		fallXML.child("frame1").attribute("h").as_int()
+	});
+	fall.frames.push_back(
+	{
+		fallXML.child("frame2").attribute("x").as_int(),
+		fallXML.child("frame2").attribute("y").as_int(),
+		fallXML.child("frame2").attribute("w").as_int(),
+		fallXML.child("frame2").attribute("h").as_int()
+	});
+	fall.frames.push_back(
+	{
+		fallXML.child("frame3").attribute("x").as_int(),
+		fallXML.child("frame3").attribute("y").as_int(),
+		fallXML.child("frame3").attribute("w").as_int(),
+		fallXML.child("frame3").attribute("h").as_int()
+	});
+
+	fall.speed = fallXML.attribute("speed").as_float();
 }
 
 EntityCreature::~EntityCreature()
 {}
+
+/*********************************************************/
+void EntityCreature::Die()
+{
+	creature_state = DEAD;
+}

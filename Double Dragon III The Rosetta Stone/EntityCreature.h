@@ -24,7 +24,8 @@ enum state
 	RUNNING,
 	JUMPING,
 	ATTACKING,
-	DAMAGED
+	DAMAGED,
+	DEAD
 };
 
 class EntityCreature : public ModuleEntity
@@ -32,6 +33,8 @@ class EntityCreature : public ModuleEntity
 public:
 	EntityCreature(creature_type types, bool start_enabled = true);
 	~EntityCreature();
+
+	void Die();
 
 public:
 	SDL_Texture* graphics = nullptr;
@@ -44,9 +47,12 @@ public:
 	SDL_Rect kick_jump;
 	SDL_Rect jump;
 	SDL_Rect damaged;
+	Animation fall;
 
 	state creature_state;
 	float speed;
+	int life;
+	int damageAttack;
 };
 
 #endif

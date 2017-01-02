@@ -13,6 +13,8 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 {
 	position.x = 120;
 	position.y = 216;
+	life = 300;
+	damageAttack = 10;
 	speed = 1;
 	//int n = 20+2+2;
 
@@ -98,33 +100,17 @@ update_status CreaturePlayer::Update()
 {
 	UpdateProfundity();
 
-	SDL_Rect billy = right_down.frames[0];
+	static SDL_Rect billy = right_down.frames[0];
 	static bool flip = false; // When the character goes left is true
 	int newSpeed = getSpeed();
 	static int counter = 0;
+	static int damageReaction = 0;
 
-	
-
-	/*if (creatureCollider->collisionMatrix[0][1]) //Player - Enemy
-	{
-		//screature_state = previous_state;
-		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
-		{
-			CreatureEnemy* e = (CreatureEnemy*)(*it);
-			/*if (e->enemy = e->punch.frames[2])
-			{
-				creature_state = DAMAGED;
-			}
-			creature_state = DAMAGED;
-		}
-	}*/
-
+	if (life <= 0)
+		Die();
 
 	switch (creature_state)
 	{
-	//case IDLE:
-		
-		//break;
 	case ATTACKING:
 		if (!isAttacking())
 			break;
@@ -140,17 +126,42 @@ update_status CreaturePlayer::Update()
 		billy = jump;
 		break;
 	case DAMAGED:
-		++counter;
-		if (counter < 24)
+		switch (damageReaction)
 		{
-			billy = damaged;
-		}
-		else
-		{
-			creature_state = IDLE;
-			counter = 0;
+		case 0:
+			++counter;
+			if (counter < 24)
+			{
+				billy = damaged;
+			}
+			else
+			{
+				creature_state = IDLE;
+				counter = 0;
+			}
+			break;
+		case 1:
+			if (fall.AnimationFinished())
+			{
+				creature_state = IDLE;
+				billy = right_down.GetCurrentFrame();
+				break;
+			}
+			billy = fall.GetCurrentFrame();
+			break;
 		}
 		break;
+	case DEAD:
+		//++counter;
+		if (fall.AnimationHalf())
+		{
+			break;
+		}
+		billy = fall.GetCurrentFrame();
+		break;
+	case IDLE:
+		if (up.current_frame == 0)
+			billy = right_down.frames[right_down.current_frame];
 	default:
 		if (isAttacking())
 		{
@@ -414,7 +425,8 @@ void CreaturePlayer::doDamage()
 			if ((*it)->type == enemy)
 			{
 				CreatureEnemy* e = (CreatureEnemy*)(*it);
-				e->ReceiveDamage(1);
+				e->creature_state = DAMAGED;
+				e->life -= damageAttack;
 			}
 		}
 	}
@@ -433,8 +445,8 @@ void CreaturePlayer::UpdateCamera()
 	strcpy(tab2, tmp.c_str());
 	LOG(tab2);*/
 
-	if (position.x*2 + App->renderer->camera.x > 3*SCREEN_WIDTH/2)
+	if (position.x*SCREEN_SIZE + App->renderer->camera.x > 3*SCREEN_WIDTH/ SCREEN_SIZE)
 	{
-		App->renderer->camera.x -= speed * 2;
+		App->renderer->camera.x -= speed * SCREEN_SIZE;
 	}
 }

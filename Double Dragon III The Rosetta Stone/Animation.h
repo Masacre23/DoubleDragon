@@ -9,8 +9,8 @@ public:
 	float speed;
 	vector<SDL_Rect> frames;
 
-private:
 	float current_frame;
+private:
 	bool finished = false;
 
 public:

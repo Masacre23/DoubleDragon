@@ -14,6 +14,8 @@ CreatureEnemy::CreatureEnemy(float x, float y, bool start_enabled) : EntityCreat
 {
 	position.x = x;
 	position.y = y;
+	life = 100;
+	damageAttack = 5;
 }
 
 CreatureEnemy::~CreatureEnemy()
@@ -51,18 +53,19 @@ bool CreatureEnemy::CleanUp()
 update_status CreatureEnemy::Update()
 {
 	UpdateProfundity();
-	//enemy = right_down.frames[3];
 	static bool flip = false;
 	static int counter = 0;
 	
-	//counter++;
-	if (creature_state != ATTACKING)
+	if (creature_state != ATTACKING && creature_state != DAMAGED && creature_state != DEAD)
 	{
 		if (target->position.x < position.x)
 			flip = true;
 		else
 			flip = false;
 	}
+
+	if (life <= 0)
+		Die();
 
 	switch (creature_state)
 	{
@@ -79,6 +82,16 @@ update_status CreatureEnemy::Update()
 			Move(enemy);
 		}
 		break;
+	case DEAD:
+		if (fall.AnimationHalf())
+		{
+			break;
+		}
+		enemy = fall.GetCurrentFrame();
+		break;
+	case IDLE:
+		//if(up.current_frame == 0)
+			enemy = right_down.frames[right_down.current_frame];
 	default:
 		Move(enemy);
 		break;
@@ -129,12 +142,7 @@ SDL_Rect CreatureEnemy::Attack()
 	if (punch.AnimationHalf() && position.DistanceTo(target->position) < 20)
 	{
 		target->creature_state = DAMAGED;
+		target->life -= damageAttack;
 	}
 	return punch.GetCurrentFrame();
-}
-
-/*****************************************************/
-void CreatureEnemy::ReceiveDamage(int damage)
-{
-	creature_state = DAMAGED;
 }
