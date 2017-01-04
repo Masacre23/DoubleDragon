@@ -77,3 +77,9 @@ bool ModuleWindow::CleanUp()
 	SDL_Quit();
 	return true;
 }
+
+/*******************************************/
+void ModuleWindow::setCenter(int x)
+{
+	center_window_x = x;
+}

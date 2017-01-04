@@ -114,6 +114,9 @@ void CreatureEnemy::Move(SDL_Rect& enemy)
 	distance = sqrtf((distx * distx) + (disty * disty));
 	if (distance > 20 && creature_state != ATTACKING)
 	{
+		//if(creatureCollider->collisionMatrix[1][1])//Enemy-enemy
+		
+		
 		//Normalize
 		distx /= distance;
 		disty /= distance;

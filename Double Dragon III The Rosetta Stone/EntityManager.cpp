@@ -3,6 +3,7 @@
 #include "CreaturePlayer.h"
 #include "CreatureEnemy.h"
 #include <vector>
+#include "Point.h"
 
 EntityManager::EntityManager()
 {}
@@ -10,7 +11,7 @@ EntityManager::EntityManager()
 EntityManager::~EntityManager()
 {}
 
-void EntityManager::CreateEntity(Types type, float x, float y)
+ModuleEntity* EntityManager::CreateEntity(Types type, float x, float y)
 {
 	//static_assert(ModuleEntity::Types::un)
 	ModuleEntity* ret = nullptr;
@@ -26,7 +27,7 @@ void EntityManager::CreateEntity(Types type, float x, float y)
 		entities.push_back(ret);
 	}
 
-	//return ret;
+	return ret;
 }
 
 /**************************************************************/
@@ -72,4 +73,19 @@ int EntityManager::Digit(int index, int num)
 	num = num % 10;
 
 	return num;
+}
+
+/***********************************************************/
+void EntityManager::Wave(int numEnemy1, int numEnemy2, float posX[], float posY[])
+{
+	for (int i = 0; i < numEnemy1; ++i)
+	{
+		ModuleEntity* e = CreateEntity(enemy, posX[i], posY[i]);
+		e->Start();
+		e->Enable();
+	}
+	
+
+	//for (int i = numEnemy1; i < numEnemy1 + numEnemy2; ++i)
+	//	CreateEntity(enemy, positions[i].x, positions[i].y);
 }

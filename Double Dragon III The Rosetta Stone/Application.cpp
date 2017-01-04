@@ -12,6 +12,7 @@
 #include "ModuleEntity.h"
 #include "EntityManager.h"
 #include "ModuleCollision.h"
+#include "ModuleFonts.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ Application::Application()
 	modules.push_back(window = new ModuleWindow());
 
 	modules.push_back(renderer = new ModuleRender());
+	modules.push_back(fonts = new ModuleFonts());
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
 
@@ -57,7 +59,7 @@ bool Application::Init()
 
 	// Start the first scene --
 	fade->FadeToBlack(scene_menu, nullptr, 3.0f);
-	//fade->FadeToBlack(scene_mission1, nullptr, 3.0f);
+
 	return ret;
 }
 

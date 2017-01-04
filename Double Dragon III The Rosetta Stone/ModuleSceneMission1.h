@@ -6,7 +6,6 @@
 #include "Globals.h"
 
 struct SDL_Texture;
-//class ModulePlayer;
 
 class ModuleSceneMission1 : public Module
 {
@@ -22,8 +21,7 @@ public:
 	SDL_Rect ground;
 	SDL_Rect background;
 
-	//Pruebas
-	//ModulePlayer* player;
+	CreaturePlayer* player;
 };
 
 #endif

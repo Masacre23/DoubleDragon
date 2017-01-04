@@ -19,6 +19,7 @@ class ModuleCollision;
 
 //class ModuleEntity;
 class EntityManager;
+class ModuleFonts;
 
 class Application
 {
@@ -38,14 +39,13 @@ public:
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModuleFadeToBlack* fade;
-	//ModulePlayer* player;
-	//ModuleEntity* entity;
 	ModuleCollision* collision;
 
 	ModuleSceneMenu* scene_menu;
 	ModuleSceneMission1* scene_mission1;
 
 	EntityManager* entityManager;
+	ModuleFonts* fonts;
 //private:
 
 	std::list<Module*> modules;

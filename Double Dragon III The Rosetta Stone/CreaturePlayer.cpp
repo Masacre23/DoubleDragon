@@ -8,6 +8,7 @@
 #include "src\pugixml.hpp"
 #include "CreatureEnemy.h"
 #include "EntityManager.h"
+#include "ModuleWindow.h"
 
 CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, start_enabled)
 {
@@ -422,11 +423,14 @@ void CreaturePlayer::doDamage()
 	{
 		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		{
-			if ((*it)->type == enemy)
+			if ((*it)->type == enemy && (*it)->position.DistanceTo(position) < 20)
 			{
 				CreatureEnemy* e = (CreatureEnemy*)(*it);
-				e->creature_state = DAMAGED;
-				e->life -= damageAttack;
+				if (e->creature_state != DEAD)
+				{
+					e->creature_state = DAMAGED;
+					e->life -= damageAttack;
+				}
 			}
 		}
 	}
@@ -448,5 +452,6 @@ void CreaturePlayer::UpdateCamera()
 	if (position.x*SCREEN_SIZE + App->renderer->camera.x > 3*SCREEN_WIDTH/ SCREEN_SIZE)
 	{
 		App->renderer->camera.x -= speed * SCREEN_SIZE;
+		App->window->center_window_x += speed;
 	}
 }
