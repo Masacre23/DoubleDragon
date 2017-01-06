@@ -102,12 +102,12 @@ update_status CreaturePlayer::Update()
 	UpdateProfundity();
 
 	static SDL_Rect billy = right_down.frames[0];
-	static bool flip = false; // When the character goes left is true
+	//static bool flip = false; // When the character goes left is true
 	int newSpeed = getSpeed();
 	static int counter = 0;
 	static int damageReaction = 0;
 
-	if (life <= 0)
+	if (life <= 0) 
 		Die();
 
 	switch (creature_state)
@@ -161,8 +161,8 @@ update_status CreaturePlayer::Update()
 		billy = fall.GetCurrentFrame();
 		break;
 	case IDLE:
-		if (up.current_frame == 0)
-			billy = right_down.frames[right_down.current_frame];
+		//if (up.current_frame == 0)
+		billy = right_down.frames[right_down.current_frame];
 	default:
 		if (isAttacking())
 		{
@@ -175,26 +175,32 @@ update_status CreaturePlayer::Update()
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			flip = false;
-			position.x += newSpeed;
+			if (!creatureCollider->collisionArray[collider_type::WALL_RIGHT])
+				position.x += newSpeed;
 			billy = right_down.GetCurrentFrame();
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
 			flip = true;
-			if(position.x > -App->renderer->camera.x/SCREEN_SIZE - 25) //25 is number of pixels
-				position.x -= newSpeed;
+			if (position.x > -App->renderer->camera.x / SCREEN_SIZE - 25) //25 is number of pixels
+			{
+				if (!creatureCollider->collisionArray[collider_type::WALL_LEFT])
+					position.x -= newSpeed;
+			}
 			billy = right_down.GetCurrentFrame();
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-			if (!creatureCollider->collisionMatrix[0][2])//Player-Wall
+			//if (!creatureCollider->collisionMatrix[0][2])//Player-Wall
+			if (!creatureCollider->collisionArray[collider_type::WALL_UP])
 				position.y -= speed;
 			billy = up.GetCurrentFrame();
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		{
-			position.y += speed;
+			if (!creatureCollider->collisionArray[collider_type::WALL_DOWN])
+				position.y += speed;
 			billy = right_down.GetCurrentFrame();
 		}
 		break;
@@ -419,14 +425,15 @@ void CreaturePlayer::HeadButt()
 /*****************************************/
 void CreaturePlayer::doDamage()
 {
-	if (creatureCollider->collisionMatrix[0][1])
+	//if (creatureCollider->collisionMatrix[0][1])
+	if (creatureCollider->collisionArray[1])
 	{
 		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		{
 			if ((*it)->type == enemy && (*it)->position.DistanceTo(position) < 20)
 			{
 				CreatureEnemy* e = (CreatureEnemy*)(*it);
-				if (e->creature_state != DEAD)
+				if (e->creature_state != DEAD && e->creature_state != DAMAGED && ((flip && position.x > e->position.x) || (flip == false && position.x < e->position.x)))
 				{
 					e->creature_state = DAMAGED;
 					e->life -= damageAttack;

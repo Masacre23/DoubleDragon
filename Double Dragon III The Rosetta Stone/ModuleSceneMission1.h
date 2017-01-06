@@ -6,6 +6,7 @@
 #include "Globals.h"
 
 struct SDL_Texture;
+class EntityExit;
 
 class ModuleSceneMission1 : public Module
 {
@@ -22,6 +23,7 @@ public:
 	SDL_Rect background;
 
 	CreaturePlayer* player;
+	EntityExit* exit;
 };
 
 #endif

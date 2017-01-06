@@ -13,6 +13,8 @@
 
 #include "ModuleFonts.h"
 #include "ModuleWindow.h"
+#include "EntityExit.h"
+#include "CreatureEnemy.h"
 
 ModuleSceneMission1::ModuleSceneMission1(bool start_enabled) : Module(start_enabled)
 {
@@ -29,10 +31,8 @@ ModuleSceneMission1::~ModuleSceneMission1()
 //Load assets
 bool ModuleSceneMission1::Start()
 {
-	//*player = App->entityManager->CreateEntity(Types::player);
 	player = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player);
-	//App->entityManager->CreateEntity(Types::enemy, 0.0f, 200.0f);
-	//App->entityManager->CreateEntity(Types::enemy, 100.0f, 100.0f);
+	exit = (EntityExit*)App->entityManager->CreateEntity(Types::exits, 800, 60, 50, 30);
 
 	bool res = true;
 	LOG("Loading menu scene");
@@ -47,12 +47,30 @@ bool ModuleSceneMission1::Start()
 		(*it)->Enable();
 	}
 
-	SDL_Rect r1 = { 0, 0, 3930, 83 };
-	App->collision->AddCollider(r1, WALL);
+	//Colliders
+	SDL_Rect wallup = { 0, 0, 4000, 83 };
+	App->collision->AddCollider(wallup, collider_type::WALL_UP);
 
+	SDL_Rect walldown = { 0, SCREEN_HEIGHT, 4000, 83 };
+	App->collision->AddCollider(walldown, collider_type::WALL_DOWN);
+
+	SDL_Rect wallright = { 900, 0, 5, SCREEN_HEIGHT };
+	App->collision->AddCollider(wallright, collider_type::WALL_RIGHT);
+
+	//Car
+	SDL_Rect walldownCar = { 375, 180, 113, 5 };
+	App->collision->AddCollider(walldownCar, collider_type::WALL_DOWN);
+
+	SDL_Rect wallrightCar = { 375, 180, 5, 40 };
+	App->collision->AddCollider(wallrightCar, collider_type::WALL_RIGHT);
+
+	SDL_Rect wallleftCar = { 375 + 113, 180, 5, 40 };
+	App->collision->AddCollider(wallleftCar, collider_type::WALL_LEFT);
+
+	//Enemies
 	float posX[] = {0, 0, 0, 300.0f, 300.0f};
 	float posY[] = { 100.0f, 120.0f, 150.0f, 200.0f, 230.0f };
-	App->entityManager->Wave(3, 0, posX, posY);
+	App->entityManager->Wave(1, 0, posX, posY);
 
 	return res;
 }
@@ -77,6 +95,22 @@ update_status ModuleSceneMission1::Update()
 	static int time = 200 * 60;
 	--time;
 
+	if (player->creatureCollider->collisionArray[collider_type::EXIT])
+	{
+		bool b = true;
+		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
+		{
+			if ((*it)->type == enemy)
+			{
+				CreatureEnemy* e = (CreatureEnemy*)(*it);
+				if (e->creature_state != DEAD)
+					b = false;
+			}
+		}
+		if(b)
+			exit->NextRoom();
+	}
+
 	// Draw everything --------------------------------------
 	App->renderer->Blit(graphics, 0, 0, &background, 1.0f); 
 
@@ -96,16 +130,8 @@ update_status ModuleSceneMission1::Update()
 
 	//With life
 	iPoint pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
-	//App->fonts->DrawLine(to_string(player->life), 0, pos);
-	//App->fonts->DrawLine(to_string(player->life), 1, pos);
-	//App->fonts->DrawLine(to_string(player->life), 2, pos);
-	//App->fonts->DrawLine(to_string(player->life), 3, pos);
 	pos.y = -90;
 	App->fonts->DrawLine(to_string(player->life), 4, pos);
-	//App->fonts->DrawLine(to_string(player->life), 5, pos);
-	/*pos.x -= 15;
-	pos.y += 10;
-	App->fonts->DrawLine("buy in", 0, pos);*/
 
 	//Time
 	pos = { App->window->center_window_x, 10 };

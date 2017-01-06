@@ -19,7 +19,7 @@ enum Types
 {
 	enemy,
 	player,
-	unknown
+	exits
 };
 
 

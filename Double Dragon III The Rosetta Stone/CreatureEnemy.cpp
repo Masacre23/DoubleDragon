@@ -83,15 +83,21 @@ update_status CreatureEnemy::Update()
 		}
 		break;
 	case DEAD:
+		++counter;
 		if (fall.AnimationHalf())
 		{
+			if(counter % 8 != 0)
+				App->renderer->Blit(graphics, position.x + speed, position.y - enemy.h, &(enemy), 1.0f, flip);
+			if (counter > 60 * 3)
+				CleanUp();
+			return UPDATE_CONTINUE;
 			break;
 		}
 		enemy = fall.GetCurrentFrame();
 		break;
 	case IDLE:
 		//if(up.current_frame == 0)
-			enemy = right_down.frames[right_down.current_frame];
+		enemy = right_down.frames[right_down.current_frame];
 	default:
 		Move(enemy);
 		break;
@@ -142,7 +148,7 @@ SDL_Rect CreatureEnemy::Attack()
 		creature_state = WALKING;
 		return right_down.frames[3];
 	}
-	if (punch.AnimationHalf() && position.DistanceTo(target->position) < 20)
+	if (punch.AnimationHalf() && position.DistanceTo(target->position) < 20 && target->creature_state != DAMAGED)
 	{
 		target->creature_state = DAMAGED;
 		target->life -= damageAttack;

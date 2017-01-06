@@ -4,6 +4,7 @@
 #include "CreatureEnemy.h"
 #include <vector>
 #include "Point.h"
+#include "EntityExit.h"
 
 EntityManager::EntityManager()
 {}
@@ -11,7 +12,7 @@ EntityManager::EntityManager()
 EntityManager::~EntityManager()
 {}
 
-ModuleEntity* EntityManager::CreateEntity(Types type, float x, float y)
+ModuleEntity* EntityManager::CreateEntity(Types type, float x, float y, int w, int h)
 {
 	//static_assert(ModuleEntity::Types::un)
 	ModuleEntity* ret = nullptr;
@@ -19,6 +20,10 @@ ModuleEntity* EntityManager::CreateEntity(Types type, float x, float y)
 	{
 	case player: ret = (ModuleEntity*)new CreaturePlayer(); break;
 	case enemy: ret = (ModuleEntity*)new CreatureEnemy(x, y); break;
+	case exits:
+		SDL_Rect rect = {x, y, w, h};
+		ret = (ModuleEntity*)new EntityExit(rect); 
+		break;
 	}
 
 	if (ret != nullptr)

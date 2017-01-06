@@ -66,17 +66,18 @@ bool Application::Init()
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
-
-	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	//static bool b = false;
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && scene_menu->IsEnabled())
 	{
-		fade->FadeToBlack(scene_mission1, nullptr, 3.0f);
+			fade->FadeToBlack(scene_mission1, scene_menu, 3.0f);
 	}
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if ((*it)->IsEnabled() == true)
 			ret = (*it)->PreUpdate();
-	
-	entityManager->RadixSortList(entityManager->entities, entityManager->entities.size());
+
+	if(scene_mission1->IsEnabled())
+		entityManager->RadixSortList(entityManager->entities, entityManager->entities.size());
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if ((*it)->IsEnabled() == true)
