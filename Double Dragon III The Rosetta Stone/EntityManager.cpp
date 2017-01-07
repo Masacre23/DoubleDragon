@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "EntityExit.h"
 #include "EntityCreature.h"
+#include <cstdlib>
 
 EntityManager::EntityManager()
 {}
@@ -82,21 +83,18 @@ int EntityManager::Digit(int index, int num)
 }
 
 /***********************************************************/
-void EntityManager::Wave(int numEnemy1, int numEnemy2, float posX[], float posY[])
+void EntityManager::Wave(int numEnemies, float posX[], float posY[])
 {
-	for (int i = 0; i < numEnemy1; ++i)
+	for (int i = 0; i < numEnemies; ++i)
 	{
-		ModuleEntity* e = CreateEntity(Types::enemy, creature_type::ENEMY1, posX[i], posY[i]);
+		int num = rand() % 2;
+		ModuleEntity* e;
+		if(num)
+			e = CreateEntity(Types::enemy, creature_type::ENEMY1, posX[i], posY[i]);
+		else
+			e = CreateEntity(Types::enemy, creature_type::ENEMY2, posX[i], posY[i]);
 
 		e->Start();
 		e->Enable();
-	}
-	
-	for (int j = numEnemy1; j < numEnemy1 + numEnemy2; ++j)
-	{
-		ModuleEntity* e2 = CreateEntity(Types::enemy, creature_type::ENEMY2, posX[j], posY[j]);
-
-		e2->Start();
-		e2->Enable();
 	}
 }

@@ -2,6 +2,10 @@
 #include "EntityCreature.h"
 #include <string>
 
+#include "Application.h"
+#include "EntityManager.h"
+
+
 ModuleEntity::ModuleEntity(bool start_enabled) : Module(start_enabled)
 {}
 
@@ -26,5 +30,4 @@ void ModuleEntity::UpdateProfundity()
 	}
 
 	profundity = position.y;
-	
 }

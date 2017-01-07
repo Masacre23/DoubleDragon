@@ -47,7 +47,7 @@ bool ModuleSceneMission1::Start()
 		(*it)->Enable();
 	}
 
-	//Colliders
+	//Colliders-------------------
 	SDL_Rect wallup = { 0, 0, 4000, 83 };
 	App->collision->AddCollider(wallup, collider_type::WALL_UP);
 
@@ -67,10 +67,15 @@ bool ModuleSceneMission1::Start()
 	SDL_Rect wallleftCar = { 375 + 113, 180, 5, 40 };
 	App->collision->AddCollider(wallleftCar, collider_type::WALL_LEFT);
 
+	//Spawns
+	SDL_Rect spawn1 = {550, 0, 5, SCREEN_HEIGHT};
+	App->collision->AddCollider(spawn1, collider_type::SPAWN);
+
 	//Enemies
-	float posX[] = {-50, 400, 0, 300.0f, 300.0f};
-	float posY[] = { 100.0f, 200.0f, 150.0f, 200.0f, 230.0f };
-	App->entityManager->Wave(1, 1, posX, posY);
+	float posX[] = {-player->position.x - 300, player->position.x + 300, player->position.x + 400 };
+	float posY[] = { 150.0f, 200.0f, 250.0f};
+	App->entityManager->Wave(3, posX, posY);
+	++num_waves;
 
 	return res;
 }
@@ -115,8 +120,31 @@ update_status ModuleSceneMission1::Update()
 	App->renderer->Blit(graphics, 0, 0, &background, 1.0f); 
 
 	//Update entities
+	int num_enemies = 0;
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
-		(*it)->Update();
+	{
+		if ((*it)->IsEnabled())
+		{
+			if((*it)->type == Types::enemy)
+				++num_enemies;
+			(*it)->Update();
+		}
+	}
+
+	//Manage waves
+	if (player->creatureCollider->collisionArray[collider_type::SPAWN])
+	{
+		new_wave = true;
+	}
+
+	if (num_enemies == 1 && num_waves % 2 != 0 || num_enemies == 0 && new_wave)
+	{
+		float posX[] = { player->position.x-300, player->position.x + 300, player->position.x + 400 };
+		float posY[] = { 150.0f, 200.0f, 250.0f};
+		App->entityManager->Wave(3, posX, posY);
+		++num_waves;
+		new_wave = false;
+	}
 
 	// Draw fonts
 

@@ -18,12 +18,15 @@ public:
 	update_status Update();
 	bool  CleanUp();
 
+public:
 	SDL_Texture* graphics = nullptr;
 	SDL_Rect ground;
 	SDL_Rect background;
 
 	CreaturePlayer* player;
 	EntityExit* exit;
+	int num_waves = 0;
+	bool new_wave = false;
 };
 
 #endif

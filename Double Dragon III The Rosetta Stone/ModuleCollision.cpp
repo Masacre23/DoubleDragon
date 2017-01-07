@@ -8,8 +8,7 @@
 using namespace std;
 
 ModuleCollision::ModuleCollision()
-{
-}
+{}
 
 // Destructor
 ModuleCollision::~ModuleCollision()
@@ -38,18 +37,6 @@ update_status ModuleCollision::Update()
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
 	{
 		(*it)->colliding = false;
-		/*(*it)->collisionMatrix[0][0] = false;
-		(*it)->collisionMatrix[0][1] = false;
-		(*it)->collisionMatrix[0][2] = false;
-		(*it)->collisionMatrix[1][0] = false;
-		(*it)->collisionMatrix[1][1] = false;
-		(*it)->collisionMatrix[1][2] = false;
-		(*it)->collisionMatrix[2][0] = false;
-		(*it)->collisionMatrix[2][1] = false;
-		(*it)->collisionMatrix[2][2] = false;
-		(*it)->collisionMatrix[3][0] = false;
-		(*it)->collisionMatrix[3][1] = false;
-		(*it)->collisionMatrix[3][2] = false;*/
 		(*it)->collisionArray[0] = false;
 		(*it)->collisionArray[1] = false;
 		(*it)->collisionArray[2] = false;
@@ -57,16 +44,15 @@ update_status ModuleCollision::Update()
 		(*it)->collisionArray[4] = false;
 		(*it)->collisionArray[5] = false;
 		(*it)->collisionArray[6] = false;
+		(*it)->collisionArray[7] = false;
+
 		for (list<Collider*>::iterator it2 = colliders.begin(); it2 != colliders.end(); ++it2)
 		{
 			if ((*it)->CheckCollision((*it2)->rect))
 			{
-				//LOG("YOLOOOOOOOOOOOOOOOOOOOOOO");
 				(*it)->colliding = true;
-				//(*it)->collisionMatrix[(*it)->type][(*it2)->type] = true;
 				(*it)->collisionArray[(*it2)->type] = true;
 				(*it2)->colliding = true;
-				//(*it2)->collisionMatrix[(*it2)->type][(*it)->type] = true;
 				(*it2)->collisionArray[(*it)->type] = true;
 			}
 		}
@@ -100,6 +86,7 @@ void ModuleCollision::DebugDraw()
 			App->renderer->DrawQuad((*it)->rect, 255, 0, 0, 80);
 			break;
 		case EXIT:
+		case SPAWN:
 			App->renderer->DrawQuad((*it)->rect, 127, 127, 0, 80);
 			break;
 		}

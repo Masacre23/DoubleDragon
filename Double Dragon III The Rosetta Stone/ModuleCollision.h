@@ -16,6 +16,7 @@ enum collider_type
 	WALL_DOWN,
 	WALL_RIGHT,
 	WALL_LEFT,
+	SPAWN
 };
 struct Collider
 {
@@ -24,13 +25,8 @@ struct Collider
 	bool to_delete = false;
 
 	collider_type type;
-	/*bool collisionMatrix[4][4] = {
-		{false, false, false}, //Player
-		{false, false, false}, //Enemy
-		{false, false, false}, //Wall
-		{false, false, false} //Exit
-	};*/
-	bool collisionArray[6] = {false, false, false, false, false, false}; //Player, enemy, wall, exit
+
+	bool collisionArray[7] = {false, false, false, false, false, false, false}; //Player, enemy, wallup, walldown, wallright, wallleft, exit, spawn
 
 	Collider(SDL_Rect rectangle) : // expand this call if you need to
 		rect(rectangle)

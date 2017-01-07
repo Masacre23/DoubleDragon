@@ -18,7 +18,7 @@ CreatureEnemy::CreatureEnemy(creature_type creaturetype, float x, float y, bool 
 {
 	position.x = x;
 	position.y = y;
-	life = 100;
+	life = 20;
 	damageAttack = 5;
 	enemytype = creaturetype;
 }
@@ -105,7 +105,10 @@ update_status CreatureEnemy::Update()
 			if(counter % 8 != 0)
 				App->renderer->Blit(graphics, position.x + speed, position.y - (*enemy).h, &(*enemy), 1.0f, flip);
 			if (counter > 60 * 3)
+			{
 				CleanUp();
+				Disable();
+			}
 			return UPDATE_CONTINUE;
 			break;
 		}

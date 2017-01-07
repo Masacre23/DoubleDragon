@@ -9,6 +9,8 @@
 #include "SDL/include/SDL.h"
 #include "src\pugixml.hpp"
 
+#include "EntityManager.h"
+#include "ModuleCollision.h"
 
 EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleEntity(start_enabled)
 {
@@ -264,4 +266,6 @@ EntityCreature::~EntityCreature()
 void EntityCreature::Die()
 {
 	creature_state = DEAD;
+	//App->entityManager->entities.remove((ModuleEntity*)this);
+	creatureCollider->SetPos(0, 0);
 }
