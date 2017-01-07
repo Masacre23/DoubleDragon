@@ -31,8 +31,8 @@ ModuleSceneMission1::~ModuleSceneMission1()
 //Load assets
 bool ModuleSceneMission1::Start()
 {
-	player = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player);
-	exit = (EntityExit*)App->entityManager->CreateEntity(Types::exits, 800, 60, 50, 30);
+	player = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, creature_type::PLAYER1);
+	exit = (EntityExit*)App->entityManager->CreateEntity(Types::exits, creature_type::UNKNOWN,800, 60, 50, 30);
 
 	bool res = true;
 	LOG("Loading menu scene");
@@ -68,9 +68,9 @@ bool ModuleSceneMission1::Start()
 	App->collision->AddCollider(wallleftCar, collider_type::WALL_LEFT);
 
 	//Enemies
-	float posX[] = {0, 0, 0, 300.0f, 300.0f};
-	float posY[] = { 100.0f, 120.0f, 150.0f, 200.0f, 230.0f };
-	App->entityManager->Wave(1, 0, posX, posY);
+	float posX[] = {-50, 400, 0, 300.0f, 300.0f};
+	float posY[] = { 100.0f, 200.0f, 150.0f, 200.0f, 230.0f };
+	App->entityManager->Wave(1, 1, posX, posY);
 
 	return res;
 }

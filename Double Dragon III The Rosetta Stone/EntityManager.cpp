@@ -5,6 +5,7 @@
 #include <vector>
 #include "Point.h"
 #include "EntityExit.h"
+#include "EntityCreature.h"
 
 EntityManager::EntityManager()
 {}
@@ -12,14 +13,14 @@ EntityManager::EntityManager()
 EntityManager::~EntityManager()
 {}
 
-ModuleEntity* EntityManager::CreateEntity(Types type, float x, float y, int w, int h)
+ModuleEntity* EntityManager::CreateEntity(Types type, creature_type creaturetype, float x, float y, int w, int h)
 {
 	//static_assert(ModuleEntity::Types::un)
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
 	case player: ret = (ModuleEntity*)new CreaturePlayer(); break;
-	case enemy: ret = (ModuleEntity*)new CreatureEnemy(x, y); break;
+	case enemy: ret = (ModuleEntity*)new CreatureEnemy(creaturetype, x, y); break;
 	case exits:
 		SDL_Rect rect = {x, y, w, h};
 		ret = (ModuleEntity*)new EntityExit(rect); 
@@ -85,12 +86,17 @@ void EntityManager::Wave(int numEnemy1, int numEnemy2, float posX[], float posY[
 {
 	for (int i = 0; i < numEnemy1; ++i)
 	{
-		ModuleEntity* e = CreateEntity(enemy, posX[i], posY[i]);
+		ModuleEntity* e = CreateEntity(Types::enemy, creature_type::ENEMY1, posX[i], posY[i]);
+
 		e->Start();
 		e->Enable();
 	}
 	
+	for (int j = numEnemy1; j < numEnemy1 + numEnemy2; ++j)
+	{
+		ModuleEntity* e2 = CreateEntity(Types::enemy, creature_type::ENEMY2, posX[j], posY[j]);
 
-	//for (int i = numEnemy1; i < numEnemy1 + numEnemy2; ++i)
-	//	CreateEntity(enemy, positions[i].x, positions[i].y);
+		e2->Start();
+		e2->Enable();
+	}
 }

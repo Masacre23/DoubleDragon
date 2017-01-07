@@ -11,7 +11,7 @@
 	</renderer>
 	
 	<entities>
-		<player1>
+		<player1 speed="1.0f">
 			<right_down speed="0.1f">
 				<frame1 x="9" y="0" w="70" h="64"/>
 				<frame2 x="84" y="0" w="70" h="64"/>
@@ -43,11 +43,12 @@
 			<rotate_kick_jump speed="0.2f">
 				<frame1 x="217" y="79" w="70" h="64"/>
 				<frame2 x="281" y="79" w="70" h="64"/>
-				<frame3 x="343" y="79" w="70" h="64"/>
-				<frame4 x="217" y="79" w="70" h="64"/>
+				<frame3 x="692" y="79" w="70" h="64"/>
+				<frame4 x="343" y="79" w="70" h="64"/>
 			</rotate_kick_jump>
 			<head_butt x="1" y="170" h = "70" w="64"/>
 			<damaged x="3" y="391" w="70" h="64"/>
+			<damaged2 x="3" y="391" w="70" h="64"/>
 			<fall speed="0.05f">
 				<frame1 x="138" y="391" w="70" h="64"/>
 				<frame2 x="248" y="391" w="70" h="64"/>
@@ -59,7 +60,7 @@
 				<frame2 x="248" y="391" w="70" h="64"/>
 			</dead>
 		</player1>
-		<enemy1>
+		<enemy1 speed = "1.1f">
 			<right_down speed="0.1f">
 				<frame1 x="6" y="7" w="70" h="64"/>
 				<frame2 x="78" y="7" w="70" h="64"/>
@@ -67,12 +68,12 @@
 				<frame4 x="197" y="7" w="70" h="64"/>
 			</right_down>
 			<up speed="0.1f">
-				<frame1 x="281" y="0" w="70" h="64"/>
-				<frame2 x="338" y="0" w="70" h="64"/>
-				<frame3 x="390" y="0" w="70" h="64"/>
-				<frame4 x="438" y="0" w="70" h="64"/>
+				<frame1 x="274" y="7" w="70" h="64"/>
+				<frame2 x="339" y="7" w="70" h="64"/>
+				<frame3 x="399" y="7" w="70" h="64"/>
+				<frame4 x="460" y="7" w="70" h="64"/>
 			</up>
-			<jump x="398" y="79" h = "70" w="64"/>
+			<jump x="141" y="79" h = "70" w="64"/>
 			<punch speed="0.1f">
 				<frame1 x="197" y="7" w="70" h="64"/>
 				<frame2 x="8" y="79" w="70" h="64"/>
@@ -87,17 +88,60 @@
 				<frame4 x="8" y="79" w="70" h="64"/>
 				<frame5 x="197" y="7" w="70" h="64"/>
 			</kick>
-			<kick_jump x="463" y="79" h = "70" w="64"/>
+			<kick_jump x="215" y="79" h = "70" w="64"/>
 			<damaged x="279" y="79" w="70" h="64"/>
-			<fall speed="0.05f">
+			<damaged2 x="279" y="79" w="70" h="64"/>
+			<fall speed="0.1f">
 				<frame1 x="343" y="79" w="70" h="64"/>
 				<frame2 x="422" y="79" w="70" h="64"/>
+				<frame3 x="422" y="79" w="70" h="64"/>
 			</fall>
 			<dead speed="0.05f">
 				<frame1 x="343" y="79" w="70" h="64"/>
 				<frame2 x="422" y="79" w="70" h="64"/>
 			</dead>
 		</enemy1>
+		<enemy2 speed="1.0f">
+			<right_down speed="0.1f">
+				<frame1 x="11" y="150" w="70" h="64"/>
+				<frame2 x="79" y="150" w="70" h="64"/>
+				<frame3 x="145" y="150" w="70" h="64"/>
+				<frame4 x="215" y="150" w="70" h="64"/>
+			</right_down>
+			<up speed="0.1f">
+				<frame1 x="283" y="150" w="70" h="64"/>
+				<frame2 x="350" y="150" w="70" h="64"/>
+				<frame3 x="430" y="150" w="70" h="64"/>
+				<frame4 x="509" y="150" w="70" h="64"/>
+			</up>
+			<jump x="147" y="223" h = "70" w="64"/>
+			<punch speed="0.1f">
+				<frame1 x="79" y="150" w="70" h="64"/>
+				<frame2 x="10" y="223" w="70" h="64"/>
+				<frame3 x="83" y="223" w="70" h="64"/>
+				<frame4 x="10" y="223" w="70" h="64"/>
+				<frame5 x="79" y="150" w="70" h="64"/>
+			</punch>
+			<kick speed="0.1f">
+				<frame1 x="79" y="150" w="70" h="64"/>
+				<frame2 x="147" y="223" h = "70" w="64"/>
+				<frame3 x="219" y="223" w="70" h="64"/>
+				<frame4 x="147" y="223" h = "70" w="64"/>
+				<frame5 x="79" y="150" w="70" h="64"/>
+			</kick>
+			<kick_jump x="463" y="150" h = "70" w="64"/>
+			<damaged x="278" y="223" w="70" h="64"/>
+			<damaged2 x="345" y="223" w="70" h="64"/>
+			<fall speed="0.1f">
+				<frame1 x="345" y="223" w="70" h="64"/>
+				<frame2 x="431" y="223" w="70" h="64"/>
+				<frame2 x="431" y="223" w="70" h="64"/>
+			</fall>
+			<dead speed="0.05f">
+				<frame1 x="345" y="223" w="70" h="64"/>
+				<frame2 x="431" y="223" w="70" h="64"/>
+			</dead>
+		</enemy2>
 	</entities>
 
 </config>

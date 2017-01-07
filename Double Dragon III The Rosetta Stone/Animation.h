@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "SDL/include/SDL.h"
 
 using namespace std;
 
@@ -10,6 +11,8 @@ public:
 	vector<SDL_Rect> frames;
 
 	float current_frame;
+	bool running = false;
+
 private:
 	bool finished = false;
 
@@ -20,10 +23,12 @@ public:
 	SDL_Rect& GetCurrentFrame()
 	{
 		current_frame += speed;
+		running = true;
 		finished = false;
 		if (current_frame >= frames.size())
 		{
 			current_frame = 0.0f;
+			running = false;
 			finished = true;
 		}
 		return frames[(int)current_frame];

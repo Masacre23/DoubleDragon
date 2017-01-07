@@ -16,7 +16,7 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 	position.y = 216;
 	life = 300;
 	damageAttack = 10;
-	speed = 1;
+	//speed = 1;
 	//int n = 20+2+2;
 
 	pugi::xml_document doc;
@@ -192,7 +192,6 @@ update_status CreaturePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-			//if (!creatureCollider->collisionMatrix[0][2])//Player-Wall
 			if (!creatureCollider->collisionArray[collider_type::WALL_UP])
 				position.y -= speed;
 			billy = up.GetCurrentFrame();
@@ -269,6 +268,13 @@ bool CreaturePlayer::isAttacking()
 			return false;
 		}
 
+		if (rotate_kick_jump.AnimationFinished())
+		{
+			currentAttack = 0;
+			creature_state = IDLE;
+			return false;
+		}
+
 		return true;
 	}
 	else
@@ -282,6 +288,8 @@ bool CreaturePlayer::isAttacking()
 		else if (App->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_DOWN)
 		{
 			currentAttack = SDL_SCANCODE_PERIOD;
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+				currentAttack = 1; //Rotate kick jump
 		}
 		return false;
 	}
@@ -293,6 +301,14 @@ SDL_Rect& CreaturePlayer::getAttack()
 {
 	switch (currentAttack)
 	{
+	case 1: //Rotate kick jump
+		/*if (rotate_kick_jump.AnimationHalf())
+			position.y += 5;
+		else
+			position.y -= 5;*/
+		return rotate_kick_jump.GetCurrentFrame();
+		break;
+
 	case SDL_SCANCODE_COMMA: //Punch
 		if (creature_state == JUMPING)
 			return jump;

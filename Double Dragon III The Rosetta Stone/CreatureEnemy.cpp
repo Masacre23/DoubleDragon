@@ -10,12 +10,17 @@
 #include "CreaturePlayer.h"
 #include <cmath>
 
-CreatureEnemy::CreatureEnemy(float x, float y, bool start_enabled) : EntityCreature(ENEMY1, start_enabled)
+//#include <stdlib.h>
+//#include <time.h>
+#include <cstdlib>
+
+CreatureEnemy::CreatureEnemy(creature_type creaturetype, float x, float y, bool start_enabled) : EntityCreature(creaturetype, start_enabled)
 {
 	position.x = x;
 	position.y = y;
 	life = 100;
 	damageAttack = 5;
+	enemytype = creaturetype;
 }
 
 CreatureEnemy::~CreatureEnemy()
@@ -27,7 +32,7 @@ bool CreatureEnemy::Start()
 
 	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Enemies.png");
 	
-	creature_state = IDLE;
+	creature_state = WALKING;
 
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 	{
@@ -53,10 +58,8 @@ bool CreatureEnemy::CleanUp()
 update_status CreatureEnemy::Update()
 {
 	UpdateProfundity();
-	static bool flip = false;
-	static int counter = 0;
 	
-	if (creature_state != ATTACKING && creature_state != DAMAGED && creature_state != DEAD)
+	if (creature_state == WALKING)
 	{
 		if (target->position.x < position.x)
 			flip = true;
@@ -73,13 +76,26 @@ update_status CreatureEnemy::Update()
 		++counter;
 		if (counter < 24)
 		{
-			enemy = damaged;
+			switch (damage_reaction)
+			{
+			case 0:
+				*enemy = damaged;
+				break;
+			case 1:
+				*enemy = damaged2;
+				break;
+			case 2:
+				counter = 0;
+				*enemy = Jump(falling_speed, true);
+				break;
+			}
 		}
 		else
 		{
 			creature_state = IDLE;
 			counter = 0;
-			Move(enemy);
+			damage_reaction = rand() % 3;
+			Move();
 		}
 		break;
 	case DEAD:
@@ -87,42 +103,40 @@ update_status CreatureEnemy::Update()
 		if (fall.AnimationHalf())
 		{
 			if(counter % 8 != 0)
-				App->renderer->Blit(graphics, position.x + speed, position.y - enemy.h, &(enemy), 1.0f, flip);
+				App->renderer->Blit(graphics, position.x + speed, position.y - (*enemy).h, &(*enemy), 1.0f, flip);
 			if (counter > 60 * 3)
 				CleanUp();
 			return UPDATE_CONTINUE;
 			break;
 		}
-		enemy = fall.GetCurrentFrame();
+		*enemy = fall.GetCurrentFrame();
 		break;
 	case IDLE:
-		//if(up.current_frame == 0)
-		enemy = right_down.frames[right_down.current_frame];
+		*enemy = right_down.frames[right_down.current_frame];
+	//case JUMPING:
 	default:
-		Move(enemy);
+		Move();
 		break;
 	}
 
 	creatureCollider->SetPos(position.x + 25, position.y - 64);
-	App->renderer->Blit(graphics, position.x + speed, position.y - enemy.h, &(enemy), 1.0f, flip);
+	App->renderer->Blit(graphics, position.x + speed, position.y - (*enemy).h, &(*enemy), 1.0f, flip);
 	return UPDATE_CONTINUE;
 }
 
 /****************************************************/
-void CreatureEnemy::Move(SDL_Rect& enemy)
+//void CreatureEnemy::Move(SDL_Rect& enemy)
+void CreatureEnemy::Move()
 {
-	float distx, disty, distance, moveX, moveY;
-	speed = 1.0f;
+	float distx, disty, distance;
+	//speed = 1.0f;
 
 	distx = target->position.x - position.x;
 	disty = target->position.y - position.y;
 
 	distance = sqrtf((distx * distx) + (disty * disty));
-	if (distance > 20 && creature_state != ATTACKING)
+	if (distance > 20 && creature_state != ATTACKING && creature_state != JUMPING)
 	{
-		//if(creatureCollider->collisionMatrix[1][1])//Enemy-enemy
-		
-		
 		//Normalize
 		distx /= distance;
 		disty /= distance;
@@ -133,25 +147,110 @@ void CreatureEnemy::Move(SDL_Rect& enemy)
 		position.x += distx;
 		position.y += disty;
 
-		enemy = right_down.GetCurrentFrame();
+		if (target->position.y > position.y)
+			*enemy = right_down.GetCurrentFrame();
+		else
+			*enemy = up.GetCurrentFrame();
 	}
 	else
-		enemy = Attack();
+		*enemy = Attack();
 }
 
 /****************************************************/
 SDL_Rect CreatureEnemy::Attack()
 {
 	creature_state = ATTACKING;
-	if (punch.AnimationFinished())
+	if (punch.AnimationFinished() || kick.AnimationFinished())
 	{
 		creature_state = WALKING;
-		return right_down.frames[3];
+		current_attack = rand() % 3;
+
+		if(enemytype == creature_type::ENEMY1)
+			return right_down.frames[3];
+		else if(enemytype == creature_type::ENEMY2)
+			return right_down.frames[1];
 	}
-	if (punch.AnimationHalf() && position.DistanceTo(target->position) < 20 && target->creature_state != DAMAGED)
+	if ((punch.AnimationHalf() || kick.AnimationHalf() || creature_state == JUMPING) && position.DistanceTo(target->position) < 20 + 45 //45 = 70/2 -> 70 is the heigth
+		&& target->creature_state != DAMAGED)
 	{
 		target->creature_state = DAMAGED;
 		target->life -= damageAttack;
 	}
-	return punch.GetCurrentFrame();
+	
+	switch (current_attack)
+	{
+	case 0:
+		return punch.GetCurrentFrame();
+		break;
+	case 1:
+		return kick.GetCurrentFrame();
+		break;
+	case 2:
+		creature_state = JUMPING;
+		return Jump(jump_speed);
+		break;
+	}
+}
+
+/************************************/
+SDL_Rect CreatureEnemy::Jump(float& jump_speed, bool falling)
+{
+	float aceleration = 0.3f;
+
+	if (y_ini == -1)
+	{
+		y_ini = position.y;
+		position.y -= 1;
+	}
+	else if (y_ini <= position.y)
+	{
+		position.y = y_ini;
+		if (fall.AnimationFinished() || falling == false)
+		{
+			creature_state = WALKING;
+			y_ini = -1;
+			counterJump = 0;
+			current_attack = rand() % 3;
+			damage_reaction = rand() % 3;
+			jump_speed = 4;
+
+			if (enemytype == creature_type::ENEMY1)
+				return right_down.frames[3];
+			else if (enemytype == creature_type::ENEMY2)
+				return right_down.frames[1];
+		}
+	}
+	else
+	{
+		jump_speed -= aceleration;
+		position.y -= jump_speed;
+
+		if (falling)
+		{
+			if (target->flip)
+				position.x -= 4;
+			else if (target->flip == false)
+				position.x += 4;
+		}
+		else
+		{
+			if (flip == false)
+				position.x += 2;
+			else if (flip)
+				position.x -= 2;
+		}
+	}
+	if (falling)
+		return fall.GetCurrentFrame();
+
+	if (enemytype == creature_type::ENEMY1)
+	{
+		++counterJump;
+		if (counterJump < 12)
+			return jump;
+		else
+			return kick_jump;
+	}
+	else if (enemytype == creature_type::ENEMY2)
+		return jump;
 }

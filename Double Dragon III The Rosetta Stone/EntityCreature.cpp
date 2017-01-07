@@ -24,7 +24,7 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 	
 	switch (type)
 	{
-	case PLAYER:
+	case PLAYER1:
 		creature = entities.child("player1");
 		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 25, 64 }, (collider_type)PLAYER);
 		break;
@@ -34,13 +34,15 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 		break;
 	case ENEMY2:
 		creature = entities.child("enemy2");
-		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 70, 64 }, (collider_type)ENEMY);
+		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 25, 64 }, (collider_type)ENEMY);
 		break;
 	case BOSS:
 		creature = entities.child("boss");
-		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 70, 64 }, (collider_type)ENEMY);
+		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 25, 64 }, (collider_type)ENEMY);
 		break;
 	}
+
+	speed = creature.attribute("speed").as_int();
 
 	// Right & Down
 	pugi::xml_node right_downXML = creature.child("right_down");
@@ -216,6 +218,16 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 		damagedXML.attribute("y").as_int(),
 		damagedXML.attribute("w").as_int(),
 		damagedXML.attribute("h").as_int()
+	};
+
+	// Damaged2
+	pugi::xml_node damaged2XML = creature.child("damaged2");
+	damaged2 =
+	{
+		damaged2XML.attribute("x").as_int(),
+		damaged2XML.attribute("y").as_int(),
+		damaged2XML.attribute("w").as_int(),
+		damaged2XML.attribute("h").as_int()
 	};
 
 	// Fall

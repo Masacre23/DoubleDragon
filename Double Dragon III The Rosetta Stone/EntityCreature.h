@@ -14,7 +14,8 @@ enum creature_type
 	PLAYER2,
 	ENEMY1,
 	ENEMY2,
-	BOSS
+	BOSS,
+	UNKNOWN
 };
 
 enum state
@@ -46,7 +47,7 @@ public:
 	Animation kick;
 	SDL_Rect kick_jump;
 	SDL_Rect jump;
-	SDL_Rect damaged;
+	SDL_Rect damaged, damaged2;
 	Animation fall;
 
 	state creature_state;
