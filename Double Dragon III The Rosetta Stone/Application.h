@@ -47,7 +47,7 @@ public:
 	EntityManager* entityManager;
 	ModuleFonts* fonts;
 //private:
-
+	int coins = 15;
 	std::list<Module*> modules;
 
 };

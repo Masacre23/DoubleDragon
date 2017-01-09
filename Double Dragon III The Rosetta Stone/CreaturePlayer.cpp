@@ -14,8 +14,8 @@ CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, sta
 {
 	position.x = 120;
 	position.y = 216;
-	life = 300;
-	damageAttack = 10;
+	//life = 300;
+	//damageAttack = 10;
 	//speed = 1;
 	//int n = 20+2+2;
 

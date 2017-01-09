@@ -11,7 +11,7 @@
 	</renderer>
 	
 	<entities>
-		<player1 speed="1.0f">
+		<player1 speed="1.0f" damage="10" life="250">
 			<right_down speed="0.1f">
 				<frame1 x="9" y="0" w="70" h="64"/>
 				<frame2 x="84" y="0" w="70" h="64"/>
@@ -60,7 +60,7 @@
 				<frame2 x="248" y="391" w="70" h="64"/>
 			</dead>
 		</player1>
-		<enemy1 speed = "1.1f">
+		<enemy1 speed = "1.1f" damage="10" life="50">
 			<right_down speed="0.1f">
 				<frame1 x="6" y="7" w="70" h="64"/>
 				<frame2 x="78" y="7" w="70" h="64"/>
@@ -101,7 +101,7 @@
 				<frame2 x="422" y="79" w="70" h="64"/>
 			</dead>
 		</enemy1>
-		<enemy2 speed="1.0f">
+		<enemy2 speed="1.0f" damage="10" life="50">
 			<right_down speed="0.1f">
 				<frame1 x="11" y="150" w="70" h="64"/>
 				<frame2 x="79" y="150" w="70" h="64"/>

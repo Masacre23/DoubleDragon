@@ -27,6 +27,7 @@ public:
 	EntityExit* exit;
 	int num_waves = 0;
 	bool new_wave = false;
+	//bool gameover = false;
 };
 
 #endif

@@ -18,8 +18,8 @@ CreatureEnemy::CreatureEnemy(creature_type creaturetype, float x, float y, bool 
 {
 	position.x = x;
 	position.y = y;
-	life = 20;
-	damageAttack = 5;
+	//life = 20;
+	//damageAttack = 5;
 	enemytype = creaturetype;
 }
 
@@ -156,7 +156,14 @@ void CreatureEnemy::Move()
 			*enemy = up.GetCurrentFrame();
 	}
 	else
-		*enemy = Attack();
+	{
+		if ((target->creature_state != DEAD && target->creature_state != DEAD) || creature_state == JUMPING)
+		{
+			*enemy = Attack();
+		}
+		else
+			*enemy = right_down.frames[right_down.current_frame];
+	}
 }
 
 /****************************************************/
@@ -173,7 +180,7 @@ SDL_Rect CreatureEnemy::Attack()
 		else if(enemytype == creature_type::ENEMY2)
 			return right_down.frames[1];
 	}
-	if ((punch.AnimationHalf() || kick.AnimationHalf() || creature_state == JUMPING) && position.DistanceTo(target->position) < 20 + 45 //45 = 70/2 -> 70 is the heigth
+	if ((punch.AnimationHalf() || kick.AnimationHalf() || creature_state == JUMPING) && position.DistanceTo(target->position) < 20 
 		&& target->creature_state != DAMAGED)
 	{
 		target->creature_state = DAMAGED;
@@ -190,6 +197,11 @@ SDL_Rect CreatureEnemy::Attack()
 		break;
 	case 2:
 		creature_state = JUMPING;
+		if (creatureCollider->collisionArray[collider_type::PLAYER] && target->creature_state != DAMAGED)
+		{
+			target->creature_state = DAMAGED;
+			target->life -= damageAttack;
+		}
 		return Jump(jump_speed);
 		break;
 	}

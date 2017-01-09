@@ -45,6 +45,8 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 	}
 
 	speed = creature.attribute("speed").as_int();
+	damageAttack = creature.attribute("damage").as_int();
+	life = creature.attribute("life").as_int();
 
 	// Right & Down
 	pugi::xml_node right_downXML = creature.child("right_down");

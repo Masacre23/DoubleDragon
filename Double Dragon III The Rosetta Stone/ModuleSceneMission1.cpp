@@ -98,7 +98,11 @@ bool ModuleSceneMission1::CleanUp()
 update_status ModuleSceneMission1::Update()
 {
 	static int time = 200 * 60;
+	static bool b = false;
 	--time;
+
+	if (time % (2 * 60) == 0) //2 seconds
+		b = !b;
 
 	if (player->creatureCollider->collisionArray[collider_type::EXIT])
 	{
@@ -112,12 +116,12 @@ update_status ModuleSceneMission1::Update()
 					b = false;
 			}
 		}
-		if(b)
+		if (b)
 			exit->NextRoom();
 	}
 
 	// Draw everything --------------------------------------
-	App->renderer->Blit(graphics, 0, 0, &background, 1.0f); 
+	App->renderer->Blit(graphics, 0, 0, &background, 1.0f);
 
 	//Update entities
 	int num_enemies = 0;
@@ -125,7 +129,7 @@ update_status ModuleSceneMission1::Update()
 	{
 		if ((*it)->IsEnabled())
 		{
-			if((*it)->type == Types::enemy)
+			if ((*it)->type == Types::enemy)
 				++num_enemies;
 			(*it)->Update();
 		}
@@ -139,8 +143,8 @@ update_status ModuleSceneMission1::Update()
 
 	if (num_enemies == 1 && num_waves % 2 != 0 || num_enemies == 0 && new_wave)
 	{
-		float posX[] = { player->position.x-300, player->position.x + 300, player->position.x + 400 };
-		float posY[] = { 150.0f, 200.0f, 250.0f};
+		float posX[] = { player->position.x - 300, player->position.x + 300, player->position.x + 400 };
+		float posY[] = { 150.0f, 200.0f, 250.0f };
 		App->entityManager->Wave(3, posX, posY);
 		++num_waves;
 		new_wave = false;
@@ -149,52 +153,99 @@ update_status ModuleSceneMission1::Update()
 	// Draw fonts
 
 	//First player
-	//Without life
-	/*iPoint pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
-	App->fonts->DrawLine("to", 0, pos);
-	pos.x -= 15;
-	pos.y += 10;
-	App->fonts->DrawLine("buy in", 0, pos);*/
-
-	//With life
 	iPoint pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
-	pos.y = -80;
-	pos.x -= 20 + 20;
-	App->fonts->DrawLine(to_string(player->life), 4, pos);
-	pos.x += 5;
-	pos.y = 45;
-	App->fonts->DrawLine("billy", 0, pos);
-	pos.y = 17;
-	pos.x += 45;
-	App->fonts->DrawFace(pos);
-
-	//Time
-	pos = { App->window->center_window_x -20, 22 };
-	App->fonts->DrawLine("time "+to_string(time/60), 0, pos);
-	pos.y += 10;
-	App->fonts->DrawLine("coins 15", 0, pos);
-
-	//Second player
-	static bool b = false;
-	if (time % (2*60) == 0) //2 seconds
-		b = !b;
-
-	pos = { App->window->center_window_x + SCREEN_WIDTH / 4 + 10, 22};
-	
-	if (b)
+	if (player->creature_state == DEAD)
 	{
-		pos.x -= 10;
-		App->fonts->DrawLine("press", 0, pos);
-		pos.y += 10;
-		App->fonts->DrawLine("start", 0, pos);
+		//Without life
+		pos = { App->window->center_window_x - SCREEN_WIDTH / 4 - 10, 22 };
+		if (b)
+		{
+			App->fonts->DrawLine("press", 0, pos);
+			//pos.x += 15;
+			pos.y += 10;
+			App->fonts->DrawLine("start", 0, pos);
+		}
+		else
+		{
+			App->fonts->DrawLine("cont _", 0, pos);
+			//pos.x += 15;
+			pos.y += 10;
+			App->fonts->DrawLine("inue ?", 0, pos);
+		}
+
 	}
 	else
 	{
-		App->fonts->DrawLine("to", 0, pos);
-		pos.x -= 15;
-		pos.y += 10;
-		App->fonts->DrawLine("buy in", 0, pos);
+		//With life
+		//pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
+		pos.y = -80;
+		pos.x -= 20 + 20;
+		if (player->life < 100)
+		{
+			if(player->life < 10)
+				App->fonts->DrawLine("000", 4, pos);
+			else
+				App->fonts->DrawLine("0" + to_string(player->life), 4, pos);
+		}
+		else
+			App->fonts->DrawLine(to_string(player->life), 4, pos);
+		pos.x += 5;
+		pos.y = 45;
+		App->fonts->DrawLine("billy", 0, pos);
+		pos.y = 17;
+		pos.x += 45;
+		App->fonts->DrawFace(pos);
 	}
+
+	//Time
+	pos = { App->window->center_window_x - 20, 22 };
+	App->fonts->DrawLine("time " + to_string(time / 60), 0, pos);
+	pos.y += 10;
+	App->fonts->DrawLine("coins " + to_string(App->coins), 0, pos);
+
+	//Second player
+
+	pos = { App->window->center_window_x + SCREEN_WIDTH / 4 + 10, 22 };
+	if (player->creature_state == DEAD)
+	{
+		if (b)
+		{
+			pos.x -= 10;
+			App->fonts->DrawLine("cont _", 0, pos);
+			pos.y += 10;
+			App->fonts->DrawLine("inue ?", 0, pos);
+		}
+		else
+		{
+			pos.x -= 10;
+			App->fonts->DrawLine("press", 0, pos);
+			pos.y += 10;
+			App->fonts->DrawLine("start", 0, pos);
+		}
+	}
+	else
+	{
+		if (b)
+		{
+			pos.x -= 10;
+			App->fonts->DrawLine("press", 0, pos);
+			pos.y += 10;
+			App->fonts->DrawLine("start", 0, pos);
+		}
+		else
+		{
+			App->fonts->DrawLine("to", 0, pos);
+			pos.x -= 15;
+			pos.y += 10;
+			App->fonts->DrawLine("buy in", 0, pos);
+		}
+	}
+
+	//Game over
+	/*if (gameover)
+	{
+		pos = { App->window->center_window_x - SCREEN_WIDTH / 4 + 10, 22 };
+	}*/
 
 	return UPDATE_CONTINUE;
 }
