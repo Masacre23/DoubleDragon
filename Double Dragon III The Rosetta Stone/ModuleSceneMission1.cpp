@@ -158,20 +158,43 @@ update_status ModuleSceneMission1::Update()
 
 	//With life
 	iPoint pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
-	pos.y = -90;
+	pos.y = -80;
+	pos.x -= 20 + 20;
 	App->fonts->DrawLine(to_string(player->life), 4, pos);
+	pos.x += 5;
+	pos.y = 45;
+	App->fonts->DrawLine("billy", 0, pos);
+	pos.y = 17;
+	pos.x += 45;
+	App->fonts->DrawFace(pos);
 
 	//Time
-	pos = { App->window->center_window_x, 10 };
-	pos.x -= 20;
-	App->fonts->DrawLine("time: "+to_string(time/60), 0, pos);
+	pos = { App->window->center_window_x -20, 22 };
+	App->fonts->DrawLine("time "+to_string(time/60), 0, pos);
+	pos.y += 10;
+	App->fonts->DrawLine("coins 15", 0, pos);
 
 	//Second player
-	pos = { App->window->center_window_x + SCREEN_WIDTH / 4, 10};
-	App->fonts->DrawLine("to", 0, pos);
-	pos.x -= 15;
-	pos.y += 10;
-	App->fonts->DrawLine("buy in", 0, pos);
+	static bool b = false;
+	if (time % (2*60) == 0) //2 seconds
+		b = !b;
+
+	pos = { App->window->center_window_x + SCREEN_WIDTH / 4 + 10, 22};
+	
+	if (b)
+	{
+		pos.x -= 10;
+		App->fonts->DrawLine("press", 0, pos);
+		pos.y += 10;
+		App->fonts->DrawLine("start", 0, pos);
+	}
+	else
+	{
+		App->fonts->DrawLine("to", 0, pos);
+		pos.x -= 15;
+		pos.y += 10;
+		App->fonts->DrawLine("buy in", 0, pos);
+	}
 
 	return UPDATE_CONTINUE;
 }

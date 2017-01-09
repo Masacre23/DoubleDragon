@@ -31,6 +31,11 @@ bool ModuleFonts::CleanUp()
 
 	return true;
 }
+/*******************************************************/
+void ModuleFonts::DrawFace(iPoint pos)
+{
+	App->renderer->Blit(graphics, pos.x, pos.y, face);
+}
 
 /*******************************************************/
 void ModuleFonts::DrawLine(const string& words, int line, iPoint pos)

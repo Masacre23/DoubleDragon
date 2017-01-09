@@ -21,15 +21,14 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	void DrawFace(iPoint pos);
 	void DrawLine(const string& words, int line, iPoint pos);
 	SDL_Rect* getRect(const char c, int line);
 
 public:
 	SDL_Texture* graphics = nullptr;
+	SDL_Rect* face = new SDL_Rect({168, 40, 23, 23});
 
-	/*char normal_letters[54] = { " 0123456789abcdefghijklmnopqrstuvwxyz?!·#$%&'()*+,_./" };
-	char golden_letters[24] = {" 0123456789timecns:/*-+"};
-	char big_numbers[12] = {"0 123456789"};*/
 	string normal_letters = " 0123456789abcdefghijklmnopqrstuvwxyz?!·#$%&'()*+,_./";
 	string golden_letters = " 0123456789timecns:/*-+";
 	string big_numbers = "0123456789";
