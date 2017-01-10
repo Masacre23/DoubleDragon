@@ -67,6 +67,7 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 	//static bool b = false;
+
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && scene_menu->IsEnabled())
 	{
 			fade->FadeToBlack(scene_mission1, scene_menu, 3.0f);

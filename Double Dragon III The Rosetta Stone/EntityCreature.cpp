@@ -270,4 +270,7 @@ void EntityCreature::Die()
 	creature_state = DEAD;
 	//App->entityManager->entities.remove((ModuleEntity*)this);
 	creatureCollider->SetPos(0, 0);
+
+	if (App->time > 10 * 60) //10 seconds
+		App->time = 10 * 60;
 }

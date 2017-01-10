@@ -38,10 +38,13 @@ public:
 	bool running = false;
 	bool isButting = false;
 	bool flip = false;
+	bool invulnerability = false;
 	//int life = 250;
 	//Collider* playerCollider;
 	//bool wallCollision = false;
 	//bool enemyCollision = false;
+
+	
 };
 
 #endif // __MODULEPLAYER_H__

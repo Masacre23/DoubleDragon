@@ -17,9 +17,11 @@ public:
 	bool Start();
 	update_status Update();
 	bool  CleanUp();
+	void Reset();
 
 public:
 	SDL_Texture* graphics = nullptr;
+	SDL_Texture* gameoverTexture = nullptr;
 	SDL_Rect ground;
 	SDL_Rect background;
 
@@ -27,6 +29,7 @@ public:
 	EntityExit* exit;
 	int num_waves = 0;
 	bool new_wave = false;
+	//int time = 150 * 60;
 	//bool gameover = false;
 };
 

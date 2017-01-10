@@ -48,6 +48,7 @@ public:
 	ModuleFonts* fonts;
 //private:
 	int coins = 15;
+	int time = 150 * 60;
 	std::list<Module*> modules;
 
 };

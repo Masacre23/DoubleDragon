@@ -131,7 +131,7 @@ update_status CreaturePlayer::Update()
 		{
 		case 0:
 			++counter;
-			if (counter < 24)
+			if (counter < 30)
 			{
 				billy = damaged;
 			}
@@ -139,6 +139,7 @@ update_status CreaturePlayer::Update()
 			{
 				creature_state = IDLE;
 				counter = 0;
+				invulnerability = true;
 			}
 			break;
 		case 1:
@@ -208,8 +209,23 @@ update_status CreaturePlayer::Update()
 	UpdateCamera();
 
 	creatureCollider->SetPos(position.x + 25, position.y - 64);
+	static bool b = false;
+	if (invulnerability)
+	{
+		++counter;
+		if (counter >= 60) // 1 seconds
+		{
+			invulnerability = false;
+			counter = 0;
+		}
+		if (counter % (10) == 0) // 0.25 seconds
+			b = !b;
 
-	App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
+		if(b)
+			App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
+	}
+	else
+		App->renderer->Blit(graphics, position.x + speed, position.y - billy.h, &(billy), 1.0f, flip);
 	return UPDATE_CONTINUE;
 }
 

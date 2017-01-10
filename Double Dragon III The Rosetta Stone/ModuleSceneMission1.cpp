@@ -15,6 +15,7 @@
 #include "ModuleWindow.h"
 #include "EntityExit.h"
 #include "CreatureEnemy.h"
+#include "ModuleSceneMenu.h"
 
 ModuleSceneMission1::ModuleSceneMission1(bool start_enabled) : Module(start_enabled)
 {
@@ -38,7 +39,7 @@ bool ModuleSceneMission1::Start()
 	LOG("Loading menu scene");
 
 	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Mission 1 America.png");
-
+	gameoverTexture = App->textures->Load("Game over.png");
 	//res = App->player->Start();
 	//App->player->Enable();
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
@@ -97,11 +98,13 @@ bool ModuleSceneMission1::CleanUp()
 // Update: draw background
 update_status ModuleSceneMission1::Update()
 {
-	static int time = 200 * 60;
+	//static int time = 200 * 60;
+	//static int time = 10 * 60;
 	static bool b = false;
-	--time;
+	
+	--App->time;
 
-	if (time % (2 * 60) == 0) //2 seconds
+	if (App->time % (2 * 60) == 0) //2 seconds
 		b = !b;
 
 	if (player->creatureCollider->collisionArray[collider_type::EXIT])
@@ -150,7 +153,7 @@ update_status ModuleSceneMission1::Update()
 		new_wave = false;
 	}
 
-	// Draw fonts
+	// Draw fonts --------------------------------------------
 
 	//First player
 	iPoint pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
@@ -199,9 +202,13 @@ update_status ModuleSceneMission1::Update()
 
 	//Time
 	pos = { App->window->center_window_x - 20, 22 };
-	App->fonts->DrawLine("time " + to_string(time / 60), 0, pos);
+	if(App->time <= 0)
+		App->fonts->DrawLine("time 0", 0, pos);
+	else
+		App->fonts->DrawLine("time " + to_string(App->time / 60), 0, pos);
 	pos.y += 10;
 	App->fonts->DrawLine("coins " + to_string(App->coins), 0, pos);
+
 
 	//Second player
 
@@ -242,10 +249,28 @@ update_status ModuleSceneMission1::Update()
 	}
 
 	//Game over
-	/*if (gameover)
+	if (App->time <= 0)
 	{
-		pos = { App->window->center_window_x - SCREEN_WIDTH / 4 + 10, 22 };
-	}*/
+		//pos = { App->window->center_window_x - SCREEN_WIDTH / 4 + 10, 22 };
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+		{
+			if(App->coins > 0)
+				Reset();
+			else
+				App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
+		}
+		SDL_Rect gameover = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+		App->renderer->Blit(gameoverTexture, 0, 0, &(gameover), 1.0f);
+	}
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleSceneMission1::Reset()
+{
+	--App->coins;
+	App->time = 150 * 60; //150 seconds
+	player->creature_state = IDLE;
+	player->life = 250;
+	player->invulnerability = true;
 }
