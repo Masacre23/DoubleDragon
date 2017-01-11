@@ -33,11 +33,23 @@ bool CreatureEnemy::Start()
 	
 	creature_state = WALKING;
 
+	bool findsecond = false;
+	if (App->numplayers == 2)
+	{
+		findsecond = rand() % 2;
+		//findsecond = true;
+	}
+
+	int counter = 0;
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 	{
 		target = (CreaturePlayer*)(*it);
 		if (target->type == player)
-			break;
+		{
+			++counter;
+			if(findsecond == false || counter == 2)
+				break;
+		}
 	}
 
 	return true;

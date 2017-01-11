@@ -22,11 +22,10 @@ public:
 	void Move();
 	SDL_Rect Attack();
 	SDL_Rect Jump(float& jump_speed, bool falling = false);
-	//Animation getNewAttack();
 
 public:
 	SDL_Texture* graphics = nullptr;
-	CreaturePlayer* target;
+	CreaturePlayer* target, *target1, *target2;
 	SDL_Rect* enemy = new SDL_Rect();
 	creature_type enemytype;
 	bool flip = false;

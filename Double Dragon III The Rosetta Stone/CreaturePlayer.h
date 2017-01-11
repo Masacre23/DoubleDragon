@@ -47,10 +47,22 @@ public:
 	int kickSound;
 
 private:
+	SDL_Rect billy = right_down.frames[0];
+	int counter = 0;
+
 	int newSpeed;
 	int controlsplayer[7];
 	int controlsplayer1[7] = { SDL_SCANCODE_W, SDL_SCANCODE_A, SDL_SCANCODE_S, SDL_SCANCODE_D, SDL_SCANCODE_N, SDL_SCANCODE_M, SDL_SCANCODE_SPACE };
 	int controlsplayer2[7] = { SDL_SCANCODE_UP, SDL_SCANCODE_LEFT, SDL_SCANCODE_DOWN, SDL_SCANCODE_RIGHT, SDL_SCANCODE_KP_2, SDL_SCANCODE_KP_3, SDL_SCANCODE_KP_0 };
+
+	bool jumpDirection[2] = { false, false }; //right, left
+	float jump_speed = 5;
+	int y_ini = -1;
+
+	//Get speed
+	int maxTime = 24;
+	int time = 0;
+	bool walking = false;
 };
 
 #endif // __MODULEPLAYER_H__

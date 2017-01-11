@@ -49,6 +49,7 @@ public:
 //private:
 	int coins = 15;
 	int time = 150 * 60;
+	int numplayers = 1;
 	std::list<Module*> modules;
 
 };

@@ -115,10 +115,10 @@ update_status CreaturePlayer::Update()
 {
 	UpdateProfundity();
 
-	static SDL_Rect billy = right_down.frames[0];
+	//static SDL_Rect billy = right_down.frames[0];
 	//static bool flip = false; // When the character goes left is true
 	newSpeed = getSpeed();
-	static int counter = 0;
+	//static int counter = 0;
 	//static int damageReaction = 0;
 
 	if (life <= 0)
@@ -258,10 +258,9 @@ update_status CreaturePlayer::Update()
 /**************************************************************/
 int CreaturePlayer::getSpeed()
 {
-	//static bool running = false;
-	static bool walking = false;
-	static int time = 0;
-	static int maxTime = 24; 
+	//static bool walking = false;
+	//static int time = 0;
+	//static int maxTime = 24; 
 
 	if (running)
 	{
@@ -393,10 +392,10 @@ bool CreaturePlayer::isJumping()
 //--------------------------------------------------------------------
 void CreaturePlayer::Jump()
 {
-	static int y_ini = -1;
+	//static int y_ini = -1;
 	float aceleration = 0.3f;
-	static float jump_speed = 5;
-	static bool jumpDirection[] = {false, false}; //right, left
+	//static float jump_speed = 5;
+	//static bool jumpDirection[] = {false, false}; //right, left
 
 	if (y_ini == -1)// Init
 	{
@@ -454,10 +453,10 @@ void CreaturePlayer::Jump()
 void CreaturePlayer::HeadButt()
 {
 	//static bool isButting = false;
-	static int y_ini = -1;
+	//static int y_ini = -1;
 	float aceleration = 0.5f;
-	static float jump_speed = 5;
-	static bool jumpDirection[] = { false, false }; //right, left
+	//static float jump_speed = 5;
+	//static bool jumpDirection[] = { false, false }; //right, left
 	running = false;
 	if (y_ini == -1)
 	{

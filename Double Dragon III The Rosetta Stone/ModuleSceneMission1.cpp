@@ -313,4 +313,5 @@ void ModuleSceneMission1::InsertPlayer2()
 	player2 = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, PLAYER2, player->position.x + 50, player->position.y);
 	player2->Start();
 	player2created = true;
+	App->numplayers++;
 }
