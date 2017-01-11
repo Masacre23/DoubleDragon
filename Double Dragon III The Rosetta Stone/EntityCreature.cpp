@@ -11,13 +11,14 @@
 
 #include "EntityManager.h"
 #include "ModuleCollision.h"
+#include "ModuleAudio.h"
 
 EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleEntity(start_enabled)
 {
-	//position.x = 100;
-	//position.y = 216;
-	//speed = 1;
+	// Sounds
+	deathSound = App->audio->LoadFx("death.wav");
 
+	// Textures
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data.xml");
 	pugi::xml_node config = doc.document_element();
@@ -267,8 +268,12 @@ EntityCreature::~EntityCreature()
 /*********************************************************/
 void EntityCreature::Die()
 {
+	if(deathSound != NULL)
+		App->audio->PlayFx(deathSound);
+
+	deathSound = NULL;
+
 	creature_state = DEAD;
-	//App->entityManager->entities.remove((ModuleEntity*)this);
 	creatureCollider->SetPos(-100, 0);
 
 	if (App->time > 10 * 60 && type == Types::player) //10 seconds

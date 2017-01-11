@@ -9,15 +9,16 @@
 #include "CreatureEnemy.h"
 #include "EntityManager.h"
 #include "ModuleWindow.h"
+#include "ModuleAudio.h"
 
 CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, start_enabled)
 {
+	// Sounds
+	punchSound = App->audio->LoadFx("player_punch.wav");
+	kickSound = App->audio->LoadFx("player_kick.wav");
+
 	position.x = 120;
 	position.y = 216;
-	//life = 300;
-	//damageAttack = 10;
-	//speed = 1;
-	//int n = 20+2+2;
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data.xml");
@@ -307,15 +308,15 @@ bool CreaturePlayer::isAttacking()
 	}
 	else
 	{
-		if (App->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
 		{
-			currentAttack = SDL_SCANCODE_COMMA;
+			currentAttack = SDL_SCANCODE_N;
 			if (running)
 				isButting = true;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_DOWN)
+		else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 		{
-			currentAttack = SDL_SCANCODE_PERIOD;
+			currentAttack = SDL_SCANCODE_M;
 			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 				currentAttack = 1; //Rotate kick jump
 		}
@@ -337,7 +338,7 @@ SDL_Rect& CreaturePlayer::getAttack()
 		return rotate_kick_jump.GetCurrentFrame();
 		break;
 
-	case SDL_SCANCODE_COMMA: //Punch
+	case SDL_SCANCODE_N: //Punch
 		if (creature_state == JUMPING)
 			return jump;
 		if (isButting)
@@ -351,7 +352,7 @@ SDL_Rect& CreaturePlayer::getAttack()
 		return punch.GetCurrentFrame();
 		break;
 
-	case SDL_SCANCODE_PERIOD: //Kick
+	case SDL_SCANCODE_M: //Kick
 		if (creature_state == JUMPING)
 		{
 			doDamage();
@@ -487,6 +488,7 @@ void CreaturePlayer::HeadButt()
 void CreaturePlayer::doDamage()
 {
 	//if (creatureCollider->collisionMatrix[0][1])
+	bool activateSound = false;
 	if (creatureCollider->collisionArray[1])
 	{
 		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
@@ -498,8 +500,23 @@ void CreaturePlayer::doDamage()
 				{
 					e->creature_state = DAMAGED;
 					e->life -= damageAttack;
+					activateSound = true;
 				}
 			}
+		}
+	}
+
+	if (activateSound)
+	{
+		switch (currentAttack)
+		{
+		case SDL_SCANCODE_N: //Punch
+			App->audio->PlayFx(punchSound);
+			break;
+
+		case SDL_SCANCODE_M: // Kick
+			App->audio->PlayFx(kickSound);
+			break;
 		}
 	}
 }

@@ -54,6 +54,8 @@ public:
 	float speed;
 	int life;
 	int damageAttack;
+
+	int deathSound;
 };
 
 #endif

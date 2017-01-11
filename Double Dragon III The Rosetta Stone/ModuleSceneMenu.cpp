@@ -28,7 +28,7 @@ bool ModuleSceneMenu::Start()
 	LOG("Loading menu scene");
 
 	graphics = App->textures->Load("DD3_Title.gif");
-	//App->audio->PlayMusic("01-rosetta-stone.ogg");
+	App->audio->PlayMusic("01-rosetta-stone.ogg");
 
 	return res;
 }

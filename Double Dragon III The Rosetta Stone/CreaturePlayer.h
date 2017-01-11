@@ -41,12 +41,10 @@ public:
 	bool invulnerability = false;
 	int damage_reaction = rand() % 3;
 	bool falling = false;
-	//int life = 250;
-	//Collider* playerCollider;
-	//bool wallCollision = false;
-	//bool enemyCollision = false;
 
-	
+	//Sounds
+	int punchSound;
+	int kickSound;
 };
 
 #endif // __MODULEPLAYER_H__

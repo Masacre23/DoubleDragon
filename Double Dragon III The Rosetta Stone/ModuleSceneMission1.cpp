@@ -75,8 +75,11 @@ bool ModuleSceneMission1::Start()
 	//Enemies
 	float posX[] = {-player->position.x - 300, player->position.x + 300, player->position.x + 400 };
 	float posY[] = { 150.0f, 200.0f, 250.0f};
-	App->entityManager->Wave(1, posX, posY);
+	App->entityManager->Wave(3, posX, posY);
 	++num_waves;
+
+	//Music
+	App->audio->PlayMusic("02-in-america.ogg");
 
 	return res;
 }
@@ -139,7 +142,7 @@ update_status ModuleSceneMission1::Update()
 	}
 
 	//Manage waves
-	/*if (player->creatureCollider->collisionArray[collider_type::SPAWN])
+	if (player->creatureCollider->collisionArray[collider_type::SPAWN])
 	{
 		new_wave = true;
 	}
@@ -151,7 +154,7 @@ update_status ModuleSceneMission1::Update()
 		App->entityManager->Wave(3, posX, posY);
 		++num_waves;
 		new_wave = false;
-	}*/
+	}
 
 	// Draw fonts --------------------------------------------
 

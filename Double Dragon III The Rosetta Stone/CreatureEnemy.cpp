@@ -10,16 +10,13 @@
 #include "CreaturePlayer.h"
 #include <cmath>
 
-//#include <stdlib.h>
-//#include <time.h>
 #include <cstdlib>
+#include "ModuleAudio.h"
 
 CreatureEnemy::CreatureEnemy(creature_type creaturetype, float x, float y, bool start_enabled) : EntityCreature(creaturetype, start_enabled)
 {
 	position.x = x;
 	position.y = y;
-	//life = 20;
-	//damageAttack = 5;
 	enemytype = creaturetype;
 }
 
@@ -29,6 +26,8 @@ CreatureEnemy::~CreatureEnemy()
 bool CreatureEnemy::Start()
 {
 	LOG("Loading enemy");
+
+	hitSound = App->audio->LoadFx("enemy_hit.wav");
 
 	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Enemies.png");
 	
@@ -190,7 +189,7 @@ SDL_Rect CreatureEnemy::Attack()
 			target->falling = true;
 		}
 		target->life -= damageAttack;
-		//target->invulnerability = true;
+		App->audio->PlayFx(hitSound);
 	}
 	
 	switch (current_attack)
@@ -211,7 +210,7 @@ SDL_Rect CreatureEnemy::Attack()
 			else
 				target->falling = true;
 			target->life -= damageAttack;
-			//target->invulnerability = true;
+			App->audio->PlayFx(hitSound);
 		}
 		return Jump(jump_speed);
 		break;

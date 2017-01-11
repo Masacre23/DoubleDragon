@@ -39,6 +39,7 @@ private:
 	int current_attack = rand() % 3;
 	int damage_reaction = rand() % 3;
 	int counterJump = 0;
+	int hitSound;
 };
 
 #endif
