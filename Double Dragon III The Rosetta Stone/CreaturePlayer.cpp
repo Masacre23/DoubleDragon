@@ -539,4 +539,10 @@ void CreaturePlayer::UpdateCamera()
 		App->renderer->camera.x -= speed * SCREEN_SIZE;
 		App->window->center_window_x += speed;
 	}
+
+	if (position.x*SCREEN_SIZE + App->renderer->camera.x < SCREEN_WIDTH / (10*SCREEN_SIZE))
+	{
+		App->renderer->camera.x += speed * SCREEN_SIZE;
+		App->window->center_window_x -= speed;
+	}
 }

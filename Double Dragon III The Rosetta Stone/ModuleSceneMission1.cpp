@@ -58,6 +58,9 @@ bool ModuleSceneMission1::Start()
 	SDL_Rect wallright = { 900, 0, 5, SCREEN_HEIGHT };
 	App->collision->AddCollider(wallright, collider_type::WALL_RIGHT);
 
+	SDL_Rect wallleft = { 40, 0, 5, SCREEN_HEIGHT };
+	App->collision->AddCollider(wallleft, collider_type::WALL_LEFT);
+
 	//Car
 	SDL_Rect walldownCar = { 375, 180, 113, 5 };
 	App->collision->AddCollider(walldownCar, collider_type::WALL_DOWN);
@@ -71,6 +74,9 @@ bool ModuleSceneMission1::Start()
 	//Spawns
 	SDL_Rect spawn1 = {550, 0, 5, SCREEN_HEIGHT};
 	App->collision->AddCollider(spawn1, collider_type::SPAWN);
+
+	SDL_Rect wallspawn = { 551, 0, 5, SCREEN_HEIGHT };
+	App->collision->AddCollider(wallspawn, collider_type::WALL_LEFT);
 
 	//Enemies
 	float posX[] = {-player->position.x - 300, player->position.x + 300, player->position.x + 400 };
