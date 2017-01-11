@@ -16,10 +16,9 @@ class ModuleSceneMenu;
 class ModuleSceneMission1;
 class ModuleCollision;
 
-
-//class ModuleEntity;
 class EntityManager;
 class ModuleFonts;
+class ModuleSceneIni;
 
 class Application
 {
@@ -41,6 +40,7 @@ public:
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
 
+	ModuleSceneIni* scene_ini;
 	ModuleSceneMenu* scene_menu;
 	ModuleSceneMission1* scene_mission1;
 

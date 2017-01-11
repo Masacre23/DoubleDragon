@@ -13,6 +13,7 @@
 #include "EntityManager.h"
 #include "ModuleCollision.h"
 #include "ModuleFonts.h"
+#include "ModuleSceneIni.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ Application::Application()
 
 	// Game Modules
 	entityManager = new EntityManager();
+	modules.push_back(scene_ini = new ModuleSceneIni(false));
 	modules.push_back(scene_menu = new ModuleSceneMenu(false));
 	modules.push_back(scene_mission1 = new ModuleSceneMission1(false));
 	modules.push_back(fade = new ModuleFadeToBlack());
@@ -60,7 +62,8 @@ bool Application::Init()
 	}
 
 	// Start the first scene --
-	fade->FadeToBlack(scene_menu, nullptr, 3.0f);
+	//fade->FadeToBlack(scene_menu, nullptr, 3.0f);
+	fade->FadeToBlack(scene_ini, nullptr, 3.0f);
 
 	return ret;
 }

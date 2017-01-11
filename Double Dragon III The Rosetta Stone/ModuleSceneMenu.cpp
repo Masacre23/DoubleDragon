@@ -35,8 +35,6 @@ bool ModuleSceneMenu::Start()
 
 	graphics = App->textures->Load("title_dd3.png");
 
-	App->audio->PlayMusic("01-rosetta-stone.ogg");
-
 	return res;
 }
 
