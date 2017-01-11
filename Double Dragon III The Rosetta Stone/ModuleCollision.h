@@ -56,9 +56,9 @@ public:
 	Collider* AddCollider(const SDL_Rect& rect, const collider_type& type);
 	void DebugDraw();
 
-private:
-
 	std::list<Collider*> colliders;
+
+private:
 	bool debug = false;
 };
 

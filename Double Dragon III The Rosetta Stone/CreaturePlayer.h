@@ -12,7 +12,7 @@ struct SDL_Texture;
 class CreaturePlayer   : public EntityCreature
 {
 public:
-	CreaturePlayer(bool start_enabled = true);
+	CreaturePlayer(creature_type playertype, bool start_enabled = true);
 	~CreaturePlayer();
 
 	bool Start();

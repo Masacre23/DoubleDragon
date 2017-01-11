@@ -20,7 +20,7 @@ ModuleEntity* EntityManager::CreateEntity(Types type, creature_type creaturetype
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
-	case player: ret = (ModuleEntity*)new CreaturePlayer(); break;
+	case player: ret = (ModuleEntity*)new CreaturePlayer(creaturetype); break;
 	case enemy: ret = (ModuleEntity*)new CreatureEnemy(creaturetype, x, y); break;
 	case exits:
 		SDL_Rect rect = {x, y, w, h};

@@ -28,6 +28,7 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 	switch (type)
 	{
 	case PLAYER1:
+	case PLAYER2:
 		creature = entities.child("player1");
 		creatureCollider = App->collision->AddCollider({ (int) position.x, (int) position.y - 64, 25, 64 }, (collider_type)PLAYER);
 		break;

@@ -64,7 +64,7 @@ update_status ModuleSceneMenu::Update()
 	if (b)
 	{
 		if(x2 <= 0)
-			x2 += 20;
+			x2 += 10;
 		App->renderer->Blit(graphics, x2, 0, &title, 1.0f);
 	}
 	return UPDATE_CONTINUE;

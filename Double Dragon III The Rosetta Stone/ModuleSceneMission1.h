@@ -17,7 +17,9 @@ public:
 	bool Start();
 	update_status Update();
 	bool  CleanUp();
+	void Respawn();
 	void Reset();
+	void InsertPlayer2();
 
 public:
 	SDL_Texture* graphics = nullptr;
@@ -25,7 +27,7 @@ public:
 	SDL_Rect ground;
 	SDL_Rect background;
 
-	CreaturePlayer* player;
+	CreaturePlayer* player, *player2;
 	EntityExit* exit;
 	int num_waves = 0;
 	bool new_wave = false;

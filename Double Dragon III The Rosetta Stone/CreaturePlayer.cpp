@@ -11,7 +11,7 @@
 #include "ModuleWindow.h"
 #include "ModuleAudio.h"
 
-CreaturePlayer::CreaturePlayer(bool start_enabled) : EntityCreature(PLAYER1, start_enabled)
+CreaturePlayer::CreaturePlayer(creature_type playertype, bool start_enabled) : EntityCreature(playertype, start_enabled)
 {
 	// Sounds
 	punchSound = App->audio->LoadFx("player_punch.wav");

@@ -260,34 +260,56 @@ update_status ModuleSceneMission1::Update()
 	//Game over
 	if (App->time <= 0)
 	{
-		//pos = { App->window->center_window_x - SCREEN_WIDTH / 4 + 10, 22 };
-		/*if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-		{
-			if(App->coins > 0)
-				Reset();
-			else
-				App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
-		}*/
-		//SDL_Rect gameover = { App->window->center_window_x - SCREEN_WIDTH/2, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 		SDL_Rect gameover = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 		App->renderer->Blit(gameoverTexture, App->window->center_window_x - SCREEN_WIDTH / 2, 0, &(gameover), 1.0f);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && App->time <= 10)
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && App->time <= 10 * 60)
 	{
-		if (App->coins > 0)
-			Reset();
+		if (App->coins > 0 && App->time > 0)
+			Respawn();
 		else
-			App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
+		{
+			Reset();
+			//App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
+		}
 	}
+	else if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		InsertPlayer2();
+	}
+
 	return UPDATE_CONTINUE;
 }
 
-void ModuleSceneMission1::Reset()
+/*****************************************************/
+void ModuleSceneMission1::Respawn()
 {
 	--App->coins;
 	App->time = 150 * 60; //150 seconds
 	player->creature_state = IDLE;
 	player->life = 250;
 	player->invulnerability = true;
+}
+
+/******************************************************/
+void ModuleSceneMission1::Reset()
+{
+	/*for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
+	{
+		(*it)->Disable();
+		delete((*it));
+		App->entityManager->entities.remove(*it);
+	}*/
+	//App->collision->colliders.clear();
+	//App->entityManager->entities.clear();
+	App = new Application();
+	App->Init();
+}
+
+/**************************************************/
+void ModuleSceneMission1::InsertPlayer2()
+{
+	player2 = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, PLAYER2, player->position.x + 50, player->position.y);
+	player2->Start();
 }
