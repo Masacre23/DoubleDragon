@@ -115,7 +115,7 @@ update_status ModuleSceneMission1::Update()
 
 	if (App->time % (2 * 60) == 0) //2 seconds
 		b = !b;
-
+	// Exit
 	if (player->creatureCollider->collisionArray[collider_type::EXIT])
 	{
 		bool b = true;
@@ -203,7 +203,7 @@ update_status ModuleSceneMission1::Update()
 			App->fonts->DrawLine(to_string(player->life), 4, pos);
 		pos.x += 5;
 		pos.y = 45;
-		App->fonts->DrawLine("billy", 0, pos);
+		App->fonts->DrawLine("jimmy", 0, pos);
 		pos.y = 17;
 		pos.x += 45;
 		App->fonts->DrawFace(pos);
@@ -219,11 +219,12 @@ update_status ModuleSceneMission1::Update()
 	App->fonts->DrawLine("coins " + to_string(App->coins), 0, pos);
 
 
-	//Second player
-
+	//Second player ----------------------------------------
+	
 	pos = { App->window->center_window_x + SCREEN_WIDTH / 4 + 10, 22 };
 	if (player->creature_state == DEAD)
 	{
+		// Without life
 		if (b)
 		{
 			pos.x -= 10;
@@ -241,19 +242,43 @@ update_status ModuleSceneMission1::Update()
 	}
 	else
 	{
-		if (b)
+		if (!player2created)
 		{
-			pos.x -= 10;
-			App->fonts->DrawLine("press", 0, pos);
-			pos.y += 10;
-			App->fonts->DrawLine("start", 0, pos);
+			if (b)
+			{
+				pos.x -= 10;
+				App->fonts->DrawLine("press", 0, pos);
+				pos.y += 10;
+				App->fonts->DrawLine("start", 0, pos);
+			}
+			else
+			{
+				App->fonts->DrawLine("to", 0, pos);
+				pos.x -= 15;
+				pos.y += 10;
+				App->fonts->DrawLine("buy in", 0, pos);
+			}
 		}
-		else
+		else // With life
 		{
-			App->fonts->DrawLine("to", 0, pos);
-			pos.x -= 15;
-			pos.y += 10;
-			App->fonts->DrawLine("buy in", 0, pos);
+			pos.y += SCREEN_WIDTH / 2;
+			pos.y = -80 -24;
+			pos.x -= 20 + 20;
+			if (player2->life < 100)
+			{
+				if (player2->life < 10)
+					App->fonts->DrawLine("000", 5, pos);
+				else
+					App->fonts->DrawLine("0" + to_string(player2->life), 5, pos);
+			}
+			else
+				App->fonts->DrawLine(to_string(player2->life), 5, pos);
+			pos.x += 5;
+			pos.y = 45;
+			App->fonts->DrawLine("billy", 0, pos);
+			pos.y = 17;
+			pos.x += 45;
+			App->fonts->DrawFace(pos, 1);
 		}
 	}
 
@@ -303,6 +328,7 @@ void ModuleSceneMission1::Reset()
 	}*/
 	//App->collision->colliders.clear();
 	//App->entityManager->entities.clear();
+	App->CleanUp();
 	App = new Application();
 	App->Init();
 }

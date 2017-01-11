@@ -48,7 +48,7 @@
 			</rotate_kick_jump>
 			<head_butt x="1" y="170" h = "70" w="64"/>
 			<damaged x="3" y="391" w="70" h="64"/>
-			<damaged2 x="3" y="391" w="70" h="64"/>
+			<damaged2 x="65" y="391" w="70" h="64"/>
 			<fall speed="0.05f">
 				<frame1 x="138" y="391" w="70" h="64"/>
 				<frame2 x="248" y="391" w="70" h="64"/>
@@ -60,6 +60,55 @@
 				<frame2 x="248" y="391" w="70" h="64"/>
 			</dead>
 		</player1>
+		<player2 speed="1.0f" damage="10" life="250">
+			<right_down speed="0.1f">
+				<frame1 x="5" y="463" w="70" h="64"/>
+				<frame2 x="71" y="463" w="70" h="64"/>
+				<frame3 x="138" y="463" w="70" h="64"/>
+				<frame4 x="217" y="463" w="70" h="64"/>
+			</right_down>
+			<up speed="0.1f">
+				<frame1 x="293" y="463" w="70" h="64"/>
+				<frame2 x="365" y="463" w="70" h="64"/>
+				<frame3 x="434" y="463" w="70" h="64"/>
+				<frame4 x="502" y="463" w="70" h="64"/>
+			</up>
+			<jump x="437" y="543" h = "70" w="64"/>
+			<punch speed="0.2f">
+				<frame1 x="5" y="463" w="70" h="64"/>
+				<frame2 x="7" y="543" w="70" h="64"/>
+				<frame3 x="64" y="543" w="70" h="64"/>
+				<frame4 x="7" y="543" w="70" h="64"/>
+				<frame5 x="5" y="463" w="70" h="64"/>
+			</punch>
+			<kick speed="0.2f">
+				<frame1 x="5" y="463" w="70" h="64"/>
+				<frame2 x="140" y="543" w="70" h="64"/>
+				<frame3 x="214" y="543" w="70" h="64"/>
+				<frame4 x="140" y="543" w="70" h="64"/>
+				<frame5 x="5" y="463" w="70" h="64"/>
+			</kick>
+			<kick_jump x="512" y="543" h = "70" w="64"/>
+			<rotate_kick_jump speed="0.2f">
+				<frame1 x="217" y="543" w="70" h="64"/>
+				<frame2 x="281" y="543" w="70" h="64"/>
+				<frame3 x="692" y="543" w="70" h="64"/>
+				<frame4 x="343" y="543" w="70" h="64"/>
+			</rotate_kick_jump>
+			<head_butt x="1" y="625" h = "70" w="64"/>
+			<damaged x="17" y="855" w="70" h="64"/>
+			<damaged2 x="91" y="855" w="70" h="64"/>
+			<fall speed="0.05f">
+				<frame1 x="182" y="855" w="70" h="64"/>
+				<frame2 x="310" y="855" w="70" h="64"/>
+				<frame3 x="436" y="855" w="70" h="64"/>
+				<frame4  x="5" y="463" w="70" h="64"/>
+			</fall>
+			<dead speed="0.05f">
+				<frame1 x="182" y="855" w="70" h="64"/>
+				<frame2 x="310" y="855" w="70" h="64"/>
+			</dead>
+		</player2>
 		<enemy1 speed = "1.1f" damage="10" life="50">
 			<right_down speed="0.1f">
 				<frame1 x="6" y="7" w="70" h="64"/>

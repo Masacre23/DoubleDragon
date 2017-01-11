@@ -16,6 +16,8 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
+	bool ret = true;
+
 	/******PUGI******/
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data.xml");
@@ -26,7 +28,6 @@ bool ModuleWindow::Init()
 	//	LOG(title.text().as_string());
 	/******PUGI******/
 	LOG("Init SDL window & surface");
-	bool ret = true;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{

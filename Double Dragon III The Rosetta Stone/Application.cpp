@@ -49,7 +49,9 @@ bool Application::Init()
 	bool ret = true;
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
+	{
 		ret = (*it)->Init(); // we init everything, even if not anabled
+	}
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 	{

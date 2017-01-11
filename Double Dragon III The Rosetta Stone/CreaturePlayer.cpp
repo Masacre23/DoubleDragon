@@ -37,11 +37,14 @@ CreaturePlayer::CreaturePlayer(creature_type playertype, bool start_enabled) : E
 	pugi::xml_parse_result result = doc.load_file("data.xml");
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node entities = config.child("entities");
-	pugi::xml_node player1 = entities.child("player1");	
-
+	pugi::xml_node player;
+	if(playertype == PLAYER1)
+		player = entities.child("player1");	
+	else
+		player = entities.child("player2");
 
 	// Rotate kick jump
-	pugi::xml_node rotate_kick_jumpXML = player1.child("rotate_kick_jump");
+	pugi::xml_node rotate_kick_jumpXML = player.child("rotate_kick_jump");
 	rotate_kick_jump.frames.push_back(
 	{
 		rotate_kick_jumpXML.child("frame1").attribute("x").as_int(),
@@ -74,7 +77,7 @@ CreaturePlayer::CreaturePlayer(creature_type playertype, bool start_enabled) : E
 	rotate_kick_jump.speed = rotate_kick_jumpXML.attribute("speed").as_float();
 
 	// Butting
-	pugi::xml_node buttingXML = player1.child("head_butt");
+	pugi::xml_node buttingXML = player.child("head_butt");
 	head_butt =
 	{
 		buttingXML.attribute("x").as_int(),

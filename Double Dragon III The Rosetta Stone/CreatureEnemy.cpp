@@ -37,7 +37,6 @@ bool CreatureEnemy::Start()
 	if (App->numplayers == 2)
 	{
 		findsecond = rand() % 2;
-		//findsecond = true;
 	}
 
 	int counter = 0;

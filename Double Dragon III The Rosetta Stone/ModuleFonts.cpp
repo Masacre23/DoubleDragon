@@ -32,9 +32,12 @@ bool ModuleFonts::CleanUp()
 	return true;
 }
 /*******************************************************/
-void ModuleFonts::DrawFace(iPoint pos)
+void ModuleFonts::DrawFace(iPoint pos, int face)
 {
-	App->renderer->Blit(graphics, pos.x, pos.y, face);
+	if(!face)
+		App->renderer->Blit(graphics, pos.x, pos.y, faceJimmy);
+	else
+		App->renderer->Blit(graphics, pos.x, pos.y, faceBilly);
 }
 
 /*******************************************************/
