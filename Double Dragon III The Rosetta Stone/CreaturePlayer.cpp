@@ -105,10 +105,12 @@ update_status CreaturePlayer::Update()
 	//static bool flip = false; // When the character goes left is true
 	int newSpeed = getSpeed();
 	static int counter = 0;
-	static int damageReaction = 0;
+	//static int damageReaction = 0;
 
-	if (life <= 0) 
+	if (life <= 0)
+	{
 		Die();
+	}
 
 	switch (creature_state)
 	{
@@ -118,43 +120,52 @@ update_status CreaturePlayer::Update()
 		billy = getAttack();
 		break;
 	case JUMPING:
-		isJumping();
+		Jump();
 		if (isAttacking())
 		{
 			billy = getAttack();
 			break;
 		}
-		billy = jump;
+		if (falling)
+			billy = fall.frames[0];
+		else
+			billy = jump;
 		break;
 	case DAMAGED:
-		switch (damageReaction)
+		++counter;
+		if (counter < 30)
 		{
-		case 0:
-			++counter;
-			if (counter < 30)
+			switch (damage_reaction)
 			{
+			case 0:
 				billy = damaged;
-			}
-			else
-			{
-				creature_state = IDLE;
+				break;
+			case 1:
+				billy = damaged2;
+				break;
+			case 2:
 				counter = 0;
-				invulnerability = true;
-			}
-			break;
-		case 1:
-			if (fall.AnimationFinished())
-			{
-				creature_state = IDLE;
-				billy = right_down.GetCurrentFrame();
+				if (fall.AnimationFinished())
+				{
+					creature_state = IDLE;
+					invulnerability = true;
+					damage_reaction = rand() % 3;
+					billy = right_down.GetCurrentFrame();
+				}
+				else
+					billy = fall.GetCurrentFrame();
 				break;
 			}
-			billy = fall.GetCurrentFrame();
-			break;
+		}
+		else
+		{
+			creature_state = IDLE;
+			counter = 0;
+			invulnerability = true;
+			damage_reaction = rand() % 3;
 		}
 		break;
 	case DEAD:
-		//++counter;
 		if (fall.AnimationHalf())
 		{
 			break;
@@ -162,7 +173,6 @@ update_status CreaturePlayer::Update()
 		billy = fall.GetCurrentFrame();
 		break;
 	case IDLE:
-		//if (up.current_frame == 0)
 		billy = right_down.frames[right_down.current_frame];
 	default:
 		if (isAttacking())
@@ -171,8 +181,10 @@ update_status CreaturePlayer::Update()
 			break;
 		}
 		if (isJumping())
+		{
+			Jump();
 			break;
-
+		}
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			flip = false;
@@ -218,7 +230,7 @@ update_status CreaturePlayer::Update()
 			invulnerability = false;
 			counter = 0;
 		}
-		if (counter % (10) == 0) // 0.25 seconds
+		if (counter % (5) == 0) // 0.25 seconds
 			b = !b;
 
 		if(b)
@@ -358,7 +370,6 @@ bool CreaturePlayer::isJumping()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || creature_state == JUMPING)
 	{
 		creature_state = JUMPING;
-		Jump();
 		return true;
 	}
 	return false;
@@ -374,6 +385,7 @@ void CreaturePlayer::Jump()
 	if (y_ini == -1)// Init
 	{
 		y_ini = position.y;
+		creature_state = JUMPING;
 		position.y -= 1;
 		jump_speed = 5;
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
@@ -393,6 +405,13 @@ void CreaturePlayer::Jump()
 		jumpDirection[0] = false;
 		jumpDirection[1] = false;
 		currentAttack = 0;
+		if (falling)
+		{
+			damage_reaction = 2;
+			creature_state = DAMAGED;
+			falling = false;
+			fall.GetCurrentFrame();
+		}
 	}
 	else
 	{
@@ -400,9 +419,19 @@ void CreaturePlayer::Jump()
 		position.y -= jump_speed;
 
 		if (jumpDirection[0])
-			position.x += 2;
-		else if(jumpDirection[1])
-			position.x -= 2;
+		{
+			if(falling)
+				position.x -= 2;
+			else
+				position.x += 2;
+		}
+		else if (jumpDirection[1])
+		{
+			if(falling)
+				position.x += 2;
+			else
+				position.x -= 2;
+		}
 	}
 }
 /*****************************************/

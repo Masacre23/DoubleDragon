@@ -75,7 +75,7 @@ bool ModuleSceneMission1::Start()
 	//Enemies
 	float posX[] = {-player->position.x - 300, player->position.x + 300, player->position.x + 400 };
 	float posY[] = { 150.0f, 200.0f, 250.0f};
-	App->entityManager->Wave(3, posX, posY);
+	App->entityManager->Wave(1, posX, posY);
 	++num_waves;
 
 	return res;
@@ -139,7 +139,7 @@ update_status ModuleSceneMission1::Update()
 	}
 
 	//Manage waves
-	if (player->creatureCollider->collisionArray[collider_type::SPAWN])
+	/*if (player->creatureCollider->collisionArray[collider_type::SPAWN])
 	{
 		new_wave = true;
 	}
@@ -151,7 +151,7 @@ update_status ModuleSceneMission1::Update()
 		App->entityManager->Wave(3, posX, posY);
 		++num_waves;
 		new_wave = false;
-	}
+	}*/
 
 	// Draw fonts --------------------------------------------
 
@@ -252,17 +252,25 @@ update_status ModuleSceneMission1::Update()
 	if (App->time <= 0)
 	{
 		//pos = { App->window->center_window_x - SCREEN_WIDTH / 4 + 10, 22 };
-		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+		/*if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		{
 			if(App->coins > 0)
 				Reset();
 			else
 				App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
-		}
+		}*/
+		//SDL_Rect gameover = { App->window->center_window_x - SCREEN_WIDTH/2, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 		SDL_Rect gameover = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-		App->renderer->Blit(gameoverTexture, 0, 0, &(gameover), 1.0f);
+		App->renderer->Blit(gameoverTexture, App->window->center_window_x - SCREEN_WIDTH / 2, 0, &(gameover), 1.0f);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && App->time <= 10)
+	{
+		if (App->coins > 0)
+			Reset();
+		else
+			App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
+	}
 	return UPDATE_CONTINUE;
 }
 

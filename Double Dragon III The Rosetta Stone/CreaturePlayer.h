@@ -39,6 +39,8 @@ public:
 	bool isButting = false;
 	bool flip = false;
 	bool invulnerability = false;
+	int damage_reaction = rand() % 3;
+	bool falling = false;
 	//int life = 250;
 	//Collider* playerCollider;
 	//bool wallCollision = false;

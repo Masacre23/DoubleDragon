@@ -181,10 +181,16 @@ SDL_Rect CreatureEnemy::Attack()
 			return right_down.frames[1];
 	}
 	if ((punch.AnimationHalf() || kick.AnimationHalf() || creature_state == JUMPING) && position.DistanceTo(target->position) < 20 
-		&& target->creature_state != DAMAGED && target->invulnerability == false)
+		&& target->creature_state != DAMAGED && target->invulnerability == false && target->falling == false)
 	{
-		target->creature_state = DAMAGED;
+		if (target->creature_state != JUMPING)
+			target->creature_state = DAMAGED;
+		else
+		{
+			target->falling = true;
+		}
 		target->life -= damageAttack;
+		//target->invulnerability = true;
 	}
 	
 	switch (current_attack)
@@ -197,10 +203,15 @@ SDL_Rect CreatureEnemy::Attack()
 		break;
 	case 2:
 		creature_state = JUMPING;
-		if (creatureCollider->collisionArray[collider_type::PLAYER] && target->creature_state != DAMAGED && target->invulnerability == false)
+		if (creatureCollider->collisionArray[collider_type::PLAYER] && target->creature_state != DAMAGED && target->invulnerability == false
+			&& target->falling == false)
 		{
-			target->creature_state = DAMAGED;
+			if (target->creature_state != JUMPING)
+				target->creature_state = DAMAGED;
+			else
+				target->falling = true;
 			target->life -= damageAttack;
+			//target->invulnerability = true;
 		}
 		return Jump(jump_speed);
 		break;
