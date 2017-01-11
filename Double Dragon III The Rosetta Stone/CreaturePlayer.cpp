@@ -17,6 +17,19 @@ CreaturePlayer::CreaturePlayer(creature_type playertype, bool start_enabled) : E
 	punchSound = App->audio->LoadFx("player_punch.wav");
 	kickSound = App->audio->LoadFx("player_kick.wav");
 
+	// Controls
+	if (playertype == PLAYER1)
+	{
+		for(int i = 0; i < 7; ++i)
+		controlsplayer[i] = controlsplayer1[i];
+	}
+	else
+	{
+		for (int i = 0; i < 7; ++i)
+			controlsplayer[i] = controlsplayer2[i];
+	}
+
+	// Textures
 	position.x = 120;
 	position.y = 216;
 
@@ -104,7 +117,7 @@ update_status CreaturePlayer::Update()
 
 	static SDL_Rect billy = right_down.frames[0];
 	//static bool flip = false; // When the character goes left is true
-	int newSpeed = getSpeed();
+	newSpeed = getSpeed();
 	static int counter = 0;
 	//static int damageReaction = 0;
 
@@ -186,14 +199,14 @@ update_status CreaturePlayer::Update()
 			Jump();
 			break;
 		}
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		if (App->input->GetKey(controlsplayer[3]) == KEY_REPEAT)
 		{
 			flip = false;
 			if (!creatureCollider->collisionArray[collider_type::WALL_RIGHT])
 				position.x += newSpeed;
 			billy = right_down.GetCurrentFrame();
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		else if (App->input->GetKey(controlsplayer[1]) == KEY_REPEAT)
 		{
 			flip = true;
 			if (position.x > -App->renderer->camera.x / SCREEN_SIZE - 25) //25 is number of pixels
@@ -204,13 +217,13 @@ update_status CreaturePlayer::Update()
 			billy = right_down.GetCurrentFrame();
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		if (App->input->GetKey(controlsplayer[0]) == KEY_REPEAT)
 		{
 			if (!creatureCollider->collisionArray[collider_type::WALL_UP])
 				position.y -= speed;
 			billy = up.GetCurrentFrame();
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		else if (App->input->GetKey(controlsplayer[2]) == KEY_REPEAT)
 		{
 			if (!creatureCollider->collisionArray[collider_type::WALL_DOWN])
 				position.y += speed;
@@ -252,14 +265,14 @@ int CreaturePlayer::getSpeed()
 
 	if (running)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP || App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+		if (App->input->GetKey(controlsplayer[3]) == KEY_UP || App->input->GetKey(controlsplayer[1]) == KEY_UP)
 		{
 			running = false;
 			return speed;
 		}
 		return speed * 2;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	if (App->input->GetKey(controlsplayer[3]) == KEY_DOWN || App->input->GetKey(controlsplayer[1]) == KEY_DOWN)
 	{
 		if (walking && time < maxTime)
 		{
@@ -308,17 +321,17 @@ bool CreaturePlayer::isAttacking()
 	}
 	else
 	{
-		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+		if (App->input->GetKey(controlsplayer[4]) == KEY_DOWN)
 		{
-			currentAttack = SDL_SCANCODE_N;
+			currentAttack = controlsplayer[4];
 			if (running)
 				isButting = true;
 		}
-		else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+		else if (App->input->GetKey(controlsplayer[5]) == KEY_DOWN)
 		{
-			currentAttack = SDL_SCANCODE_M;
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-				currentAttack = 1; //Rotate kick jump
+			currentAttack = controlsplayer[5];
+			//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+				//currentAttack = 1; //Rotate kick jump
 		}
 		return false;
 	}
@@ -339,6 +352,7 @@ SDL_Rect& CreaturePlayer::getAttack()
 		break;
 
 	case SDL_SCANCODE_N: //Punch
+	case SDL_SCANCODE_KP_2:
 		if (creature_state == JUMPING)
 			return jump;
 		if (isButting)
@@ -353,6 +367,7 @@ SDL_Rect& CreaturePlayer::getAttack()
 		break;
 
 	case SDL_SCANCODE_M: //Kick
+	case SDL_SCANCODE_KP_3:
 		if (creature_state == JUMPING)
 		{
 			doDamage();
@@ -368,7 +383,7 @@ SDL_Rect& CreaturePlayer::getAttack()
 //--------------------------------------------------------------------
 bool CreaturePlayer::isJumping()
 {
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || creature_state == JUMPING)
+	if (App->input->GetKey(controlsplayer[6]) == KEY_DOWN || creature_state == JUMPING)
 	{
 		creature_state = JUMPING;
 		return true;
@@ -389,11 +404,11 @@ void CreaturePlayer::Jump()
 		creature_state = JUMPING;
 		position.y -= 1;
 		jump_speed = 5;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		if (App->input->GetKey(controlsplayer[3]) == KEY_REPEAT)
 		{
 			jumpDirection[0] = true;
 		}
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		if (App->input->GetKey(controlsplayer[1]) == KEY_REPEAT)
 		{
 			jumpDirection[1] = true;
 		}
@@ -451,11 +466,11 @@ void CreaturePlayer::HeadButt()
 		jump_speed = 5;
 		running = false;
 		isButting = true;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		if (App->input->GetKey(controlsplayer[3]) == KEY_REPEAT)
 		{
 			jumpDirection[0] = true;
 		}
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		if (App->input->GetKey(controlsplayer[1]) == KEY_REPEAT)
 		{
 			jumpDirection[1] = true;
 		}
@@ -511,10 +526,12 @@ void CreaturePlayer::doDamage()
 		switch (currentAttack)
 		{
 		case SDL_SCANCODE_N: //Punch
+		case SDL_SCANCODE_KP_2:
 			App->audio->PlayFx(punchSound);
 			break;
 
 		case SDL_SCANCODE_M: // Kick
+		case SDL_SCANCODE_KP_3:
 			App->audio->PlayFx(kickSound);
 			break;
 		}

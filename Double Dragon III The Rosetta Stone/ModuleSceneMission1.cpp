@@ -274,7 +274,7 @@ update_status ModuleSceneMission1::Update()
 			//App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
 		}
 	}
-	else if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	else if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && player2created == false)
 	{
 		InsertPlayer2();
 	}
@@ -312,4 +312,5 @@ void ModuleSceneMission1::InsertPlayer2()
 {
 	player2 = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, PLAYER2, player->position.x + 50, player->position.y);
 	player2->Start();
+	player2created = true;
 }

@@ -31,6 +31,7 @@ public:
 	EntityExit* exit;
 	int num_waves = 0;
 	bool new_wave = false;
+	bool player2created = false;
 	//int time = 150 * 60;
 	//bool gameover = false;
 };
