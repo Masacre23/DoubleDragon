@@ -32,7 +32,7 @@ ModuleSceneMission1::~ModuleSceneMission1()
 //Load assets
 bool ModuleSceneMission1::Start()
 {
-	player = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, creature_type::PLAYER1);
+	player = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, creature_type::PLAYER1, 120.0f, 200.0f);
 	exit = (EntityExit*)App->entityManager->CreateEntity(Types::exits, creature_type::UNKNOWN,800, 60, 50, 30);
 
 	bool res = true;
@@ -40,8 +40,7 @@ bool ModuleSceneMission1::Start()
 
 	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Mission 1 America.png");
 	gameoverTexture = App->textures->Load("Game over.png");
-	//res = App->player->Start();
-	//App->player->Enable();
+
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 	{
 		res = (*it)->Start();
@@ -107,8 +106,6 @@ bool ModuleSceneMission1::CleanUp()
 // Update: draw background
 update_status ModuleSceneMission1::Update()
 {
-	//static int time = 200 * 60;
-	//static int time = 10 * 60;
 	static bool b = false;
 	
 	--App->time;
@@ -189,7 +186,6 @@ update_status ModuleSceneMission1::Update()
 	else
 	{
 		//With life
-		//pos = { App->window->center_window_x - SCREEN_WIDTH / 4, 10 };
 		pos.y = -80;
 		pos.x -= 20 + 20;
 		if (player->life < 100)
@@ -286,7 +282,17 @@ update_status ModuleSceneMission1::Update()
 	if (App->time <= 0)
 	{
 		SDL_Rect gameover = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-		App->renderer->Blit(gameoverTexture, App->window->center_window_x - SCREEN_WIDTH / 2, 0, &(gameover), 1.0f);
+		if (player2created)
+		{
+			if (player2->creature_state == DEAD)
+			{
+				App->renderer->Blit(gameoverTexture, App->window->center_window_x - SCREEN_WIDTH / 2, 0, &(gameover), 1.0f);
+			}
+		}
+		else
+		{
+			App->renderer->Blit(gameoverTexture, App->window->center_window_x - SCREEN_WIDTH / 2, 0, &(gameover), 1.0f);
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && App->time <= 10 * 60)
@@ -296,7 +302,6 @@ update_status ModuleSceneMission1::Update()
 		else
 		{
 			Reset();
-			//App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);
 		}
 	}
 	else if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && player2created == false)
@@ -320,14 +325,6 @@ void ModuleSceneMission1::Respawn()
 /******************************************************/
 void ModuleSceneMission1::Reset()
 {
-	/*for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
-	{
-		(*it)->Disable();
-		delete((*it));
-		App->entityManager->entities.remove(*it);
-	}*/
-	//App->collision->colliders.clear();
-	//App->entityManager->entities.clear();
 	App->CleanUp();
 	App = new Application();
 	App->Init();
@@ -339,5 +336,6 @@ void ModuleSceneMission1::InsertPlayer2()
 	player2 = (CreaturePlayer*)App->entityManager->CreateEntity(Types::player, PLAYER2, player->position.x + 50, player->position.y);
 	player2->Start();
 	player2created = true;
+
 	App->numplayers++;
 }

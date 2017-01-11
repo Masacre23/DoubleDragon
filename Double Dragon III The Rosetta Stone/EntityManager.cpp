@@ -16,11 +16,10 @@ EntityManager::~EntityManager()
 
 ModuleEntity* EntityManager::CreateEntity(Types type, creature_type creaturetype, float x, float y, int w, int h)
 {
-	//static_assert(ModuleEntity::Types::un)
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
-	case player: ret = (ModuleEntity*)new CreaturePlayer(creaturetype); break;
+	case player: ret = (ModuleEntity*)new CreaturePlayer(creaturetype, x, y); break;
 	case enemy: ret = (ModuleEntity*)new CreatureEnemy(creaturetype, x, y); break;
 	case exits:
 		SDL_Rect rect = {x, y, w, h};

@@ -13,6 +13,7 @@
 #include "ModuleFonts.h"
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
+#include "CreaturePlayer.h"
 
 EntityExit::EntityExit(SDL_Rect rect, bool start_enabled) : ModuleEntity(start_enabled)
 {
@@ -49,6 +50,7 @@ void EntityExit::NextRoom()
 	App->renderer->camera.x = 0;
 	App->window->center_window_x = SCREEN_WIDTH / 2;
 	App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);*/
+	App->scene_mission1->player2->Disable();
 
 	App->CleanUp();
 	App = new Application();

@@ -126,7 +126,6 @@ update_status CreatureEnemy::Update()
 		break;
 	case IDLE:
 		*enemy = right_down.frames[right_down.current_frame];
-	//case JUMPING:
 	default:
 		Move();
 		break;
@@ -138,11 +137,9 @@ update_status CreatureEnemy::Update()
 }
 
 /****************************************************/
-//void CreatureEnemy::Move(SDL_Rect& enemy)
 void CreatureEnemy::Move()
 {
 	float distx, disty, distance;
-	//speed = 1.0f;
 
 	distx = target->position.x - position.x;
 	disty = target->position.y - position.y;

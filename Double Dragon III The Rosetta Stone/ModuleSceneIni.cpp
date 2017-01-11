@@ -51,7 +51,7 @@ update_status ModuleSceneIni::Update()
 {
 	static int counter = 0;
 	++counter;
-	//App->fade->FadeToBlack(App->scene_menu, nullptr, 3.0f);
+
 	switch (currentState)
 	{
 	case SEGA:
@@ -76,8 +76,6 @@ bool ModuleSceneIni::CleanUp()
 	LOG("Unloading ini scene");
 	App->textures->Unload(sega);
 	App->textures->Unload(flying);
-	//App->textures->Unload(initPageGraphics);
-	//actualState = INIT_PAGE;
 
 	return true;
 }

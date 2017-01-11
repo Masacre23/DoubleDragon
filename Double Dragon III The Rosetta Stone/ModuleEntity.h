@@ -6,15 +6,6 @@
 #include "Module.h"
 #include "Point.h"
 
-/*enum Types
-{
-	npc,
-	player,
-	room,
-	exit,
-	item,
-	unknown
-};*/
 enum Types
 {
 	enemy,

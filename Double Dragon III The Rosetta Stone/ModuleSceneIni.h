@@ -10,9 +10,7 @@ struct SDL_Texture;
 
 enum iniState {
 	SEGA,
-	FLYING,
-	BLACK
-//	INIT_PAGE,
+	FLYING
 };
 
 

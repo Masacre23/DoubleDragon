@@ -12,7 +12,7 @@ struct SDL_Texture;
 class CreaturePlayer   : public EntityCreature
 {
 public:
-	CreaturePlayer(creature_type playertype, bool start_enabled = true);
+	CreaturePlayer(creature_type playertype, float x, float y, bool start_enabled = true);
 	~CreaturePlayer();
 
 	bool Start();
@@ -27,7 +27,6 @@ public:
 	void HeadButt();
 	void doDamage();
 	void UpdateCamera();
-	//int getCollision();
 
 public:
 	

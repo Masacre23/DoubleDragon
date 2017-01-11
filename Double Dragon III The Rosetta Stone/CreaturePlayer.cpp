@@ -11,7 +11,7 @@
 #include "ModuleWindow.h"
 #include "ModuleAudio.h"
 
-CreaturePlayer::CreaturePlayer(creature_type playertype, bool start_enabled) : EntityCreature(playertype, start_enabled)
+CreaturePlayer::CreaturePlayer(creature_type playertype, float x, float y, bool start_enabled) : EntityCreature(playertype, start_enabled)
 {
 	// Sounds
 	punchSound = App->audio->LoadFx("player_punch.wav");
@@ -30,8 +30,8 @@ CreaturePlayer::CreaturePlayer(creature_type playertype, bool start_enabled) : E
 	}
 
 	// Textures
-	position.x = 120;
-	position.y = 216;
+	position.x = x;
+	position.y = y;
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data.xml");
@@ -118,11 +118,7 @@ update_status CreaturePlayer::Update()
 {
 	UpdateProfundity();
 
-	//static SDL_Rect billy = right_down.frames[0];
-	//static bool flip = false; // When the character goes left is true
 	newSpeed = getSpeed();
-	//static int counter = 0;
-	//static int damageReaction = 0;
 
 	if (life <= 0)
 	{
@@ -261,9 +257,6 @@ update_status CreaturePlayer::Update()
 /**************************************************************/
 int CreaturePlayer::getSpeed()
 {
-	//static bool walking = false;
-	//static int time = 0;
-	//static int maxTime = 24; 
 
 	if (running)
 	{
@@ -332,8 +325,7 @@ bool CreaturePlayer::isAttacking()
 		else if (App->input->GetKey(controlsplayer[5]) == KEY_DOWN)
 		{
 			currentAttack = controlsplayer[5];
-			//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-				//currentAttack = 1; //Rotate kick jump
+
 		}
 		return false;
 	}
@@ -345,13 +337,6 @@ SDL_Rect& CreaturePlayer::getAttack()
 {
 	switch (currentAttack)
 	{
-	case 1: //Rotate kick jump
-		/*if (rotate_kick_jump.AnimationHalf())
-			position.y += 5;
-		else
-			position.y -= 5;*/
-		return rotate_kick_jump.GetCurrentFrame();
-		break;
 
 	case SDL_SCANCODE_N: //Punch
 	case SDL_SCANCODE_KP_2:
@@ -395,10 +380,7 @@ bool CreaturePlayer::isJumping()
 //--------------------------------------------------------------------
 void CreaturePlayer::Jump()
 {
-	//static int y_ini = -1;
 	float aceleration = 0.3f;
-	//static float jump_speed = 5;
-	//static bool jumpDirection[] = {false, false}; //right, left
 
 	if (y_ini == -1)// Init
 	{
@@ -455,11 +437,8 @@ void CreaturePlayer::Jump()
 /*****************************************/
 void CreaturePlayer::HeadButt()
 {
-	//static bool isButting = false;
-	//static int y_ini = -1;
 	float aceleration = 0.5f;
-	//static float jump_speed = 5;
-	//static bool jumpDirection[] = { false, false }; //right, left
+
 	running = false;
 	if (y_ini == -1)
 	{
@@ -504,13 +483,12 @@ void CreaturePlayer::HeadButt()
 /*****************************************/
 void CreaturePlayer::doDamage()
 {
-	//if (creatureCollider->collisionMatrix[0][1])
 	bool activateSound = false;
 	if (creatureCollider->collisionArray[1])
 	{
 		for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		{
-			if ((*it)->type == enemy && (*it)->position.DistanceTo(position) < 20)
+			if ((*it)->type == enemy && (*it)->position.DistanceTo(position) < 25)
 			{
 				CreatureEnemy* e = (CreatureEnemy*)(*it);
 				if (e->creature_state != DEAD && e->creature_state != DAMAGED && ((flip && position.x > e->position.x) || (flip == false && position.x < e->position.x)))
@@ -543,16 +521,6 @@ void CreaturePlayer::doDamage()
 /**************************************/
 void CreaturePlayer::UpdateCamera()
 {
-	/*std::string tmp = "PLAYER: " + std::to_string(position.x);
-	char tab1[1024];
-	strcpy(tab1, tmp.c_str());
-	LOG(tab1);
-
-	tmp = "CAMERA: " + std::to_string(App->renderer->camera.x);
-	char tab2[1024];
-	strcpy(tab2, tmp.c_str());
-	LOG(tab2);*/
-
 	if (position.x*SCREEN_SIZE + App->renderer->camera.x > 3*SCREEN_WIDTH/ SCREEN_SIZE)
 	{
 		App->renderer->camera.x -= speed * SCREEN_SIZE;
