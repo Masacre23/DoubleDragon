@@ -14,8 +14,14 @@ ModuleSceneMenu::ModuleSceneMenu(bool start_enabled) : Module(start_enabled)
 	// Background
 	background.x = 0;
 	background.y = 0;
-	background.w = 320;
+	background.w = 960;
 	background.h = 224;
+
+	// Title
+	title.x = 10;
+	title.y = 224;
+	title.w = 320;
+	title.h = 224;
 }
 
 ModuleSceneMenu::~ModuleSceneMenu()
@@ -27,7 +33,8 @@ bool ModuleSceneMenu::Start()
 	bool res = true;
 	LOG("Loading menu scene");
 
-	graphics = App->textures->Load("DD3_Title.gif");
+	graphics = App->textures->Load("title_dd3.png");
+
 	App->audio->PlayMusic("01-rosetta-stone.ogg");
 
 	return res;
@@ -47,7 +54,18 @@ bool ModuleSceneMenu::CleanUp()
 update_status ModuleSceneMenu::Update()
 {
 	// Draw everything --------------------------------------
-	App->renderer->Blit(graphics, 0, 0, &background, 1.8f); // sea and sky
-	//App->renderer->Blit(graphics, 0, 170, &ground, 1.2f);
+	static int x, x2 = -400;
+	static bool b = false;
+	if (x > -960 + 320)
+		x -= 10;
+	else
+		b = true;
+	App->renderer->Blit(graphics, x, 0, &background, 1.0f);
+	if (b)
+	{
+		if(x2 <= 0)
+			x2 += 20;
+		App->renderer->Blit(graphics, x2, 0, &title, 1.0f);
+	}
 	return UPDATE_CONTINUE;
 }

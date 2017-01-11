@@ -18,7 +18,7 @@ public:
 	bool  CleanUp();
 
 	SDL_Texture* graphics = nullptr;
-	SDL_Rect ground;
+	SDL_Rect title;
 	SDL_Rect background;
 };
 
