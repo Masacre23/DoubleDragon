@@ -16,11 +16,11 @@
 EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleEntity(start_enabled)
 {
 	// Sounds
-	deathSound = App->audio->LoadFx("death.wav");
+	deathSound = App->audio->LoadFx("resources/death.wav");
 
 	// Textures
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data.xml");
+	pugi::xml_parse_result result = doc.load_file("resources/data.xml");
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node creature;

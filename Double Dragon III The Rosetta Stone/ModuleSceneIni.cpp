@@ -23,8 +23,8 @@ bool ModuleSceneIni::Start()
 	bool res = true;
 	LOG("Loading Ini scene");
 
-	sega = App->textures->Load("title_sega.png");
-	flying = App->textures->Load("flyingedge.png");
+	sega = App->textures->Load("resources/title_sega.png");
+	flying = App->textures->Load("resources/flyingedge.png");
 
 
 	flyingRect = { 0,0,320,224 };
@@ -42,7 +42,8 @@ bool ModuleSceneIni::Start()
 	segaAnimation.frames.push_back({ 0, 352, 96, 32 });
 	segaAnimation.frames.push_back({ 0, 384, 96, 32 });
 	segaAnimation.frames.push_back({ 0, 416, 96, 32 });
-	App->audio->PlayMusic("01-rosetta-stone.ogg");
+
+	App->audio->PlayMusic("resources/01-rosetta-stone.ogg");
 
 	return res;
 }

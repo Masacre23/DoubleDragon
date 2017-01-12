@@ -20,7 +20,7 @@ bool ModuleWindow::Init()
 
 	/******PUGI******/
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data.xml");
+	pugi::xml_parse_result result = doc.load_file("resources/data.xml");
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node windowXML = config.child("window");
 	pugi::xml_node title = windowXML.child("title");

@@ -17,7 +17,7 @@ bool ModuleFonts::Start()
 
 	LOG("Loading fonts");
 
-	graphics = App->textures->Load("fonts.png");
+	graphics = App->textures->Load("resources/fonts.png");
 
 	return ret;
 }

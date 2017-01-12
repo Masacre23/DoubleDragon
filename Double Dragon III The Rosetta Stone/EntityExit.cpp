@@ -50,8 +50,9 @@ void EntityExit::NextRoom()
 	App->renderer->camera.x = 0;
 	App->window->center_window_x = SCREEN_WIDTH / 2;
 	App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);*/
-	App->scene_mission1->player2->Disable();
-
+	/*App->scene_mission1->player2->Disable();
+	App->collision->Disable();
+	App->fade->FadeToBlack(App->scene_menu, App->scene_mission1, 3.0f);*/
 	App->CleanUp();
 	App = new Application();
 	App->Init();

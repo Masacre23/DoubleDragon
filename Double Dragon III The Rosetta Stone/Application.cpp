@@ -22,6 +22,7 @@ Application::Application()
 	// Order matters: they will init/start/pre/update/post in this order
 	modules.push_back(input = new ModuleInput());
 	modules.push_back(window = new ModuleWindow());
+	
 
 	modules.push_back(renderer = new ModuleRender());
 	modules.push_back(fonts = new ModuleFonts());
@@ -49,7 +50,7 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
-
+	
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
 	{
 		ret = (*it)->Init(); // we init everything, even if not anabled

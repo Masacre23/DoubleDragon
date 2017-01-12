@@ -38,8 +38,8 @@ bool ModuleSceneMission1::Start()
 	bool res = true;
 	LOG("Loading menu scene");
 
-	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Mission 1 America.png");
-	gameoverTexture = App->textures->Load("Game over.png");
+	graphics = App->textures->Load("resources/Genesis 32X SCD - Double Dragon III The Rosetta Stone - Mission 1 America.png");
+	gameoverTexture = App->textures->Load("resources/Game over.png");
 
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 	{
@@ -84,7 +84,7 @@ bool ModuleSceneMission1::Start()
 	++num_waves;
 
 	//Music
-	App->audio->PlayMusic("02-in-america.ogg");
+	App->audio->PlayMusic("resources/02-in-america.ogg");
 
 	return res;
 }

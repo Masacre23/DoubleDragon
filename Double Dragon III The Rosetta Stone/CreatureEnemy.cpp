@@ -27,9 +27,9 @@ bool CreatureEnemy::Start()
 {
 	LOG("Loading enemy");
 
-	hitSound = App->audio->LoadFx("enemy_hit.wav");
+	hitSound = App->audio->LoadFx("resources/enemy_hit.wav");
 
-	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Enemies.png");
+	graphics = App->textures->Load("resources/Genesis 32X SCD - Double Dragon III The Rosetta Stone - Enemies.png");
 	
 	creature_state = WALKING;
 

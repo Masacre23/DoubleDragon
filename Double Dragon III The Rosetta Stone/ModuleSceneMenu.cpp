@@ -33,7 +33,7 @@ bool ModuleSceneMenu::Start()
 	bool res = true;
 	LOG("Loading menu scene");
 
-	graphics = App->textures->Load("title_dd3.png");
+	graphics = App->textures->Load("resources/title_dd3.png");
 
 	return res;
 }

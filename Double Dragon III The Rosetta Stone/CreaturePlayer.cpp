@@ -14,8 +14,8 @@
 CreaturePlayer::CreaturePlayer(creature_type playertype, float x, float y, bool start_enabled) : EntityCreature(playertype, start_enabled)
 {
 	// Sounds
-	punchSound = App->audio->LoadFx("player_punch.wav");
-	kickSound = App->audio->LoadFx("player_kick.wav");
+	punchSound = App->audio->LoadFx("resources/player_punch.wav");
+	kickSound = App->audio->LoadFx("resources/player_kick.wav");
 
 	// Controls
 	if (playertype == PLAYER1)
@@ -34,7 +34,7 @@ CreaturePlayer::CreaturePlayer(creature_type playertype, float x, float y, bool 
 	position.y = y;
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data.xml");
+	pugi::xml_parse_result result = doc.load_file("resources/data.xml");
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node player;
@@ -96,7 +96,7 @@ bool CreaturePlayer::Start()
 {
 	LOG("Loading player");
 
-	graphics = App->textures->Load("Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png");
+	graphics = App->textures->Load("resources/Genesis 32X SCD - Double Dragon III The Rosetta Stone - Billy & Jimmy2.png");
 
 	creature_state = IDLE;
 
