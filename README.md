@@ -1,37 +1,27 @@
-## Welcome to GitHub Pages
+# Double Dragon III : The Rosetta Stone
 
-You can use the [editor on GitHub](https://github.com/Masacre23/DoubleDragon/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This is a version of the mitic arcade game "Double Dragon", made entirely in C++ using the SLD library by **Adrián Guevara Alonso**.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Guide
 
-### Markdown
+In this version we only have part of the first leved. We have to kill all the enemies and go out. In the menu we have to press "Enter" to start the game. Use enter for spend your money and come alive again or for play with a friend. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Controls
 
-```markdown
-Syntax highlighted code block
+### First Player
+- **Move:** WASD
+- **Jump:** Space
+- **Punch:** N
+- **Kick:** M
 
-# Header 1
-## Header 2
-### Header 3
+### Second Player
+- **Move:** Arrows
+- **Jump:** numpad 0
+- **Punch:** numpad 2
+- **Kick:** numpad 3
 
-- Bulleted
-- List
+## Gameplay
+[Link to video](https://www.youtube.com/watch?v=w1E6819xLXg&feature=youtu.be)
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Masacre23/DoubleDragon/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Download the game
+[DOWNLOAD](https://github.com/Masacre23/DoubleDragon/releases/tag/1.0)
