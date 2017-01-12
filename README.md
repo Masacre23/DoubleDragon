@@ -23,4 +23,4 @@ In this version we only have part of the first leved. We have to kill all the en
 [Link to video](https://www.youtube.com/watch?v=w1E6819xLXg&feature=youtu.be)
 
 ## Download the game
-[DOWNLOAD](url)
+[DOWNLOAD](https://github.com/Masacre23/DoubleDragon/releases/tag/1.0)
