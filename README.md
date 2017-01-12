@@ -7,6 +7,7 @@ This is a version of the mitic arcade game "Double Dragon", made entirely in C++
 In this version we only have part of the first leved. We have to kill all the enemies and go out. In the menu we have to press "Enter" to start the game. Use enter for spend your money and come alive again or for play with a friend. 
 
 ## Controls
+
 ### First Player
 - **Move:** WASD
 - **Jump:** Space
