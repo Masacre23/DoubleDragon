@@ -13,7 +13,6 @@ enum Types
 	exits
 };
 
-
 class ModuleEntity : public Module
 {
 public:

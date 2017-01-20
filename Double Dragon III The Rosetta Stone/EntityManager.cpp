@@ -14,17 +14,14 @@ EntityManager::EntityManager()
 EntityManager::~EntityManager()
 {}
 
-ModuleEntity* EntityManager::CreateEntity(Types type, creature_type creaturetype, float x, float y, int w, int h)
+ModuleEntity* EntityManager::CreateEntity(const Types& type, const creature_type& creaturetype, float x, float y, int w, int h)
 {
 	ModuleEntity* ret = nullptr;
 	switch (type)
 	{
-	case player: ret = (ModuleEntity*)new CreaturePlayer(creaturetype, x, y); break;
-	case enemy: ret = (ModuleEntity*)new CreatureEnemy(creaturetype, x, y); break;
-	case exits:
-		SDL_Rect rect = {x, y, w, h};
-		ret = (ModuleEntity*)new EntityExit(rect); 
-		break;
+	case player: ret = (ModuleEntity*)new CreaturePlayer(&creaturetype, &x, &y); break;
+	case enemy: ret = (ModuleEntity*)new CreatureEnemy(&creaturetype, &x, &y); break;
+	case exits:	ret = (ModuleEntity*)new EntityExit(new SDL_Rect({ (int)x, (int)y, w, h }));break;
 	}
 
 	if (ret != nullptr)
@@ -37,7 +34,7 @@ ModuleEntity* EntityManager::CreateEntity(Types type, creature_type creaturetype
 }
 
 /**************************************************************/
-void EntityManager::RadixSortList(std::list<ModuleEntity*>& v, int length, int numMax)
+void EntityManager::RadixSortList(std::list<ModuleEntity*>& v, const int& length, const int& numMax)
 {
 	vector <ModuleEntity*> v2;
 	vector <vector<ModuleEntity*>> c(10);
@@ -69,7 +66,7 @@ void EntityManager::RadixSortList(std::list<ModuleEntity*>& v, int length, int n
 }
 
 /**************************************************************/
-int EntityManager::Digit(int index, int num)
+int EntityManager::Digit(const int& index, int num)
 {
 	int aux = 1;
 	for (int i = index; i > 0; --i)
@@ -82,7 +79,7 @@ int EntityManager::Digit(int index, int num)
 }
 
 /***********************************************************/
-void EntityManager::Wave(int numEnemies, float posX[], float posY[])
+void EntityManager::Wave(const int& numEnemies, float posX[], float posY[])
 {
 	for (int i = 0; i < numEnemies; ++i)
 	{

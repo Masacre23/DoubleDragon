@@ -11,14 +11,14 @@
 #include "ModuleWindow.h"
 #include "ModuleAudio.h"
 
-CreaturePlayer::CreaturePlayer(creature_type playertype, float x, float y, bool start_enabled) : EntityCreature(playertype, start_enabled)
+CreaturePlayer::CreaturePlayer(const creature_type* playertype, const float* x, const float* y, bool start_enabled) : EntityCreature(playertype, start_enabled)
 {
 	// Sounds
 	punchSound = App->audio->LoadFx("resources/player_punch.wav");
 	kickSound = App->audio->LoadFx("resources/player_kick.wav");
 
 	// Controls
-	if (playertype == PLAYER1)
+	if (*playertype == PLAYER1)
 	{
 		for(int i = 0; i < 7; ++i)
 		controlsplayer[i] = controlsplayer1[i];
@@ -30,15 +30,15 @@ CreaturePlayer::CreaturePlayer(creature_type playertype, float x, float y, bool 
 	}
 
 	// Textures
-	position.x = x;
-	position.y = y;
+	position.x = *x;
+	position.y = *y;
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("resources/data.xml");
 	pugi::xml_node config = doc.document_element();
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node player;
-	if(playertype == PLAYER1)
+	if(*playertype == PLAYER1)
 		player = entities.child("player1");	
 	else
 		player = entities.child("player2");

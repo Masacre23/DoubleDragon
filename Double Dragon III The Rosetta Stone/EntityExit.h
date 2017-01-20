@@ -7,10 +7,10 @@
 class EntityExit : public ModuleEntity
 {
 public:
-	EntityExit(SDL_Rect rect, bool start_enabled = true);
+	EntityExit(const SDL_Rect* rect, bool start_enabled = true);
 	~EntityExit();
 
-	void NextRoom();
+	void NextRoom() const;
 
 public:
 	Collider* collider;

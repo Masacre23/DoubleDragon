@@ -13,10 +13,10 @@ public:
 	EntityManager();
 	~EntityManager();
 
-	ModuleEntity* CreateEntity(Types type, creature_type creaturetype, float x = 0.0f, float y = 0.0f, int w = 0, int h = 0);
-	void RadixSortList(std::list<ModuleEntity*>& l, int length, int numMax = 255);
-	int Digit(int index, int num);
-	void Wave(int numEnemies, float posX[], float posY[]);
+	ModuleEntity* CreateEntity(const Types& type, const creature_type& creaturetype, float x = 0.0f, float y = 0.0f, int w = 0, int h = 0);
+	void RadixSortList(std::list<ModuleEntity*>& l, const int& length, const int& numMax = 255);
+	int Digit(const int& index, int num);
+	void Wave(const int& numEnemies, float posX[], float posY[]);
 
 public:
 	std::list<ModuleEntity*> entities;

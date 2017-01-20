@@ -15,15 +15,15 @@
 #include "ModuleAudio.h"
 #include "CreaturePlayer.h"
 
-EntityExit::EntityExit(SDL_Rect rect, bool start_enabled) : ModuleEntity(start_enabled)
+EntityExit::EntityExit(const SDL_Rect* rect, bool start_enabled) : ModuleEntity(start_enabled)
 {
-	collider = App->collision->AddCollider(rect, EXIT);
+	collider = App->collision->AddCollider(*rect, EXIT);
 }
 
 EntityExit::~EntityExit()
 {}
 
-void EntityExit::NextRoom()
+void EntityExit::NextRoom() const
 {
 	/*for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 	{

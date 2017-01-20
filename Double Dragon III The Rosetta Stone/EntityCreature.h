@@ -32,7 +32,7 @@ enum state
 class EntityCreature : public ModuleEntity
 {
 public:
-	EntityCreature(creature_type types, bool start_enabled = true);
+	EntityCreature(const creature_type* types, bool start_enabled = true);
 	~EntityCreature();
 
 	void Die();

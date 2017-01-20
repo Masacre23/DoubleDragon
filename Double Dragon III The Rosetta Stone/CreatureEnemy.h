@@ -1,7 +1,6 @@
 #ifndef __CREATUREENEMY_H__
 #define __CREATUREENEMY_H__
 
-//#include "Animation.h"
 #include "Globals.h"
 #include "Point.h"
 #include "EntityCreature.h"
@@ -12,7 +11,7 @@ struct SDL_Texture;
 class CreatureEnemy : public EntityCreature
 {
 public:
-	CreatureEnemy(creature_type enemytype, float x, float y, bool start_enabled = true);
+	CreatureEnemy(const creature_type* enemytype, const float* x, const float* y, bool start_enabled = true);
 	~CreatureEnemy();
 
 	bool Start();

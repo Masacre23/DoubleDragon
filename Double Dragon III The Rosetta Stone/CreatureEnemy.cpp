@@ -13,11 +13,11 @@
 #include <cstdlib>
 #include "ModuleAudio.h"
 
-CreatureEnemy::CreatureEnemy(creature_type creaturetype, float x, float y, bool start_enabled) : EntityCreature(creaturetype, start_enabled)
+CreatureEnemy::CreatureEnemy(const creature_type* creaturetype, const float* x, const float* y, bool start_enabled) : EntityCreature(creaturetype, start_enabled)
 {
-	position.x = x;
-	position.y = y;
-	enemytype = creaturetype;
+	position.x = *x;
+	position.y = *y;
+	enemytype = *creaturetype;
 }
 
 CreatureEnemy::~CreatureEnemy()

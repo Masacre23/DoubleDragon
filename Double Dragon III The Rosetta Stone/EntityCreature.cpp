@@ -13,7 +13,7 @@
 #include "ModuleCollision.h"
 #include "ModuleAudio.h"
 
-EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleEntity(start_enabled)
+EntityCreature::EntityCreature(const creature_type* type, bool start_enabled) : ModuleEntity(start_enabled)
 {
 	// Sounds
 	deathSound = App->audio->LoadFx("resources/death.wav");
@@ -25,7 +25,7 @@ EntityCreature::EntityCreature(creature_type type, bool start_enabled) : ModuleE
 	pugi::xml_node entities = config.child("entities");
 	pugi::xml_node creature;
 	
-	switch (type)
+	switch (*type)
 	{
 	case PLAYER1:
 		creature = entities.child("player1");
