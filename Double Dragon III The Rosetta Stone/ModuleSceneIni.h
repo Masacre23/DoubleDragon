@@ -31,5 +31,7 @@ public:
 
 	SDL_Rect flyingRect;
 	Animation segaAnimation;
+
+	int counter = 0;
 };
 #endif //__MODULESCENE_H__

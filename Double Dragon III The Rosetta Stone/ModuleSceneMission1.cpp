@@ -17,6 +17,8 @@
 #include "CreatureEnemy.h"
 #include "ModuleSceneMenu.h"
 
+#include "ModuleSceneIni.h"
+
 ModuleSceneMission1::ModuleSceneMission1(bool start_enabled) : Module(start_enabled)
 {
 	// Background / sky
@@ -36,7 +38,7 @@ bool ModuleSceneMission1::Start()
 	exit = (EntityExit*)App->entityManager->CreateEntity(Types::exits, creature_type::UNKNOWN,800, 60, 50, 30);
 
 	bool res = true;
-	LOG("Loading menu scene");
+	LOG("Loading game scene");
 
 	graphics = App->textures->Load("resources/Genesis 32X SCD - Double Dragon III The Rosetta Stone - Mission 1 America.png");
 	gameoverTexture = App->textures->Load("resources/Game over.png");
@@ -92,11 +94,11 @@ bool ModuleSceneMission1::Start()
 //UnLoad assets
 bool ModuleSceneMission1::CleanUp()
 {
-	LOG("Unloading menu scene");
+	LOG("Unloading game scene");
 
 	App->textures->Unload(graphics);
-	App->collision->Disable();
-	//App->player->Disable();
+	App->textures->Unload(gameoverTexture);
+
 	for (list<ModuleEntity*>::iterator it = App->entityManager->entities.begin(); it != App->entityManager->entities.end(); ++it)
 		(*it)->Disable();
 
@@ -106,12 +108,25 @@ bool ModuleSceneMission1::CleanUp()
 // Update: draw background
 update_status ModuleSceneMission1::Update()
 {
+	if (exit->reset)
+	{
+		Disable();
+		exit->NextRoom();
+		return UPDATE_CONTINUE;
+	}
+	/*if (App->input->GetKey(SDL_SCANCODE_RETURN))
+	{
+		Reset();
+		return UPDATE_CONTINUE;
+	}*/
+
 	static bool b = false;
-	
+	App->entityManager->RadixSortList(App->entityManager->entities, App->entityManager->entities.size());
 	--App->time;
 
 	if (App->time % (2 * 60) == 0) //2 seconds
 		b = !b;
+
 	// Exit
 	if (player->creatureCollider->collisionArray[collider_type::EXIT])
 	{
@@ -126,7 +141,11 @@ update_status ModuleSceneMission1::Update()
 			}
 		}
 		if (b)
-			exit->NextRoom();
+		{
+			//exit->NextRoom();
+			Reset();
+			return UPDATE_CONTINUE;
+		}
 	}
 
 	// Draw everything --------------------------------------
@@ -325,9 +344,21 @@ void ModuleSceneMission1::Respawn()
 /******************************************************/
 void ModuleSceneMission1::Reset()
 {
-	App->CleanUp();
-	App = new Application();
-	App->Init();
+	
+	App->fade->FadeToBlack(nullptr, nullptr, 0.0f);
+	exit->reset = true;
+	/**App->scene_ini = ModuleSceneIni(false);
+	App->scene_ini->Init();
+	App->scene_ini->Start();
+	*App->scene_menu = ModuleSceneMenu(false);
+	App->scene_menu->Init();
+	App->scene_menu->Start();
+	//App->fade->FadeToBlack(App->scene_ini, App->scene_mission1, 3.0f);
+	*App->scene_mission1 = ModuleSceneMission1(false);
+	App->scene_mission1->Init();
+	App->scene_mission1->Start();
+	*App->entityManager = EntityManager();
+	App->fade->FadeToBlack(App->scene_ini, nullptr, 0.0f);*/
 }
 
 /**************************************************/

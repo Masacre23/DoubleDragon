@@ -23,7 +23,6 @@ Application::Application()
 	modules.push_back(input = new ModuleInput());
 	modules.push_back(window = new ModuleWindow());
 	
-
 	modules.push_back(renderer = new ModuleRender());
 	modules.push_back(fonts = new ModuleFonts());
 	modules.push_back(textures = new ModuleTextures());
@@ -63,7 +62,6 @@ bool Application::Init()
 	}
 
 	// Start the first scene --
-	//fade->FadeToBlack(scene_menu, nullptr, 3.0f);
 	fade->FadeToBlack(scene_ini, nullptr, 3.0f);
 
 	return ret;
@@ -72,19 +70,10 @@ bool Application::Init()
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
-	//static bool b = false;
-
-	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && scene_menu->IsEnabled())
-	{
-			fade->FadeToBlack(scene_mission1, scene_menu, 3.0f);
-	}
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if ((*it)->IsEnabled() == true)
 			ret = (*it)->PreUpdate();
-
-	if(scene_mission1->IsEnabled())
-		entityManager->RadixSortList(entityManager->entities, entityManager->entities.size());
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if ((*it)->IsEnabled() == true)
@@ -102,7 +91,7 @@ bool Application::CleanUp()
 	bool ret = true;
 
 	for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
-		if ((*it)->IsEnabled() == true)
+		if ((*it)->IsEnabled())
 			ret = (*it)->CleanUp();
 
 	return ret;

@@ -50,7 +50,7 @@ bool ModuleSceneIni::Start()
 
 update_status ModuleSceneIni::Update()
 {
-	static int counter = 0;
+	//static int counter = 0;
 	++counter;
 
 	switch (currentState)
@@ -77,6 +77,9 @@ bool ModuleSceneIni::CleanUp()
 	LOG("Unloading ini scene");
 	App->textures->Unload(sega);
 	App->textures->Unload(flying);
+
+	currentState = SEGA;
+	counter = 0;
 
 	return true;
 }

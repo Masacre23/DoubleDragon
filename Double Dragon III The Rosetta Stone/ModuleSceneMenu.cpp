@@ -8,6 +8,7 @@
 #include "ModuleAudio.h"
 #include "ModuleFadeToBlack.h"
 #include "SDL/include/SDL.h"
+#include "ModuleSceneMission1.h"
 
 ModuleSceneMenu::ModuleSceneMenu(bool start_enabled) : Module(start_enabled)
 {
@@ -51,6 +52,11 @@ bool ModuleSceneMenu::CleanUp()
 // Update: draw background
 update_status ModuleSceneMenu::Update()
 {
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		App->fade->FadeToBlack(App->scene_mission1, App->scene_menu, 3.0f);
+	}
+
 	// Draw everything --------------------------------------
 	static int x, x2 = -400;
 	static bool b = false;

@@ -39,7 +39,8 @@ update_status ModuleFadeToBlack::Update()
 
 		if (module_off == nullptr && module_on != nullptr)
 		{
-			module_on->Enable();
+			if(module_on != nullptr) 
+				module_on->Enable();
 			module_on = nullptr;
 		}
 
@@ -49,7 +50,9 @@ update_status ModuleFadeToBlack::Update()
 			{
 				if (module_off != nullptr)
 					module_off->Disable();
-				module_on->Enable();
+
+				if (module_on != nullptr)
+					module_on->Enable();
 
 				total_time += total_time;
 				start_time = SDL_GetTicks();
